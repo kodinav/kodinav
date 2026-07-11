@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
+import { addLead } from "@/lib/leads";
+
+const str = (v: unknown, max = 500) =>
+  typeof v === "string" ? v.trim().slice(0, max) : undefined;
 
 /**
- * Lead intake endpoint.
- *
- * TODO before launch — deliver leads somewhere real. Recommended options:
- *  1. Resend (email):   npm i resend  → send to hello@kodinav.com
- *  2. Google Sheets / Notion webhook
- *  3. WhatsApp Cloud API notification
- * Set LEAD_WEBHOOK_URL to forward leads to any webhook (Zapier/Make/n8n/Sheets).
+ * Lead intake: every submission is persisted for the /admin panel.
+ * Optionally mirrors to LEAD_WEBHOOK_URL (Zapier/Make/Sheets/WhatsApp bot).
  */
 export async function POST(request: Request) {
   let data: Record<string, unknown>;
@@ -17,8 +16,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  const name = typeof data.name === "string" ? data.name.trim() : "";
-  const email = typeof data.email === "string" ? data.email.trim() : "";
+  const name = str(data.name, 120);
+  const email = str(data.email, 200);
   if (!name || !email) {
     return NextResponse.json(
       { error: "Name and email are required" },
@@ -26,11 +25,25 @@ export async function POST(request: Request) {
     );
   }
 
-  const lead = {
-    ...data,
-    receivedAt: new Date().toISOString(),
-    userAgent: request.headers.get("user-agent") ?? undefined,
-  };
+  let lead;
+  try {
+    lead = await addLead({
+      name,
+      email,
+      source: str(data.source, 60) ?? "website",
+      phone: str(data.phone, 40),
+      organization: str(data.organization, 200),
+      website: str(data.website, 300),
+      budget: str(data.budget, 100),
+      timeline: str(data.timeline, 100),
+      projectType: str(data.projectType, 100),
+      message: str(data.message, 3000),
+      userAgent: request.headers.get("user-agent") ?? undefined,
+    });
+  } catch (err) {
+    console.error("Lead persistence failed:", err);
+    // Fall through — still try the webhook so the lead is not lost silently
+  }
 
   const webhook = process.env.LEAD_WEBHOOK_URL;
   if (webhook) {
@@ -38,14 +51,20 @@ export async function POST(request: Request) {
       await fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lead),
+        body: JSON.stringify(lead ?? data),
       });
     } catch (err) {
       console.error("Lead webhook delivery failed:", err);
-      // Still log the lead so it isn't lost
     }
   }
 
-  console.log("New lead:", JSON.stringify(lead));
+  if (!lead && !webhook) {
+    return NextResponse.json(
+      { error: "Could not record your enquiry. Please WhatsApp directly." },
+      { status: 500 }
+    );
+  }
+
+  console.log("New lead:", JSON.stringify(lead ?? data));
   return NextResponse.json({ ok: true });
 }

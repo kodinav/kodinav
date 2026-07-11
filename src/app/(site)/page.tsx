@@ -1,9 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/Hero";
 import { TechStack } from "@/components/TechStack";
 import { CtaSection } from "@/components/CtaSection";
 import { ProjectShot } from "@/components/ProjectVisual";
-import { Stamp } from "@/components/Stamp";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { ArrowLink, ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { projects } from "@/data/projects";
@@ -257,23 +257,25 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
           <div className="grid items-center gap-14 lg:grid-cols-[0.85fr_1.15fr]">
             <Reveal>
-              {/* TODO: replace this drafting frame with a real photo of Abhinav —
-                  a real face converts better than any graphic */}
-              <div className="relative mx-auto aspect-4/5 w-full max-w-sm border border-line-strong">
-                <div aria-hidden className="bg-grid absolute inset-0" />
-                <span aria-hidden className="crosshair absolute top-3 left-3 text-faint" />
-                <span aria-hidden className="crosshair absolute top-3 right-3 text-faint" />
-                <span aria-hidden className="crosshair absolute bottom-3 left-3 text-faint" />
-                <span aria-hidden className="crosshair absolute right-3 bottom-3 text-faint" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <span className="font-serif text-7xl italic">A.S.</span>
-                  <p className="annotation">Fig. A — {site.founder}</p>
-                  <p className="annotation text-faint">Founder · Engineer</p>
+              <figure className="relative mx-auto w-full max-w-sm border border-line-strong bg-surface-raised p-3">
+                <div className="relative aspect-4/5 w-full overflow-hidden border border-line-strong">
+                  <Image
+                    src="/founder.jpg"
+                    alt={`${site.founder} — founder and software engineer, Kodinav`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 384px"
+                    className="object-cover"
+                  />
                 </div>
-                <div className="absolute right-4 bottom-4 text-foreground/50">
-                  <Stamp size={72} />
-                </div>
-              </div>
+                <span aria-hidden className="crosshair absolute -top-1.5 -left-1.5 text-line-strong" />
+                <span aria-hidden className="crosshair absolute -top-1.5 -right-1.5 text-line-strong" />
+                <span aria-hidden className="crosshair absolute -bottom-1.5 -left-1.5 text-line-strong" />
+                <span aria-hidden className="crosshair absolute -right-1.5 -bottom-1.5 text-line-strong" />
+                <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 pt-3">
+                  <span className="annotation">Fig. A — {site.founder}</span>
+                  <span className="annotation text-faint">Founder</span>
+                </figcaption>
+              </figure>
             </Reveal>
             <Reveal delay={0.1}>
               <div className="flex flex-col items-start gap-7">

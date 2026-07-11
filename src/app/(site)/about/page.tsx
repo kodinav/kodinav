@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { CtaSection } from "@/components/CtaSection";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Eyebrow, SectionHeading } from "@/components/ui";
@@ -76,6 +77,20 @@ export default function AboutPage() {
           <Reveal>
             <div className="flex flex-col gap-6">
               <SectionHeading eyebrow="The Founder" title={site.founder} />
+              <figure className="relative w-full max-w-70 border border-line-strong bg-surface-raised p-2.5">
+                <div className="relative aspect-square w-full overflow-hidden border border-line-strong">
+                  <Image
+                    src="/founder.jpg"
+                    alt={`${site.founder}, founder of Kodinav — independent software engineer`}
+                    fill
+                    sizes="280px"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="annotation pt-2.5 text-faint">
+                  Est. 2024 — {site.location}
+                </figcaption>
+              </figure>
               <p className="text-pretty leading-relaxed text-muted">
                 I&apos;m a software engineer who has spent years designing and
                 building web platforms, mobile apps and business systems — from

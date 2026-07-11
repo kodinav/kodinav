@@ -67,11 +67,25 @@ Desktop breakpoints are untouched; everything below is gated to small screens or
 
 Per-page `title`/`description`/`keywords`/canonical + Open Graph. Structured data: `ProfessionalService` + `WebSite` (root), `CollectionPage` (work), `Service` + `FAQPage` (service pages), `Article` (case studies + blog). Sitemap, robots and a dynamic OG image are generated. Alt text on every project image.
 
+## Admin panel — lead register
+
+**`/admin`** — password-protected dashboard where every form submission lands. Stats (total / new / last-7-days / won), filter by status and source, per-lead detail with one-tap WhatsApp / Call / Email, status pipeline (new → contacted → qualified → won/lost), follow-up notes, delete, and CSV export.
+
+**Environment variables:**
+
+| Var | Required | Purpose |
+|---|---|---|
+| `ADMIN_PASSWORD` | **Yes (prod)** | Login password + session-signing secret. Without it, `/admin` refuses logins in production. |
+| `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | On serverless | Persistent lead storage. **Required on Vercel** — without it leads write to `data/leads.json`, which does not survive serverless deploys. Free tier at upstash.com is plenty. |
+| `LEAD_WEBHOOK_URL` | Optional | Mirrors every lead to a webhook (Zapier/Make/Sheets) as backup/notification. |
+
+Locally, no setup needed: leads go to `data/leads.json` (gitignored) and the dev password is `kodinav-dev-admin`. `/admin` is noindexed and disallowed in robots.txt.
+
 ## Before launch — checklist
 
-1. **`src/data/site.ts`** — replace placeholder phone, WhatsApp number and Calendly URL. Set the real domain in `url`.
-2. **Lead delivery** — set `LEAD_WEBHOOK_URL` env var to forward leads (Zapier/Make/Sheets webhook), or wire Resend in `src/app/api/lead/route.ts`. Right now leads only reach the server log.
-3. **Founder photo** — the founder band shows an "A.S." monogram (a designed brand mark, not a stock placeholder). Swap in a real photo of Abhinav for higher conversion if desired (`(site)/page.tsx`, founder section).
+1. ~~Phone/WhatsApp~~ **Done** (+91 81266 61393 site-wide). **Calendly URL** in `src/data/site.ts` is still a placeholder — replace when the account exists.
+2. **Lead delivery** — leads now persist to the `/admin` panel. Set `ADMIN_PASSWORD` (+ Upstash vars on Vercel) per the Admin section above; `LEAD_WEBHOOK_URL` remains an optional mirror.
+3. ~~Founder photo~~ **Done** — `public/founder.jpg` on the home founder band and About page.
 4. **Case-study figures** — numbers in `src/data/projects.ts` are either capability statements or figures shown on the live products (e.g. Achiever's Hive "1.8L+ students"). Confirm before publishing.
 5. **Real client testimonials** — none are shown (the home "Note from the studio" is Abhinav's own, honest voice). Add real, attributed client quotes when you have permission.
 6. **Google Maps** — add the embed in `(site)/contact/page.tsx` once an office address is public.

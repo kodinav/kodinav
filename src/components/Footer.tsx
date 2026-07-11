@@ -90,7 +90,15 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="u-draw text-sm text-muted transition-colors hover:text-foreground"
                 >
-                  WhatsApp
+                  WhatsApp — {site.phone}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`tel:${site.phoneRaw}`}
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  {site.phone}
                 </a>
               </li>
               <li>

@@ -37,7 +37,7 @@ const channels = [
   {
     icon: MessageCircle,
     title: "WhatsApp",
-    body: "Prefer chat? Message directly — useful for quick questions before committing to a call.",
+    body: `Prefer chat? Message ${site.phone} directly — useful for quick questions before committing to a call.`,
     href: site.whatsapp,
     label: "Open WhatsApp",
     external: true,
