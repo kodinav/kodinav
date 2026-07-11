@@ -4,10 +4,10 @@ export const site = {
   founder: "Abhinav Saxena",
   url: "https://kodinav.com",
   email: "hello@kodinav.com",
-  phone: "+91 81266 61393",
-  phoneRaw: "+918126661393",
+  phone: "+91 81266 61493",
+  phoneRaw: "+918126661493",
   whatsapp:
-    "https://wa.me/918126661393?text=Hi%20Abhinav%2C%20I%27m%20interested%20in%20discussing%20a%20software%20project.",
+    "https://wa.me/918126661493?text=Hi%20Abhinav%2C%20I%27m%20interested%20in%20discussing%20a%20software%20project.",
   calendly: "https://calendly.com/kodinav/discovery-call", // TODO: replace with real Calendly URL
   location: "India",
   description:

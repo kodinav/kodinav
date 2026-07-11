@@ -83,7 +83,7 @@ Locally, no setup needed: leads go to `data/leads.json` (gitignored) and the dev
 
 ## Before launch — checklist
 
-1. ~~Phone/WhatsApp~~ **Done** (+91 81266 61393 site-wide). **Calendly URL** in `src/data/site.ts` is still a placeholder — replace when the account exists.
+1. ~~Phone/WhatsApp~~ **Done** (+91 81266 61493 site-wide). **Calendly URL** in `src/data/site.ts` is still a placeholder — replace when the account exists.
 2. **Lead delivery** — leads now persist to the `/admin` panel. Set `ADMIN_PASSWORD` (+ Upstash vars on Vercel) per the Admin section above; `LEAD_WEBHOOK_URL` remains an optional mirror.
 3. ~~Founder photo~~ **Done** — `public/founder.jpg` on the home founder band and About page.
 4. **Case-study figures** — numbers in `src/data/projects.ts` are either capability statements or figures shown on the live products (e.g. Achiever's Hive "1.8L+ students"). Confirm before publishing.
