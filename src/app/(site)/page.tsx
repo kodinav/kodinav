@@ -371,6 +371,34 @@ export default function Home() {
               </div>
             </Reveal>
           </div>
+
+          {/* Audit front-door offer — the low-commitment entry point */}
+          <Reveal className="mt-10">
+            <Link
+              href="/website-audit"
+              className="card-hover ink group flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10"
+            >
+              <div className="flex flex-col gap-3">
+                <p className="annotation flex items-center gap-3">
+                  <span className="crosshair text-accent" aria-hidden />
+                  Not ready for a full project?
+                </p>
+                <h3 className="font-display text-3xl uppercase sm:text-4xl">
+                  Start with a{" "}
+                  <span className="text-gradient">{site.audit.priceUsd} website audit</span>.
+                </h3>
+                <p className="max-w-xl leading-relaxed text-muted">
+                  A real engineer tells you exactly why your site is slow,
+                  invisible on Google, or losing enquiries, with a prioritised
+                  fix list. Delivered in {site.audit.turnaround}. Fee credited
+                  toward the fixes if you go ahead.
+                </p>
+              </div>
+              <span className="inline-flex shrink-0 items-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform group-hover:translate-x-1">
+                Order audit →
+              </span>
+            </Link>
+          </Reveal>
         </div>
       </section>
 
