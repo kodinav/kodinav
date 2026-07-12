@@ -6,6 +6,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { Reveal } from "@/components/motion";
 import { Chip } from "@/components/ui";
 import { getPost, posts } from "@/data/posts";
+import { getService } from "@/data/services";
 import { site } from "@/data/site";
 import { breadcrumbSchema } from "@/lib/schema";
 
@@ -56,6 +57,10 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
+
+  const relatedServiceLinks = (post.relatedServices ?? [])
+    .map((s) => getService(s))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -131,11 +136,33 @@ export default async function BlogPostPage({
             ))}
           </div>
 
+          {relatedServiceLinks.length > 0 && (
+            <Reveal className="mt-12 border-t border-line pt-8">
+              <p className="annotation mb-4">Related services</p>
+              <div className="flex flex-wrap gap-2.5">
+                {relatedServiceLinks.map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={`/services/${s.slug}`}
+                    className="border border-line-strong px-4 py-2 font-mono text-[0.6875rem] tracking-[0.14em] uppercase transition-colors hover:border-accent hover:text-accent"
+                  >
+                    {s.name} →
+                  </Link>
+                ))}
+              </div>
+            </Reveal>
+          )}
+
           <Reveal className="mt-12 border-t border-line pt-8">
             <p className="text-sm text-faint">
               Written by{" "}
               <span className="text-foreground">{site.founder}</span>, founder
-              of {site.name}, an independent software studio.
+              of {site.name}, an independent software studio. Need this built
+              properly?{" "}
+              <Link href="/contact" className="u-draw text-accent">
+                Book a free discovery call
+              </Link>
+              .
             </p>
           </Reveal>
         </div>
