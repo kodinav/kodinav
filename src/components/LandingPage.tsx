@@ -4,6 +4,7 @@ import { LeadForm } from "@/components/LeadForm";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { ProjectShot } from "@/components/ProjectVisual";
 import { Eyebrow, SectionHeading } from "@/components/ui";
+import { Price } from "@/components/Price";
 import { site } from "@/data/site";
 import type { Project } from "@/data/projects";
 
@@ -19,6 +20,8 @@ export type LandingContent = {
   proofProject: Project;
   proofNote: string;
   steps: { title: string; body: string }[];
+  /** override LeadForm budget bands (e.g. USD for international pages) */
+  budgets?: string[];
   faqs: { q: string; a: string }[];
   formTitle: string;
 };
@@ -65,7 +68,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
               </a>
             </div>
             <p className="text-sm text-faint">
-              Pricing starts from {site.priceFloor} · Fixed quotes · No obligation
+              Pricing starts from <Price inr={site.priceFloor} usd={site.priceFloorUsd} /> · Fixed quotes · No obligation
             </p>
           </Reveal>
 
@@ -196,7 +199,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
           </Reveal>
           <Reveal delay={0.1} className="mt-10">
             <div className="glass rounded-3xl p-7 sm:p-10">
-              <LeadForm orgLabel={c.orgLabel} source={c.source} />
+              <LeadForm orgLabel={c.orgLabel} source={c.source} budgets={c.budgets} />
             </div>
           </Reveal>
         </div>
