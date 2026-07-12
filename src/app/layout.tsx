@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, Archivo, Instrument_Serif, Space_Mono } from "next/font/google";
+import { MetaPixel } from "@/components/MetaPixel";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -209,6 +210,7 @@ export default function RootLayout({
       className={`${anton.variable} ${instrument.variable} ${spaceMono.variable} ${archivo.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        <MetaPixel />
         {/* Geo-aware pricing: set the region flag before paint (no flash).
             India (Asia/Kolkata timezone or en-IN locale) sees ₹, else USD. */}
         <script

@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
+import { trackLead } from "@/lib/fbq";
 
 const inputCls =
   "w-full border border-line-strong bg-transparent px-4 py-3 text-base text-foreground placeholder:text-faint outline-none transition-colors focus:border-accent sm:text-sm";
@@ -33,6 +34,7 @@ export function AuditForm() {
         body: JSON.stringify({ ...data, source: "website-audit" }),
       });
       if (!res.ok) throw new Error("failed");
+      trackLead("website-audit");
       setStatus("done");
     } catch {
       setStatus("error");
