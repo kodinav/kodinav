@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { Faq } from "@/components/Faq";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Chip, Eyebrow, SectionHeading } from "@/components/ui";
 import { getService, services } from "@/data/services";
 import { site } from "@/data/site";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
@@ -72,6 +73,22 @@ export default async function ServicePage({
     })),
   };
 
+  // Curated related services, falling back to thematic neighbours in the list
+  const relatedSlugs =
+    service.related ??
+    services
+      .filter((s) => s.slug !== slug)
+      .slice(0, 3)
+      .map((s) => s.slug);
+  const relatedServices = relatedSlugs
+    .map((s) => getService(s))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+  const crumbs = breadcrumbSchema([
+    { name: "Services", path: "/services" },
+    { name: service.name, path: `/services/${service.slug}` },
+  ]);
+
   return (
     <>
       <script
@@ -82,22 +99,26 @@ export default async function ServicePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }}
+      />
 
       <section className="bg-noise relative overflow-hidden pt-40 pb-16 sm:pt-48">
         <div aria-hidden className="bg-grid absolute inset-0" />
-        <div
-          aria-hidden
-          className="orb -top-24 left-1/2 h-96 w-160 -translate-x-1/2"
-          style={{ background: "var(--glow-blue)", opacity: 0.35 }}
-        />
         <div className="relative mx-auto max-w-4xl px-6">
           <Reveal className="flex flex-col gap-6">
-            <Link
-              href="/services"
-              className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-foreground"
-            >
-              <ArrowLeft className="size-4" /> All services
-            </Link>
+            <nav aria-label="Breadcrumb" className="annotation flex items-center gap-2">
+              <Link href="/" className="transition-colors hover:text-foreground">
+                Home
+              </Link>
+              <span aria-hidden>/</span>
+              <Link href="/services" className="transition-colors hover:text-foreground">
+                Services
+              </Link>
+              <span aria-hidden>/</span>
+              <span className="text-foreground/70">{service.name}</span>
+            </nav>
             <Eyebrow>{service.name}</Eyebrow>
             <h1 className="text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
               {service.headline}
@@ -162,7 +183,7 @@ export default async function ServicePage({
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-6 py-12 pb-20">
+      <section className="mx-auto max-w-4xl px-6 py-12">
         <Reveal>
           <SectionHeading eyebrow="FAQ" title="Common questions." />
         </Reveal>
@@ -170,6 +191,33 @@ export default async function ServicePage({
           <Faq items={service.faqs} />
         </div>
       </section>
+
+      {/* Related services — internal linking */}
+      {relatedServices.length > 0 && (
+        <section className="mx-auto max-w-4xl px-6 py-12 pb-20">
+          <Reveal>
+            <SectionHeading eyebrow="Related Services" title="Also worth knowing." />
+          </Reveal>
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {relatedServices.map((r) => (
+              <Reveal key={r.slug}>
+                <Link
+                  href={`/services/${r.slug}`}
+                  className="card-hover glass group flex h-full flex-col gap-3 p-6"
+                >
+                  <h3 className="font-display text-xl leading-none uppercase transition-colors group-hover:text-accent">
+                    {r.name}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted">{r.short}</p>
+                  <span className="annotation mt-auto pt-2 text-accent">
+                    View service →
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
 
       <CtaSection
         title={`Discuss your ${service.name.toLowerCase()} project.`}

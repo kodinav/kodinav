@@ -39,7 +39,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline} | Websites, Web Apps & Mobile Apps`,
+    default: `${site.name} — Website Development & Custom Web Apps | Delhi NCR, India`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
@@ -80,6 +80,14 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION (and _BING) as env vars to verify
+  // Search Console / Bing Webmaster Tools without touching code.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
+  },
 };
 
 const organizationSchema = {
@@ -91,35 +99,79 @@ const organizationSchema = {
   description: site.description,
   url: site.url,
   email: site.email,
+  telephone: site.phoneRaw,
+  image: `${site.url}/founder.jpg`,
   slogan: "We build software that helps businesses grow.",
-  founder: {
-    "@type": "Person",
-    name: site.founder,
-    jobTitle: "Founder & Software Engineer",
-  },
+  founder: { "@id": `${site.url}/#founder` },
   foundingDate: "2024",
-  areaServed: { "@type": "Country", name: "India" },
+  areaServed: [
+    ...site.serviceAreas.map((name) => ({ "@type": "City", name })),
+    { "@type": "Country", name: "India" },
+  ],
   availableLanguage: ["English", "Hindi"],
   priceRange: "₹₹₹",
-  address: { "@type": "PostalAddress", addressCountry: "IN" },
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "Delhi NCR",
+    addressCountry: "IN",
+  },
+  sameAs: ["https://github.com/kodinav"],
   knowsAbout: [
-    "Web Development",
-    "Custom Software Development",
-    "Mobile App Development",
-    "Learning Management Systems",
+    "Website Development",
+    "Custom Website Development",
+    "Web Application Development",
+    "Landing Page Development",
     "E-Commerce Development",
-    "AI Integration",
+    "Mobile App Development",
+    "React Development",
+    "Next.js Development",
+    "SEO-Friendly Website Development",
+    "Learning Management Systems",
     "CRM Development",
     "ERP Development",
+    "AI Integration",
   ],
   makesOffer: [
-    "Business Websites",
+    "Business Website Development",
     "Custom Web Applications",
+    "Landing Page Development",
+    "E-Commerce Development",
     "Mobile Apps",
-    "Learning Management Systems",
-    "E-Commerce",
-    "AI Integrations",
+    "Website Redesign",
+    "Website Maintenance",
+    "Performance & SEO Optimization",
   ].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
+};
+
+const founderSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${site.url}/#founder`,
+  name: site.founder,
+  jobTitle: "Founder & Software Engineer",
+  description:
+    "Freelance web developer and full stack engineer in Delhi NCR, India. Founder of Kodinav — builds websites, web applications and mobile apps with React, Next.js, Node.js and Flutter.",
+  url: `${site.url}/about`,
+  image: `${site.url}/founder.jpg`,
+  email: site.email,
+  telephone: site.phoneRaw,
+  worksFor: { "@id": `${site.url}/#studio` },
+  address: {
+    "@type": "PostalAddress",
+    addressRegion: "Delhi NCR",
+    addressCountry: "IN",
+  },
+  knowsAbout: [
+    "React",
+    "Next.js",
+    "Node.js",
+    "TypeScript",
+    "Flutter",
+    "PostgreSQL",
+    "Website Development",
+    "Full Stack Development",
+  ],
+  sameAs: ["https://github.com/kodinav"],
 };
 
 const websiteSchema = {
@@ -150,9 +202,27 @@ export default function RootLayout({
         />
         <script
           type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(founderSchema) }}
+        />
+        <script
+          type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         {children}
+        {/* GA4 — activates only when NEXT_PUBLIC_GA_ID is set (e.g. G-XXXXXXX) */}
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`,
+              }}
+            />
+          </>
+        )}
       </body>
     </html>
   );

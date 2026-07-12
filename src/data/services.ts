@@ -9,6 +9,8 @@ export type Service = {
   approach: { title: string; body: string }[];
   stack: string[];
   faqs: { q: string; a: string }[];
+  /** slugs of related services — powers internal linking between service pages */
+  related?: string[];
 };
 
 export const services: Service[] = [
@@ -375,6 +377,266 @@ export const services: Service[] = [
         a: "Shopify is genuinely good for standard stores, and I'll say so if it fits. Custom makes sense when you need Indian payment flows, complex catalogues, regional pricing, or a store deeply integrated with your other systems.",
       },
     ],
+    related: ["business-websites", "web-applications", "website-performance"],
+  },
+  {
+    slug: "landing-page-development",
+    name: "Landing Page Development",
+    short:
+      "High-converting landing pages for ads and campaigns — fast, focused and engineered to turn paid clicks into enquiries.",
+    headline: "One page. One goal. No leaks.",
+    intro:
+      "A landing page has a harder job than any other page on the internet: a stranger arrives from an ad, gives you a few seconds, and either becomes a lead or is gone with your ad money. I design and develop landing pages around that reality — one message, one action, sub-second load times, and a lead form that reaches you instantly. Every landing page I build for clients in Delhi NCR and across India follows the same conversion discipline I use on my own campaign pages: no navigation to leak clicks away, proof before promises, and a form that qualifies leads before you ever pick up the phone.",
+    forWho:
+      "Businesses running Meta or Google ads — coaching institutes, clinics, real estate projects, D2C brands and startups — and anyone whose campaign traffic currently lands on a generic homepage that wasn't built to convert.",
+    deliverables: [
+      "Custom landing page design matched to your ad creative and audience",
+      "Message hierarchy built for the 5-second first impression",
+      "Lead capture forms with qualification fields and instant delivery",
+      "Sub-second load times — every 100ms of delay costs paid conversions",
+      "Meta Pixel, Google Ads and analytics conversion tracking wired in",
+      "A/B-testable structure so headlines and offers can be iterated",
+      "Mobile-first build — most ad clicks in India happen on phones",
+      "WhatsApp integration for instant lead contact",
+    ],
+    approach: [
+      {
+        title: "Start from the ad, not the page",
+        body: "The page must continue the exact promise of the ad that brought the visitor — same words, same offer, same energy. Message match is the single biggest conversion factor, so I design the page and the ad angle together.",
+      },
+      {
+        title: "Strip everything that isn't the goal",
+        body: "No main navigation, no footer maze, no competing calls-to-action. A visitor on a landing page can do exactly two things: convert, or scroll to convince themselves — then convert.",
+      },
+      {
+        title: "Engineer for the impatient",
+        body: "Ad traffic is the least patient traffic there is. Pages render statically and load in under a second on a mid-range phone on 4G — because a spinner is where ad budgets go to die.",
+      },
+      {
+        title: "Measure everything",
+        body: "Conversion tracking is part of the build, not an afterthought. You'll know exactly which campaign, ad set and creative produced every lead in your register.",
+      },
+    ],
+    stack: ["Next.js", "React", "Tailwind CSS", "Meta Pixel", "Google Analytics"],
+    faqs: [
+      {
+        q: "How much does landing page development cost in India?",
+        a: "Focused single-page campaigns start well under the studio's usual ₹75,000 project floor — a landing page plus lead handling is a smaller scope. You get a fixed quote after a short discovery call, and the price includes conversion tracking setup.",
+      },
+      {
+        q: "How fast can a landing page go live?",
+        a: "Typically 1–2 weeks from brief to live, including copy, design, build and tracking. If a campaign deadline is looming, tell me on the call — compressed timelines are often possible for single-page scopes.",
+      },
+      {
+        q: "Do you also write the landing page copy?",
+        a: "Yes. Conversion copy and design are inseparable on a landing page, so I draft the messaging with you rather than pouring your existing brochure text into a new layout.",
+      },
+      {
+        q: "Can you improve my existing landing page instead of building new?",
+        a: "Often, yes. If the foundation is sound, a conversion audit — message match, load speed, form friction, tracking — can lift results without a rebuild. I'll tell you honestly which situation you're in.",
+      },
+    ],
+    related: ["business-websites", "website-performance", "ecommerce"],
+  },
+  {
+    slug: "portfolio-websites",
+    name: "Portfolio Websites",
+    short:
+      "Portfolio websites for professionals and creators — designed to win trust and enquiries, not just display work.",
+    headline: "Your work deserves better than a template.",
+    intro:
+      "A portfolio website is a sales document that runs while you sleep. Whether you're an architect, doctor, designer, photographer, consultant or founder, the people evaluating you are quietly comparing your online presence against everyone else they're considering. I build portfolio websites that do the convincing for you: your best work presented with editorial care, your credibility signals placed where evaluators actually look, and a clear path from 'impressed' to 'in touch'. Built with the same custom design and engineering discipline as every Kodinav project — no themes, no page builders, nothing that looks like a thousand other portfolios.",
+    forWho:
+      "Independent professionals, consultants, creators, architects, doctors, lawyers, artists and agencies across India who need their work to speak before they enter the room.",
+    deliverables: [
+      "Custom portfolio design shaped around your discipline and work",
+      "Case-study or gallery structures that present work with context",
+      "About and credentials pages built around how clients evaluate you",
+      "Contact and enquiry flows that convert interest into conversations",
+      "SEO structure so your name and specialty rank on Google",
+      "Fast, image-optimised delivery — portfolios are image-heavy by nature",
+      "A content structure you can update yourself as new work ships",
+    ],
+    approach: [
+      {
+        title: "Show the thinking, not just the output",
+        body: "The strongest portfolios explain the problem behind each piece of work. A project with context out-converts a wall of thumbnails — it proves judgment, not just execution.",
+      },
+      {
+        title: "Design around your discipline",
+        body: "A surgeon's portfolio and a photographer's portfolio should not share a template. Layout, typography and pacing are chosen for what your evaluators need to feel: precision, warmth, boldness or restraint.",
+      },
+      {
+        title: "Treat images as engineering",
+        body: "Portfolios live and die on image quality versus load time. Modern formats, responsive sizing and lazy loading keep full-quality work loading instantly on any device.",
+      },
+    ],
+    stack: ["Next.js", "React", "Tailwind CSS", "Vercel", "Cloudflare"],
+    faqs: [
+      {
+        q: "What does a portfolio website cost?",
+        a: "Focused personal portfolios start below the studio's usual project floor; portfolios with case studies, blogs or booking systems are quoted by scope. Every quote is fixed and itemised after a discovery call.",
+      },
+      {
+        q: "I already have work on Instagram/Behance. Why do I need a website?",
+        a: "Platforms rank you next to your competitors and own your audience. Your own portfolio site ranks for your name on Google, presents work without an algorithm deciding the order, and captures enquiries directly — no platform between you and the client.",
+      },
+      {
+        q: "Can I update the portfolio myself?",
+        a: "Yes — adding new projects, images and text is structured so you never need a developer for routine updates.",
+      },
+    ],
+    related: ["business-websites", "landing-page-development", "website-redesign"],
+  },
+  {
+    slug: "website-redesign",
+    name: "Website Redesign",
+    short:
+      "Redesigns that fix what your current website is costing you — credibility, speed, Google rankings and enquiries.",
+    headline: "Your website is telling people something. Is it true?",
+    intro:
+      "Most redesign enquiries start the same way: 'our website is embarrassing and we avoid sending people to it.' That instinct is usually right — an outdated website quietly undercuts every ad, every referral and every sales conversation you have. But a redesign done as a coat of paint wastes the opportunity. I approach website redesign as re-engineering: keep what works (your rankings, your content that converts), fix what doesn't (speed, mobile experience, information architecture, trust signals), and migrate carefully so years of Google equity aren't destroyed on launch day — the most common and most expensive redesign mistake.",
+    forWho:
+      "Businesses across Delhi NCR and India whose websites are 3+ years old, slow on mobile, invisible on Google, or simply no longer representative of how good the business actually is.",
+    deliverables: [
+      "Audit of your current site: speed, SEO, analytics, conversion leaks",
+      "Complete redesign with modern, custom design — no templates",
+      "SEO-safe migration: redirects, preserved rankings, no lost pages",
+      "Performance rebuild — typically 3–10× faster load times",
+      "Content restructuring around what customers actually search for",
+      "Mobile-first rebuild for the devices your visitors really use",
+      "Analytics before and after, so the improvement is measurable",
+    ],
+    approach: [
+      {
+        title: "Measure before touching anything",
+        body: "Current traffic, rankings, converting pages and drop-off points get documented first. A redesign that ignores this data routinely deletes the exact pages that were quietly earning money.",
+      },
+      {
+        title: "Protect the SEO you already own",
+        body: "Every existing URL is mapped to its new home with proper redirects, metadata is carried over and improved, and search engines are told exactly what moved where. Rankings should climb after a redesign — not crater.",
+      },
+      {
+        title: "Rebuild the engine, not just the paint",
+        body: "The visible design is half the job. The other half is the rebuild underneath: modern rendering, image optimisation and clean semantic structure that makes the new site dramatically faster than the old one.",
+      },
+    ],
+    stack: ["Next.js", "React", "Tailwind CSS", "Cloudflare", "Google Search Console"],
+    faqs: [
+      {
+        q: "Will a redesign hurt my Google rankings?",
+        a: "Done carelessly — yes, badly, and it's the most common redesign disaster. Done properly, with URL mapping, redirects and improved page structure, rankings usually improve within weeks. Migration safety is a core deliverable of every redesign I take on.",
+      },
+      {
+        q: "Can we keep some parts of the current website?",
+        a: "Absolutely — that's the point of auditing first. Content that ranks and converts is preserved and improved rather than replaced for the sake of novelty.",
+      },
+      {
+        q: "How long does a website redesign take?",
+        a: "Most business site redesigns take 3–6 weeks including the audit, design, rebuild and SEO-safe migration. Larger platforms are scoped individually with a fixed quote.",
+      },
+    ],
+    related: ["business-websites", "website-performance", "website-maintenance"],
+  },
+  {
+    slug: "website-performance",
+    name: "Performance & SEO Optimization",
+    short:
+      "Make your existing website fast and findable — Core Web Vitals, technical SEO and load-time engineering that moves rankings.",
+    headline: "Speed is a feature. Google agrees.",
+    intro:
+      "Two websites with the same content do not rank the same, convert the same, or cost the same to advertise on. The fast, technically clean one wins on every axis — Google uses Core Web Vitals as a ranking signal, visitors abandon slow pages before they render, and ad platforms charge more for landing pages that load poorly. I take existing websites and re-engineer them for speed and search: sub-second loads, 90+ Lighthouse scores, semantic structure and schema markup that make every page legible to search engines. This is the least glamorous, highest-ROI work in web development — and most agencies skip it because it doesn't produce a pretty screenshot.",
+    forWho:
+      "Businesses whose websites load slowly, score poorly on PageSpeed Insights, rank below competitors with worse content, or burn ad budget on landing pages that lose visitors before they load.",
+    deliverables: [
+      "Full performance audit: Core Web Vitals (LCP, CLS, INP), load waterfall, bundle analysis",
+      "Image optimisation: modern formats, responsive sizing, lazy loading",
+      "JavaScript and CSS reduction — removing what the page doesn't need",
+      "Caching and CDN configuration for instant repeat visits",
+      "Technical SEO: semantic HTML, schema markup, canonical URLs, sitemaps",
+      "Font loading optimisation without design compromise",
+      "Before/after Lighthouse and PageSpeed reports — the improvement in numbers",
+    ],
+    approach: [
+      {
+        title: "Measure like Google measures",
+        body: "Optimisation targets the exact metrics Google ranks on — Largest Contentful Paint, Cumulative Layout Shift, Interaction to Next Paint — measured on real mid-range phones on Indian network conditions, not on a developer's fibre connection.",
+      },
+      {
+        title: "Fix causes, not symptoms",
+        body: "A slow site is slow for specific, findable reasons: oversized images, render-blocking scripts, chatty third-party tags, cheap hosting. The audit names each one with its cost in milliseconds; the fixes are then prioritised by impact.",
+      },
+      {
+        title: "SEO is structure, then content",
+        body: "Before content can rank it must be crawlable, fast and unambiguous: one topic per URL, proper heading hierarchy, structured data telling Google exactly what your business does and where.",
+      },
+    ],
+    stack: ["Next.js", "Cloudflare", "Lighthouse", "Google Search Console", "Schema.org"],
+    faqs: [
+      {
+        q: "My website scores 40 on PageSpeed Insights. Can it really reach 90+?",
+        a: "Almost always, yes. Most low scores come from a handful of heavy, fixable causes — unoptimised images, bloated JavaScript, slow hosting. Occasionally the honest answer is that a rebuild costs less than salvaging a broken foundation; if so, I'll say that with numbers.",
+      },
+      {
+        q: "How is this different from hiring an SEO agency?",
+        a: "SEO agencies mostly do content and links, and many quietly outsource the technical work. This is the engineering layer they depend on: making the website itself fast, crawlable and structurally sound. Content marketing works dramatically better on top of it.",
+      },
+      {
+        q: "How quickly do results show?",
+        a: "Speed improvements are instant and measurable the day they ship. Ranking movement typically follows over 4–12 weeks as Google recrawls and re-evaluates the site — Search Console shows the trend clearly.",
+      },
+    ],
+    related: ["website-redesign", "website-maintenance", "business-websites"],
+  },
+  {
+    slug: "website-maintenance",
+    name: "Website Maintenance & Support",
+    short:
+      "Ongoing care for your website — updates, security, backups, monitoring and small improvements, handled by the engineer who knows your stack.",
+    headline: "Websites aren't fire-and-forget.",
+    intro:
+      "Every website starts decaying the day it launches: dependencies age, security patches pile up, content drifts out of date, and small breakages accumulate until 'the website guy disappeared' becomes a business risk. Website maintenance is the unglamorous discipline that prevents all of it. I offer ongoing maintenance and support for websites and web applications — mine or inherited from other developers — so your site stays fast, secure, backed up and current, and there's always a real engineer who answers when something needs changing. For most businesses this costs less per month than one hour of downtime during a campaign.",
+    forWho:
+      "Businesses that depend on their website daily, teams whose original developer has moved on, and anyone tired of small website tasks taking weeks because nobody owns them.",
+    deliverables: [
+      "Security updates and dependency patching on a schedule",
+      "Automated backups with tested, documented restore procedures",
+      "Uptime and error monitoring with proactive fixes",
+      "Content updates and small feature changes within the retainer",
+      "Performance checks so the site stays fast as content grows",
+      "Monthly summary of work done — no invisible retainers",
+      "Priority response when something breaks",
+    ],
+    approach: [
+      {
+        title: "Take over cleanly",
+        body: "Inherited websites get a documented onboarding: access audit, backup verification, dependency review and a written map of how everything fits together. From then on, nothing about your website is a mystery held in one person's head.",
+      },
+      {
+        title: "Prevent, don't just repair",
+        body: "Monitoring catches failing certificates, broken forms and creeping slowness before customers do. Most months, the best maintenance work is the incident that never happened.",
+      },
+      {
+        title: "Keep it honest",
+        body: "Every month you see exactly what was done and what it cost. Retainers are cancellable anytime — the work has to justify itself, not a lock-in clause.",
+      },
+    ],
+    stack: ["Node.js", "Docker", "Cloudflare", "AWS", "Uptime monitoring"],
+    faqs: [
+      {
+        q: "Can you maintain a website another developer built?",
+        a: "Yes — most maintenance clients arrive exactly this way. The onboarding audit establishes what exists, what's risky and what it costs to keep healthy, before any commitment.",
+      },
+      {
+        q: "What does website maintenance cost in India?",
+        a: "Retainers are scoped to the site's complexity and how much change you need monthly — simple sites cost a few thousand rupees a month; applications with active development cost more. You get a fixed monthly number after the audit, cancellable anytime.",
+      },
+      {
+        q: "Do I need maintenance if my site is brand new?",
+        a: "New sites need less, but not zero — dependencies, backups and monitoring matter from day one. Every Kodinav build includes a support period, after which a light retainer keeps it covered.",
+      },
+    ],
+    related: ["website-performance", "website-redesign", "web-applications"],
   },
 ];
 

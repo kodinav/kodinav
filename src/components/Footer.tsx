@@ -20,11 +20,13 @@ export function Footer() {
           <div className="flex flex-col gap-4">
             <p className="annotation">The Studio</p>
             <p className="max-w-xs text-sm leading-relaxed text-muted">
-              Independent software studio. Websites, web applications and
-              mobile apps — personally engineered by {site.founder}.
+              Independent software studio. Website development, web
+              applications and mobile apps — personally engineered by{" "}
+              {site.founder} with React, Next.js and Node.js.
             </p>
-            <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-faint">
-              {site.location} — working worldwide
+            <p className="max-w-xs text-xs leading-relaxed text-faint">
+              Serving Delhi, Noida, Gurgaon, Ghaziabad and businesses across
+              India — working worldwide.
             </p>
           </div>
 

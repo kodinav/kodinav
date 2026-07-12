@@ -52,9 +52,23 @@ const channels = [
   },
 ];
 
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: `Contact ${site.name}`,
+  url: `${site.url}/contact`,
+  mainEntity: {
+    "@id": `${site.url}/#studio`,
+  },
+};
+
 export default function ContactPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
       <section className="bg-noise relative overflow-hidden pt-40 pb-16 sm:pt-48">
         <div aria-hidden className="bg-grid absolute inset-0" />
         <div
@@ -115,8 +129,9 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-medium">Based in {site.location}</h3>
                     <p className="mt-1 text-sm leading-relaxed text-muted">
-                      Working with clients across India and worldwide. Calls
-                      scheduled in your timezone.
+                      Working with clients in Delhi, Noida, Gurgaon, Ghaziabad
+                      and across India — and worldwide. Calls scheduled in your
+                      timezone.
                     </p>
                   </div>
                 </div>

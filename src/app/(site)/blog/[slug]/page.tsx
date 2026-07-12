@@ -7,6 +7,7 @@ import { Reveal } from "@/components/motion";
 import { Chip } from "@/components/ui";
 import { getPost, posts } from "@/data/posts";
 import { site } from "@/data/site";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -22,12 +23,19 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: "article",
       title: post.title,
       description: post.excerpt,
+      url: `${site.url}/blog/${post.slug}`,
       publishedTime: post.date,
       authors: [site.founder],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
     },
   };
 }
@@ -59,6 +67,11 @@ export default async function BlogPostPage({
     publisher: { "@type": "Organization", name: site.name, url: site.url },
   };
 
+  const crumbs = breadcrumbSchema([
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ]);
+
   const related = posts.filter((p) => p.slug !== slug).slice(0, 2);
 
   return (
@@ -66,6 +79,10 @@ export default async function BlogPostPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }}
       />
 
       <article className="bg-noise relative overflow-hidden pt-40 pb-8 sm:pt-48">

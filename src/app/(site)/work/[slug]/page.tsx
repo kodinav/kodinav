@@ -8,6 +8,7 @@ import { PhoneShot, ProjectShot } from "@/components/ProjectVisual";
 import { Chip, Eyebrow, SectionHeading } from "@/components/ui";
 import { getProject, projects } from "@/data/projects";
 import { site } from "@/data/site";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -74,15 +75,25 @@ export default async function CaseStudyPage({
     "@type": "Article",
     headline: `${project.name} — Case Study`,
     description: project.summary,
-    author: { "@type": "Person", name: site.founder },
+    image: `${site.url}${project.images.cover.src}`,
+    author: { "@type": "Person", name: site.founder, url: `${site.url}/about` },
     publisher: { "@type": "Organization", name: site.name, url: site.url },
   };
+
+  const crumbs = breadcrumbSchema([
+    { name: "Work", path: "/work" },
+    { name: project.name, path: `/work/${project.slug}` },
+  ]);
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(caseStudySchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(crumbs) }}
       />
 
       {/* Hero */}

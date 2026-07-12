@@ -43,9 +43,21 @@ const principles = [
   },
 ];
 
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: `About ${site.name}`,
+  url: `${site.url}/about`,
+  mainEntity: { "@id": `${site.url}/#founder` },
+};
+
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
       <section className="bg-noise relative overflow-hidden pt-40 pb-20 sm:pt-48">
         <div aria-hidden className="bg-grid absolute inset-0" />
         <div
@@ -92,13 +104,15 @@ export default function AboutPage() {
                 </figcaption>
               </figure>
               <p className="text-pretty leading-relaxed text-muted">
-                I&apos;m a software engineer who has spent years designing and
-                building web platforms, mobile apps and business systems — from
-                education platforms serving thousands of students to e-commerce
-                and booking systems processing real revenue. Kodinav is where
-                that experience is applied with full ownership: I lead every
-                project personally, from the first discovery conversation to
-                deployment and support.
+                I&apos;m a full stack developer based in Delhi NCR who has
+                spent years designing and building web platforms, mobile apps
+                and business systems with React, Next.js, Node.js and Flutter —
+                from education platforms serving thousands of students to
+                e-commerce and booking systems processing real revenue. Kodinav
+                is where that experience is applied with full ownership: I lead
+                every website development project personally, from the first
+                discovery conversation to deployment and support, for clients
+                in Delhi, Noida, Gurgaon and across India.
               </p>
               <p className="text-pretty leading-relaxed text-muted">
                 Why independent? Because the traditional models are broken in

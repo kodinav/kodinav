@@ -11,7 +11,7 @@
   --surface-raised: #f5f1e8;
   --foreground: #16140f;
   --muted: #55503f;
-  --faint: #8b8474;
+  --faint: #6f6959; /* ≥4.5:1 on paper — WCAG AA for the small mono annotations */
   --border: rgba(22, 20, 15, 0.16);
   --border-strong: rgba(22, 20, 15, 0.45);
   --accent: #ff4400;
@@ -27,7 +27,7 @@
   --surface-raised: #262218;
   --foreground: #efeae0;
   --muted: #b5ad9b;
-  --faint: #837c6c;
+  --faint: #8f887a; /* ≥4.5:1 on ink */
   --border: rgba(239, 234, 224, 0.18);
   --border-strong: rgba(239, 234, 224, 0.45);
   --card-bg: rgba(239, 234, 224, 0.05);
@@ -232,6 +232,41 @@ h2 {
 .marquee-mask {
   mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+}
+
+/* Hero line reveal — pure CSS so the headline paints before JS hydrates (LCP) */
+@keyframes rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.reveal-line {
+  display: block;
+  overflow: hidden;
+}
+
+.reveal-line > span {
+  display: block;
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Transform-only entrance: element is painted from the first frame (no
+   opacity:0), so it can be the LCP element without penalty. */
+@keyframes rise-soft {
+  from {
+    transform: translateY(22px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.rise-soft {
+  animation: rise-soft 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes spin-slow {

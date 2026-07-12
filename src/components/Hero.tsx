@@ -6,6 +6,10 @@ import { Stamp } from "./Stamp";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * CSS-driven line reveal: unlike a framer-motion initial state, the headline
+ * is visible at first paint even before JS hydrates — critical for LCP.
+ */
 function RevealLine({
   children,
   delay,
@@ -16,15 +20,8 @@ function RevealLine({
   className?: string;
 }) {
   return (
-    <span className={`block overflow-hidden ${className}`}>
-      <motion.span
-        className="block"
-        initial={{ y: "110%" }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.9, delay, ease }}
-      >
-        {children}
-      </motion.span>
+    <span className={`reveal-line ${className}`}>
+      <span style={{ animationDelay: `${delay}s` }}>{children}</span>
     </span>
   );
 }
@@ -75,8 +72,8 @@ export function Hero() {
 
         {/* poster headline */}
         <h1 className="relative mt-8 text-[clamp(2.9rem,8.2vw,7.75rem)] leading-[0.94] sm:mt-12">
-          <RevealLine delay={0.15}>We build software</RevealLine>
-          <RevealLine delay={0.25}>
+          <RevealLine delay={0.05}>We build software</RevealLine>
+          <RevealLine delay={0.16}>
             that helps businesses{" "}
             <span className="text-gradient">grow.</span>
           </RevealLine>
@@ -111,16 +108,15 @@ export function Hero() {
 
         {/* sub row: copy + CTAs | spec sheet */}
         <div className="mt-10 grid gap-10 pb-16 lg:grid-cols-[1.2fr_0.8fr] lg:gap-20">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.85, ease }}
-            className="flex max-w-xl flex-col items-start gap-8"
+          <div
+            className="rise-soft flex max-w-xl flex-col items-start gap-8"
+            style={{ animationDelay: "0.25s" }}
           >
             <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-              Custom websites, web applications and mobile apps — engineered
-              with performance, scalability and long-term business growth in
-              mind. Every project personally led by the founder.
+              Custom website development, web applications and mobile apps —
+              engineered with React, Next.js and Node.js for performance,
+              search rankings and long-term business growth. Every project
+              personally led by the founder, from Delhi NCR to anywhere.
             </p>
             <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
               <ButtonLink href="/contact" size="lg" className="w-full sm:w-auto">
@@ -135,7 +131,7 @@ export function Hero() {
                 Explore Projects
               </ButtonLink>
             </div>
-          </motion.div>
+          </div>
 
           {/* spec sheet card */}
           <motion.div
