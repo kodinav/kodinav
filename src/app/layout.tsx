@@ -209,6 +209,13 @@ export default function RootLayout({
       className={`${anton.variable} ${instrument.variable} ${spaceMono.variable} ${archivo.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* Geo-aware pricing: set the region flag before paint (no flash).
+            India (Asia/Kolkata timezone or en-IN locale) sees ₹, else USD. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=(Intl.DateTimeFormat().resolvedOptions().timeZone||'');var l=(navigator.language||'');var india=/Kolkata|Calcutta/i.test(t)||/[-_]IN$/i.test(l);document.documentElement.setAttribute('data-region',india?'in':'intl');}catch(e){document.documentElement.setAttribute('data-region','in');}})();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}

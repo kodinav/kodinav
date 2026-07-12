@@ -1,4 +1,5 @@
 import { site } from "@/data/site";
+import { Price } from "./Price";
 import { Reveal } from "./motion";
 import { ButtonLink } from "./ui";
 import { Stamp } from "./Stamp";
@@ -45,7 +46,7 @@ export function CtaSection({
             </ButtonLink>
           </div>
           <p className="annotation">
-            Projects from {site.priceFloor} · Response within one business day
+            Projects from <Price inr={site.priceFloor} usd={site.priceFloorUsd} /> · Response within one business day
           </p>
         </Reveal>
       </div>

@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Chip, Eyebrow } from "@/components/ui";
+import { Price } from "@/components/Price";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
 
@@ -51,7 +52,7 @@ export default function ServicesPage() {
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
               Websites, platforms, apps and internal systems. Scoped honestly,
               engineered properly, and supported after launch. Projects start
-              from {site.priceFloor}.
+              from <Price inr={site.priceFloor} usd={site.priceFloorUsd} />.
             </p>
           </Reveal>
         </div>
@@ -67,7 +68,7 @@ export default function ServicesPage() {
             <div className="flex flex-col gap-3">
               <p className="annotation flex items-center gap-3">
                 <span className="crosshair text-accent" aria-hidden />
-                Start here — {site.audit.priceUsd}
+                Start here — <Price inr={site.audit.priceInr} usd={site.audit.priceUsd} />
               </p>
               <h2 className="font-display text-3xl uppercase sm:text-4xl">
                 Not sure what you need? Get a{" "}

@@ -4,6 +4,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { Faq } from "@/components/Faq";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
+import { Price } from "@/components/Price";
 import { site } from "@/data/site";
 
 export const metadata: Metadata = {
@@ -40,8 +41,8 @@ const pricingFaqs = [
     a: "Because packages force your project into a predefined box. You either pay for features you don't need or get squeezed on ones you do. Every Kodinav quote is built from your actual scope: each screen, workflow and integration itemised, so you can see exactly what you're paying for.",
   },
   {
-    q: "What does ₹75,000 actually get?",
-    a: "A focused project done properly. Typically a custom business website engineered for speed and search visibility, or a small internal tool. Larger platforms (LMS, CRM, booking systems, mobile apps) range from ₹1.5 lakh to ₹20 lakh depending on scope. The discovery call gives you a real number for your real project.",
+    q: "What does the starting price get?",
+    a: "A focused project done properly. Typically a custom business website engineered for speed and search visibility, or a small internal tool. Indian clients start from ₹75,000; international clients from $2,000. Larger platforms like an LMS, CRM, booking system or mobile app scale up from there depending on scope. The discovery call gives you a real, fixed number for your real project, in your currency.",
   },
   {
     q: "Can the price change mid-project?",
@@ -89,12 +90,14 @@ export default function PricingPage() {
             <div className="glass h-full rounded-3xl p-8 sm:p-10">
               <p className="text-sm text-faint">Projects start from</p>
               <p className="mt-2 text-6xl font-semibold tracking-tight">
-                {site.priceFloor}
+                <Price inr={site.priceFloor} usd={site.priceFloorUsd} />
               </p>
               <p className="mt-4 max-w-md text-pretty leading-relaxed text-muted">
-                Typical engagements range from {site.priceFloor} for a focused
-                business website to ₹20 lakh for full platforms: LMS, ERP,
-                booking systems and mobile apps.
+                Typical engagements range from{" "}
+                <Price inr={site.priceFloor} usd={site.priceFloorUsd} /> for a
+                focused business website to{" "}
+                <Price inr={site.priceCeil} usd={site.priceCeilUsd} /> for full
+                platforms: LMS, ERP, booking systems and mobile apps.
               </p>
               <ul className="mt-8 flex flex-col gap-3">
                 {included.map((item) => (
