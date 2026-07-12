@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
+import { trackLead } from "@/lib/fbq";
 
 const budgetsInr = ["₹75,000 – ₹1.5 lakh", "₹1.5 – ₹4 lakh", "₹4 – ₹10 lakh", "₹10 lakh+"];
 const budgetsUsd = ["$2,000 – $5,000", "$5,000 – $12,000", "$12,000 – $25,000", "$25,000+"];
@@ -50,6 +51,7 @@ export function ContactForm() {
         body: JSON.stringify({ ...data, source: "contact-page" }),
       });
       if (!res.ok) throw new Error("failed");
+      trackLead("contact-page");
       setStatus("done");
     } catch {
       setStatus("error");
