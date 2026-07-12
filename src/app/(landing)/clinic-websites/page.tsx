@@ -54,9 +54,9 @@ const content: LandingContent = {
     "Patient information handled with a security-first mindset",
     "You own everything: domain, code, data. No platform lock-in",
   ],
-  proofProject: getProject("triplipi")!,
+  proofProject: getProject("kosmo-dental-clinic")!,
   proofNote:
-    "Recent work: Triplipi, a fast, editorial public platform where visitors browse, trust the brand and move to a booking. The same architecture turns clinic website visitors into booked appointments.",
+    "Kosmo Dental Clinic, a mobile-first clinic website built to turn visitors into booked appointments and phone calls. Treatments, credentials and patient reviews presented the way patients actually evaluate a clinic, with booking, calling and WhatsApp one tap away.",
   steps: [
     {
       title: "Free strategy call",

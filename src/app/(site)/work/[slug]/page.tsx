@@ -225,7 +225,7 @@ export default async function CaseStudyPage({
           <div className="mt-10 grid items-start gap-6 lg:grid-cols-[1.55fr_1fr]">
             <Reveal>
               <ProjectShot
-                image={project.images.desktop[0]}
+                image={project.images.desktop[0] ?? project.images.cover}
                 caption={`${project.name} — desktop`}
                 sizes="(max-width: 1024px) 100vw, 620px"
               />

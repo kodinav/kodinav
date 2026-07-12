@@ -329,11 +329,11 @@ export default function Home() {
           <Reveal delay={0.1} className="mt-12">
             <blockquote className="max-w-4xl">
               <p className="font-serif text-2xl leading-snug text-pretty italic sm:text-4xl">
-                I&apos;d rather show you four projects I actually built than
+                I&apos;d rather show you seven projects I actually built than
                 claim a hundred I didn&apos;t. Every screen on this page links
-                to real, running software: a language platform, an EdTech
-                library, a travel product, an online store. If we work together,
-                yours joins them.
+                to real, running software: learning platforms, a travel product,
+                an online store, a dental clinic, a logistics platform shipping
+                to 120 countries. If we work together, yours joins them.
               </p>
               <footer className="mt-8 flex items-center gap-4">
                 <span aria-hidden className="h-px w-10 bg-accent" />

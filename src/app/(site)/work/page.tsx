@@ -58,10 +58,11 @@ export default function WorkPage() {
               Real, running <span className="text-gradient">software</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              Four projects you can actually open: a language-learning platform,
-              an EdTech library, a travel product and an online store. Every case
-              study follows the same honest structure: the business problem, what
-              was built, and what changed.
+              Seven projects you can actually open: two learning platforms, a
+              travel product, an online store, a dental clinic, an enterprise
+              logistics platform and a consumer web app. Every case study follows
+              the same honest structure: the business problem, what was built,
+              and what changed.
             </p>
           </Reveal>
         </div>
