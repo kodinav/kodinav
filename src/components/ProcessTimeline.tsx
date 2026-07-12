@@ -58,8 +58,8 @@ export function ProcessTimeline({ compact = false }: { compact?: boolean }) {
       {steps.map((s) => (
         <motion.li
           key={s.step}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 20 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="group border-b border-line"

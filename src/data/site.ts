@@ -8,7 +8,9 @@ export const site = {
   phoneRaw: "+918126661493",
   whatsapp:
     "https://wa.me/918126661493?text=Hi%20Abhinav%2C%20I%27m%20interested%20in%20discussing%20a%20software%20project.",
-  calendly: "https://calendly.com/kodinav/discovery-call", // TODO: replace with real Calendly URL
+  // Booking link. Empty = booking UI hidden and booking CTAs fall back to the
+  // contact form. TODO: paste the real Calendly URL once the account exists.
+  calendly: "",
   location: "India",
   serviceAreas: ["Delhi", "Noida", "Gurgaon", "Ghaziabad", "Delhi NCR", "India"],
   description:

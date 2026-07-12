@@ -24,8 +24,8 @@ export function TechStack() {
       {stack.map((tech, i) => (
         <motion.li
           key={tech.name}
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ y: 12 }}
+          whileInView={{ y: 0 }}
           viewport={{ once: true, margin: "-30px" }}
           transition={{ duration: 0.45, delay: (i % 6) * 0.04, ease: [0.22, 1, 0.36, 1] }}
           className="group border-b border-line"

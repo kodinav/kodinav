@@ -11,6 +11,13 @@ import { useEffect, useRef, type ReactNode } from "react";
 
 const easeOut = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Scroll reveals are TRANSFORM-ONLY by design: content is never hidden behind
+ * opacity. Fast flick-scrolling on phones can outrun IntersectionObserver and
+ * leave whileInView animations un-fired — with opacity that meant permanently
+ * blank sections; with transform-only the worst case is a 24px offset nobody
+ * notices. (Same principle as the CSS hero reveal / LCP fix.)
+ */
 export function Reveal({
   children,
   delay = 0,
@@ -27,8 +34,8 @@ export function Reveal({
   const Tag = motion[as];
   return (
     <Tag
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ y }}
+      whileInView={{ y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.7, delay, ease: easeOut }}
       className={className}
@@ -44,8 +51,8 @@ const staggerParent: Variants = {
 };
 
 const staggerChild: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: easeOut } },
+  hidden: { y: 24 },
+  show: { y: 0, transition: { duration: 0.65, ease: easeOut } },
 };
 
 export function Stagger({

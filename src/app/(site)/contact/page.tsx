@@ -30,9 +30,10 @@ const channels = [
     icon: CalendarClock,
     title: "Book a discovery call",
     body: "Thirty minutes, free, no obligation. The fastest way to get an honest scope and a real quote.",
-    href: site.calendly,
-    label: "Pick a time",
-    external: true,
+    // Falls back to the enquiry form until a real booking link exists
+    href: site.calendly || "#project-enquiry",
+    label: site.calendly ? "Pick a time" : "Request a call",
+    external: Boolean(site.calendly),
   },
   {
     icon: MessageCircle,
@@ -116,7 +117,10 @@ export default function ContactPage() {
 
       <section className="border-t border-line">
         <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <div
+            id="project-enquiry"
+            className="grid scroll-mt-28 gap-12 lg:grid-cols-[0.9fr_1.1fr]"
+          >
             <Reveal>
               <div className="flex flex-col gap-6">
                 <SectionHeading
@@ -148,28 +152,30 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Calendly inline embed */}
-      <section className="border-t border-line">
-        <div className="mx-auto max-w-6xl px-6 py-20">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Schedule Directly"
-              title="Pick a time that works."
-              align="center"
-            />
-          </Reveal>
-          <Reveal delay={0.1} className="mt-10">
-            <div className="glass overflow-hidden rounded-3xl">
-              <iframe
-                src={`${site.calendly}?hide_gdpr_banner=1&background_color=efeae0&text_color=16140f&primary_color=ff4400`}
-                title="Book a discovery call — Calendly"
-                loading="lazy"
-                className="h-175 w-full"
+      {/* Calendly inline embed — hidden until a real booking URL is configured */}
+      {site.calendly && (
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <Reveal>
+              <SectionHeading
+                eyebrow="Schedule Directly"
+                title="Pick a time that works."
+                align="center"
               />
-            </div>
-          </Reveal>
-        </div>
-      </section>
+            </Reveal>
+            <Reveal delay={0.1} className="mt-10">
+              <div className="glass overflow-hidden rounded-3xl">
+                <iframe
+                  src={`${site.calendly}?hide_gdpr_banner=1&background_color=efeae0&text_color=16140f&primary_color=ff4400`}
+                  title="Book a discovery call — Calendly"
+                  loading="lazy"
+                  className="h-175 w-full"
+                />
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
     </>
   );
 }
