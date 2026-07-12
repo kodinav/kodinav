@@ -9,12 +9,19 @@ export const site = {
   whatsapp:
     "https://wa.me/918126661493?text=Hi%20Abhinav%2C%20I%27m%20interested%20in%20discussing%20a%20software%20project.",
   calendly: "https://calendly.com/kodinav/discovery-call", // TODO: replace with real Calendly URL
-  location: "Delhi NCR, India",
+  location: "India",
   serviceAreas: ["Delhi", "Noida", "Gurgaon", "Ghaziabad", "Delhi NCR", "India"],
   description:
-    "Kodinav is an independent software studio in Delhi NCR, India. Freelance web developer Abhinav Saxena personally designs and builds fast, SEO-friendly websites, custom web applications, e-commerce stores and mobile apps with React, Next.js and Node.js.",
+    "Kodinav is an independent software studio. Freelance web developer Abhinav Saxena personally designs and builds fast, SEO-friendly websites, custom web applications, e-commerce stores and mobile apps with React, Next.js and Node.js — for clients worldwide.",
   priceFloor: "₹75,000",
   keywords: [
+    "freelance web developer",
+    "hire freelance web developer",
+    "remote web developer",
+    "website development services",
+    "Next.js development services",
+    "React development services",
+    "hire full stack developer",
     "freelance web developer India",
     "freelance web developer Delhi NCR",
     "website development India",

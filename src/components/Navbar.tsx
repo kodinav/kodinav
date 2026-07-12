@@ -155,7 +155,7 @@ export function Navbar() {
               </Link>
               <div className="flex items-center justify-between">
                 <p className="annotation">Independent Software Studio</p>
-                <p className="annotation">India</p>
+                <p className="annotation">Est. 2024</p>
               </div>
             </motion.div>
           </motion.div>

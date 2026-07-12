@@ -39,7 +39,7 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Website Development & Custom Web Apps | Delhi NCR, India`,
+    default: `${site.name} — Website Development & Custom Web Apps | Independent Software Studio`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
@@ -107,6 +107,7 @@ const organizationSchema = {
   areaServed: [
     ...site.serviceAreas.map((name) => ({ "@type": "City", name })),
     { "@type": "Country", name: "India" },
+    "Worldwide",
   ],
   availableLanguage: ["English", "Hindi"],
   priceRange: "₹₹₹",

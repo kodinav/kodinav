@@ -25,8 +25,8 @@ export function Footer() {
               {site.founder} with React, Next.js and Node.js.
             </p>
             <p className="max-w-xs text-xs leading-relaxed text-faint">
-              Serving Delhi, Noida, Gurgaon, Ghaziabad and businesses across
-              India — working worldwide.
+              Working with ambitious businesses worldwide — every timezone,
+              one engineer accountable.
             </p>
           </div>
 

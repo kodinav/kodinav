@@ -59,7 +59,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1.5 border-b border-line py-4"
         >
-          <p className="annotation">Est. 2024 — India</p>
+          <p className="annotation">Est. 2024</p>
           <p className="annotation hidden sm:block">Independent Software Studio</p>
           <p className="annotation flex items-center gap-2">
             <span className="relative flex size-1.5">
@@ -116,7 +116,7 @@ export function Hero() {
               Custom website development, web applications and mobile apps —
               engineered with React, Next.js and Node.js for performance,
               search rankings and long-term business growth. Every project
-              personally led by the founder, from Delhi NCR to anywhere.
+              personally led by the founder, wherever your business is.
             </p>
             <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
               <ButtonLink href="/contact" size="lg" className="w-full sm:w-auto">
