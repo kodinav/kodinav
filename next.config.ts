@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Hostinger's CDN doesn't purge on deploy. Cap the s-maxage sent for
+  // prerendered HTML to 5 minutes so a new deploy self-heals quickly instead
+  // of serving year-old HTML that references deleted CSS/JS chunks.
+  expireTime: 300,
   images: {
     // Serve AVIF/WebP where the browser supports them — smaller than JPEG
     formats: ["image/avif", "image/webp"],

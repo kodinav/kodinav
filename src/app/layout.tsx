@@ -3,6 +3,11 @@ import { Anton, Archivo, Instrument_Serif, Space_Mono } from "next/font/google";
 import { site } from "@/data/site";
 import "./globals.css";
 
+// Re-generate prerendered pages at most every 5 minutes. This caps the
+// s-maxage sent to Hostinger's CDN, so a fresh deploy stops being masked by
+// year-long cached HTML that references deleted asset chunks.
+export const revalidate = 300;
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
