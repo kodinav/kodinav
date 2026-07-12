@@ -85,10 +85,13 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
-  // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION (and _BING) as env vars to verify
-  // Search Console / Bing Webmaster Tools without touching code.
+  // Google Search Console verification. Present both as a DNS TXT record and
+  // here as an HTML meta tag, so a URL-prefix property verifies instantly
+  // without waiting on Google's DNS cache. Override via env var if needed.
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+      "9EfehS5fC17OPIdiq4iYrrrTR5EeBVwhno6duhgYp3A",
     other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
       ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
       : undefined,
