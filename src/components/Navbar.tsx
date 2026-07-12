@@ -59,7 +59,7 @@ export function Navbar() {
             <Wordmark />
           </Link>
 
-          <ul className="hidden items-center gap-7 lg:flex">
+          <ul className="hidden items-center gap-5 lg:flex xl:gap-7">
             {nav.map((item, i) => {
               const active =
                 item.href === pathname || pathname.startsWith(item.href + "/");

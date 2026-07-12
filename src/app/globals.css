@@ -325,6 +325,14 @@ h2 {
   animation-delay: -3s;
 }
 
+/* Hide scrollbars on horizontally-scrolling chip rows */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Link underline draw */
 .u-draw {
   background-image: linear-gradient(currentColor, currentColor);

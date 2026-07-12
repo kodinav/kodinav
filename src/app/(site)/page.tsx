@@ -179,7 +179,7 @@ export default function Home() {
             />
           </Reveal>
           <Stagger className="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((s, i) => (
+            {services.slice(0, 8).map((s, i) => (
               <StaggerItem key={s.slug} className="bg-background">
                 <Link
                   href={`/services/${s.slug}`}
@@ -203,6 +203,26 @@ export default function Home() {
                 </Link>
               </StaggerItem>
             ))}
+            {/* View-all tile keeps the grid tidy — 14 cards was a wall */}
+            <StaggerItem className="bg-background">
+              <Link
+                href="/services"
+                className="group flex h-full flex-col justify-between gap-4 bg-surface p-6 transition-colors duration-300 hover:bg-accent hover:text-[#16140f] sm:p-7"
+              >
+                <span className="font-mono text-[0.625rem] text-faint transition-colors group-hover:text-[#16140f]/60">
+                  09–{String(services.length).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="font-display text-2xl leading-none uppercase">
+                    All {services.length} services
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted transition-colors group-hover:text-[#16140f]/70">
+                    Redesigns, maintenance, performance, portfolios and more
+                    <span aria-hidden> →</span>
+                  </p>
+                </div>
+              </Link>
+            </StaggerItem>
           </Stagger>
         </div>
       </section>

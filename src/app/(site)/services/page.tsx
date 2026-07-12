@@ -32,6 +32,38 @@ export const metadata: Metadata = {
   },
 };
 
+const serviceGroups = [
+  {
+    title: "Websites & Storefronts",
+    note: "Get found, look credible, convert",
+    slugs: [
+      "business-websites",
+      "landing-page-development",
+      "portfolio-websites",
+      "ecommerce",
+      "website-redesign",
+    ],
+  },
+  {
+    title: "Applications & Platforms",
+    note: "Software your business runs on",
+    slugs: [
+      "web-applications",
+      "mobile-apps",
+      "learning-management-systems",
+      "admin-dashboards",
+      "crm",
+      "erp",
+      "ai-integrations",
+    ],
+  },
+  {
+    title: "Performance & Care",
+    note: "Keep it fast, ranked and healthy",
+    slugs: ["website-performance", "website-maintenance"],
+  },
+];
+
 export default function ServicesPage() {
   return (
     <>
@@ -87,28 +119,46 @@ export default function ServicesPage() {
         </Reveal>
       </section>
 
+      {/* Services, grouped so 14 offerings scan in seconds */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
-        <Stagger className="grid gap-4 sm:grid-cols-2">
-          {services.map((s) => (
-            <StaggerItem key={s.slug}>
-              <Link
-                href={`/services/${s.slug}`}
-                className="card-hover glass group flex h-full flex-col gap-4 rounded-3xl p-8"
-              >
-                <h2 className="flex items-start justify-between gap-4 text-2xl font-semibold tracking-tight">
-                  {s.name}
-                  <ArrowUpRight className="mt-1 size-5 shrink-0 text-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-soft" />
-                </h2>
-                <p className="leading-relaxed text-muted">{s.short}</p>
-                <div className="mt-auto flex flex-wrap gap-2 pt-2">
-                  {s.stack.slice(0, 4).map((t) => (
-                    <Chip key={t}>{t}</Chip>
-                  ))}
+        {serviceGroups.map((group) => {
+          const groupServices = group.slugs
+            .map((slug) => services.find((s) => s.slug === slug))
+            .filter((s): s is NonNullable<typeof s> => Boolean(s));
+          return (
+            <div key={group.title} className="mb-16 last:mb-0">
+              <Reveal>
+                <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-line-strong pb-4">
+                  <h2 className="font-display text-2xl uppercase sm:text-3xl">
+                    {group.title}
+                  </h2>
+                  <p className="annotation hidden sm:block">{group.note}</p>
                 </div>
-              </Link>
-            </StaggerItem>
-          ))}
-        </Stagger>
+              </Reveal>
+              <Stagger className="grid gap-4 sm:grid-cols-2">
+                {groupServices.map((s) => (
+                  <StaggerItem key={s.slug}>
+                    <Link
+                      href={`/services/${s.slug}`}
+                      className="card-hover glass group flex h-full flex-col gap-4 rounded-3xl p-8"
+                    >
+                      <h3 className="flex items-start justify-between gap-4 text-2xl font-semibold tracking-tight">
+                        {s.name}
+                        <ArrowUpRight className="mt-1 size-5 shrink-0 text-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-soft" />
+                      </h3>
+                      <p className="leading-relaxed text-muted">{s.short}</p>
+                      <div className="mt-auto flex flex-wrap gap-2 pt-2">
+                        {s.stack.slice(0, 4).map((t) => (
+                          <Chip key={t}>{t}</Chip>
+                        ))}
+                      </div>
+                    </Link>
+                  </StaggerItem>
+                ))}
+              </Stagger>
+            </div>
+          );
+        })}
       </section>
 
       <CtaSection

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/Wordmark";
+import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { site } from "@/data/site";
 
 /**
@@ -26,7 +27,10 @@ export default function LandingLayout({
           </a>
         </div>
       </header>
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">
+        {children}
+      </main>
+      <WhatsAppFab />
       <footer className="ink pb-safe border-t border-line py-8">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-2 px-6 text-center">
           <p className="font-mono text-[0.625rem] tracking-[0.16em] text-faint uppercase">

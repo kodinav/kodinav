@@ -48,15 +48,6 @@ export function Footer() {
               ))}
               <li>
                 <Link
-                  href="/pricing"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  <span className="mr-2 font-mono text-[0.625rem] text-faint">07</span>
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/website-audit"
                   className="u-draw text-sm text-accent transition-colors hover:text-foreground"
                 >
