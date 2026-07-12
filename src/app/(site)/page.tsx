@@ -4,6 +4,7 @@ import { Hero } from "@/components/Hero";
 import { TechStack } from "@/components/TechStack";
 import { CtaSection } from "@/components/CtaSection";
 import { ProjectShot } from "@/components/ProjectVisual";
+import { Price } from "@/components/Price";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { ArrowLink, ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { projects } from "@/data/projects";
@@ -359,7 +360,7 @@ export default function Home() {
             <Reveal delay={0.1}>
               <div className="flex flex-col items-start gap-5 lg:items-end">
                 <p className="font-display text-6xl uppercase sm:text-7xl">
-                  {site.priceFloor}
+                  <Price inr={site.priceFloor} usd={site.priceFloorUsd} />
                   <span className="font-serif text-3xl text-accent italic">
                     {" "}
                     onwards
@@ -385,7 +386,11 @@ export default function Home() {
                 </p>
                 <h3 className="font-display text-3xl uppercase sm:text-4xl">
                   Start with a{" "}
-                  <span className="text-gradient">{site.audit.priceUsd} website audit</span>.
+                  <span className="text-gradient">
+                    <Price inr={site.audit.priceInr} usd={site.audit.priceUsd} />{" "}
+                    website audit
+                  </span>
+                  .
                 </h3>
                 <p className="max-w-xl leading-relaxed text-muted">
                   A real engineer tells you exactly why your site is slow,

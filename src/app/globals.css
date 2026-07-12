@@ -61,6 +61,18 @@ html {
   text-size-adjust: 100%;
 }
 
+/* ---------- Geo-aware pricing (see Price.tsx + the inline script) ---------- */
+/* Default (India, or JS disabled): show INR, hide USD. */
+.price-intl {
+  display: none;
+}
+:root[data-region="intl"] .price-in {
+  display: none;
+}
+:root[data-region="intl"] .price-intl {
+  display: inline;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
