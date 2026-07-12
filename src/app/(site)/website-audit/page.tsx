@@ -5,7 +5,6 @@ import { AuditForm } from "@/components/AuditForm";
 import { Faq } from "@/components/Faq";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Eyebrow, SectionHeading } from "@/components/ui";
-import { Price } from "@/components/Price";
 import { site } from "@/data/site";
 import { breadcrumbSchema } from "@/lib/schema";
 
@@ -160,10 +159,10 @@ export default function WebsiteAuditPage() {
               first. Delivered in {site.audit.turnaround}.
             </p>
             <div className="flex flex-wrap items-baseline justify-center gap-3">
-              <span className="font-display text-5xl">
-                <Price inr={site.audit.priceInr} usd={site.audit.priceUsd} />
+              <span className="font-display text-5xl">{site.audit.priceUsd}</span>
+              <span className="annotation text-faint">
+                one-time · {site.audit.priceInr} in India
               </span>
-              <span className="annotation text-faint">one-time, fixed</span>
             </div>
             <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center">
               <Link
@@ -244,9 +243,9 @@ export default function WebsiteAuditPage() {
             <Eyebrow>Why bother</Eyebrow>
             <p className="mt-6 font-serif text-2xl leading-snug text-pretty italic sm:text-3xl">
               A website losing even a few enquiries a month is costing you far
-              more than the audit fee. It tells you whether that is happening,
-              and exactly what to do about it, before you spend real money on a
-              rebuild you might not need.
+              more than {site.audit.priceUsd}. The audit tells you whether that
+              is happening, and exactly what to do about it, before you spend
+              real money on a rebuild you might not need.
             </p>
           </Reveal>
         </div>
@@ -258,7 +257,7 @@ export default function WebsiteAuditPage() {
           <Reveal>
             <SectionHeading
               eyebrow="Order your audit"
-              title="Ready when you are."
+              title={`Start for ${site.audit.priceUsd}.`}
               lead="Tell me your website and your biggest worry. You get a secure payment link by email, then your report and walkthrough within 3 business days."
               align="center"
             />

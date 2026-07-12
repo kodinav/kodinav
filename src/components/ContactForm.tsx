@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { trackLead } from "@/lib/fbq";
-
-const budgetsInr = ["₹75,000 – ₹1.5 lakh", "₹1.5 – ₹4 lakh", "₹4 – ₹10 lakh", "₹10 lakh+"];
-const budgetsUsd = ["$2,000 – $5,000", "$5,000 – $12,000", "$12,000 – $25,000", "$25,000+"];
 
 const inputCls =
   // text-base on mobile: 16px stops iOS Safari from zooming into focused fields
@@ -28,17 +24,6 @@ export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
     "idle"
   );
-  // Default to INR (home market); swap to USD after mount for non-India visitors.
-  // The dropdown is collapsed, so there is no visible flash.
-  const [budgets, setBudgets] = useState(budgetsInr);
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      if (document.documentElement.dataset.region === "intl") {
-        setBudgets(budgetsUsd);
-      }
-    });
-    return () => cancelAnimationFrame(id);
-  }, []);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,7 +36,6 @@ export function ContactForm() {
         body: JSON.stringify({ ...data, source: "contact-page" }),
       });
       if (!res.ok) throw new Error("failed");
-      trackLead("contact-page");
       setStatus("done");
     } catch {
       setStatus("error");
@@ -128,9 +112,10 @@ export function ContactForm() {
         </label>
         <select id="c-budget" name="budget" className={inputCls} defaultValue="">
           <option value="">Prefer to discuss</option>
-          {budgets.map((b) => (
-            <option key={b}>{b}</option>
-          ))}
+          <option>₹75,000 – ₹1.5 lakh</option>
+          <option>₹1.5 – ₹4 lakh</option>
+          <option>₹4 – ₹10 lakh</option>
+          <option>₹10 lakh+</option>
         </select>
       </div>
       <button

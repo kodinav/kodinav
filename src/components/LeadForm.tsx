@@ -3,7 +3,6 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { trackLead } from "@/lib/fbq";
 
 const inputCls =
   // text-base on mobile: 16px stops iOS Safari from zooming into focused fields
@@ -39,7 +38,6 @@ export function LeadForm({
         body: JSON.stringify({ ...data, source }),
       });
       if (!res.ok) throw new Error("failed");
-      trackLead(source);
       setStatus("done");
     } catch {
       setStatus("error");
