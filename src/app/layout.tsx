@@ -194,6 +194,10 @@ const websiteSchema = {
   inLanguage: "en-IN",
 };
 
+// GA4 Measurement ID. Public by design (it ships in the page HTML); override
+// with the NEXT_PUBLIC_GA_ID env var if the property ever changes.
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-X8JNSHE7G2";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -218,16 +222,16 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         {children}
-        {/* GA4 — activates only when NEXT_PUBLIC_GA_ID is set (e.g. G-XXXXXXX) */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
+        {/* Google Analytics 4 */}
+        {GA_ID && (
           <>
             <script
               async
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
             />
             <script
               dangerouslySetInnerHTML={{
-                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`,
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','${GA_ID}');`,
               }}
             />
           </>
