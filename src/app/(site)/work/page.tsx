@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Work — Case Studies | Kodinav",
     description:
-      "Real, running software built end-to-end — education platforms, a travel product and an online store.",
+      "Real, running software built end to end: education platforms, a travel product and an online store.",
     url: `${site.url}/work`,
     type: "website",
   },
@@ -58,7 +58,7 @@ export default function WorkPage() {
               Real, running <span className="text-gradient">software</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              Four projects you can actually open — a language-learning platform,
+              Four projects you can actually open: a language-learning platform,
               an EdTech library, a travel product and an online store. Every case
               study follows the same honest structure: the business problem, what
               was built, and what changed.

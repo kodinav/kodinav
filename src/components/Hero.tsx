@@ -113,7 +113,7 @@ export function Hero() {
             style={{ animationDelay: "0.25s" }}
           >
             <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-              Custom website development, web applications and mobile apps —
+              Custom website development, web applications and mobile apps,
               engineered with React, Next.js and Node.js for performance,
               search rankings and long-term business growth. Every project
               personally led by the founder, wherever your business is.

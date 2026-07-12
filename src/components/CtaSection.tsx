@@ -5,7 +5,7 @@ import { Stamp } from "./Stamp";
 
 export function CtaSection({
   title = "Have a project in mind?",
-  lead = `A discovery call costs nothing and commits you to nothing. We talk about your business, I tell you honestly what's worth building — and what isn't.`,
+  lead = `A discovery call costs nothing and commits you to nothing. We talk about your business, and I tell you honestly what's worth building and what isn't.`,
   primaryLabel = "Book Discovery Call",
   primaryHref = "/contact",
 }: {
@@ -45,7 +45,7 @@ export function CtaSection({
             </ButtonLink>
           </div>
           <p className="annotation">
-            Projects from {site.priceFloor} — response within one business day
+            Projects from {site.priceFloor} · Response within one business day
           </p>
         </Reveal>
       </div>

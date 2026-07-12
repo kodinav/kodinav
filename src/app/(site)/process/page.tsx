@@ -8,7 +8,7 @@ import { site } from "@/data/site";
 export const metadata: Metadata = {
   title: "Development Process — Discovery to Deployment",
   description:
-    "How Kodinav takes a software project from discovery to deployment and support — a nine-step process built on written scopes, fixed quotes, usable slices and honest communication. No surprises.",
+    "How Kodinav takes a software project from discovery to deployment and support: a nine-step process built on written scopes, fixed quotes, usable slices and honest communication. No surprises.",
   keywords: [
     "software development process",
     "web development process",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Development Process | Kodinav",
     description:
-      "A nine-step process from discovery to launch — written scopes, usable slices, no surprises.",
+      "A nine-step process from discovery to launch. Written scopes, usable slices, no surprises.",
     url: `${site.url}/process`,
     type: "website",
   },
@@ -44,7 +44,7 @@ export default function ProcessPage() {
               <span className="text-gradient">That&apos;s the process.</span>
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              Software projects fail through vagueness — vague scopes, vague
+              Software projects fail through vagueness: vague scopes, vague
               timelines, vague ownership. Every step below exists to remove a
               specific kind of surprise.
             </p>

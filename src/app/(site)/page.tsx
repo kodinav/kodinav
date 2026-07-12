@@ -33,7 +33,7 @@ const whyPoints = [
   },
   {
     title: "SEO-ready architecture",
-    body: "Semantic HTML, schema markup and page structures designed to rank — engineered in from day one, not retrofitted.",
+    body: "Semantic HTML, schema markup and page structures designed to rank. Engineered in from day one, not retrofitted.",
   },
   {
     title: "Built to scale, built to last",
@@ -41,7 +41,7 @@ const whyPoints = [
   },
   {
     title: "Security-first mindset",
-    body: "Role-based access, audited dependencies and careful data handling — because your customers' data is your reputation.",
+    body: "Role-based access, audited dependencies and careful data handling, because your customers' data is your reputation.",
   },
   {
     title: "Transparent communication",
@@ -49,11 +49,11 @@ const whyPoints = [
   },
   {
     title: "Long-term support",
-    body: "Every project includes a support period, and you own the code completely. Most clients stay for years — by choice, not lock-in.",
+    body: "Every project includes a support period, and you own the code completely. Most clients stay for years. By choice, not lock-in.",
   },
   {
     title: "Business-focused solutions",
-    body: "Software is a means to an outcome — more admissions, more bookings, fewer manual hours. That outcome is the spec.",
+    body: "Software is a means to an outcome: more admissions, more bookings, fewer manual hours. That outcome is the spec.",
   },
 ];
 
@@ -153,7 +153,7 @@ export default function Home() {
           <div className="ink flex flex-col justify-between gap-6 p-7">
             <p className="annotation">From the files</p>
             <p className="font-serif text-2xl leading-snug italic sm:text-3xl">
-              &ldquo;Every case file follows the same honest structure — the
+              &ldquo;Every case file follows the same honest structure: the
               business problem, what was built, and what actually changed.&rdquo;
             </p>
             <ButtonLink
@@ -174,7 +174,7 @@ export default function Home() {
             <SectionHeading
               eyebrow="Fig. 02 — Services"
               title="One studio. The full stack."
-              lead="From a five-page business website to a full ERP — designed, engineered, deployed and supported under one roof."
+              lead="From a five-page business website to a full ERP. Designed, engineered, deployed and supported under one roof."
             />
           </Reveal>
           <Stagger className="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
@@ -285,7 +285,7 @@ export default function Home() {
                 </h2>
                 <p className="text-pretty text-lg leading-relaxed text-muted">
                   Kodinav is an independent software studio founded by{" "}
-                  <span className="text-foreground">{site.founder}</span> — one
+                  <span className="text-foreground">{site.founder}</span>, one
                   experienced engineer who designs, architects and builds every
                   project personally. Direct communication, decisions explained
                   in plain language, and software built by someone whose
@@ -293,7 +293,7 @@ export default function Home() {
                 </p>
                 <p className="text-pretty leading-relaxed text-muted">
                   When additional expertise is required, I collaborate with a
-                  trusted network of designers and developers — but ownership,
+                  trusted network of designers and developers. But ownership,
                   quality and accountability always stay with me.
                 </p>
                 <ArrowLink href="/about">More about the studio</ArrowLink>
@@ -310,7 +310,7 @@ export default function Home() {
             <SectionHeading
               eyebrow="Fig. 05 — Technology"
               title="Boring where it should be. Modern where it matters."
-              lead="Proven, widely-adopted technologies chosen for longevity — so any competent engineer can maintain what I build, and you're never held hostage by an exotic stack."
+              lead="Proven, widely-adopted technologies chosen for longevity. Any competent engineer can maintain what I build, and you're never held hostage by an exotic stack."
             />
           </Reveal>
           <div className="mt-14">
@@ -330,7 +330,7 @@ export default function Home() {
               <p className="font-serif text-2xl leading-snug text-pretty italic sm:text-4xl">
                 I&apos;d rather show you four projects I actually built than
                 claim a hundred I didn&apos;t. Every screen on this page links
-                to real, running software — a language platform, an EdTech
+                to real, running software: a language platform, an EdTech
                 library, a travel product, an online store. If we work together,
                 yours joins them.
               </p>
@@ -353,7 +353,7 @@ export default function Home() {
               <SectionHeading
                 eyebrow="Fig. 07 — Pricing"
                 title="Honest pricing, fixed quotes."
-                lead="After a discovery call you receive a fixed, itemised quote — every screen and workflow named, nothing vague, nothing added mid-project."
+                lead="After a discovery call you receive a fixed, itemised quote. Every screen and workflow named, nothing vague, nothing added mid-project."
               />
             </Reveal>
             <Reveal delay={0.1}>

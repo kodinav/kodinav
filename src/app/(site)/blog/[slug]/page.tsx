@@ -134,7 +134,7 @@ export default async function BlogPostPage({
           <Reveal className="mt-12 border-t border-line pt-8">
             <p className="text-sm text-faint">
               Written by{" "}
-              <span className="text-foreground">{site.founder}</span> — founder
+              <span className="text-foreground">{site.founder}</span>, founder
               of {site.name}, an independent software studio.
             </p>
           </Reveal>

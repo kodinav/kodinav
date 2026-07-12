@@ -21,11 +21,11 @@ export function Footer() {
             <p className="annotation">The Studio</p>
             <p className="max-w-xs text-sm leading-relaxed text-muted">
               Independent software studio. Website development, web
-              applications and mobile apps — personally engineered by{" "}
+              applications and mobile apps, personally engineered by{" "}
               {site.founder} with React, Next.js and Node.js.
             </p>
             <p className="max-w-xs text-xs leading-relaxed text-faint">
-              Working with ambitious businesses worldwide — every timezone,
+              Working with ambitious businesses worldwide. Every timezone,
               one engineer accountable.
             </p>
           </div>
@@ -92,7 +92,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="u-draw text-sm text-muted transition-colors hover:text-foreground"
                 >
-                  WhatsApp — {site.phone}
+                  WhatsApp · {site.phone}
                 </a>
               </li>
               <li>
@@ -117,7 +117,7 @@ export function Footer() {
 
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 sm:flex-row sm:items-center">
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-faint">
-            © {new Date().getFullYear()} {site.name} — {site.tagline}
+            © {new Date().getFullYear()} {site.name} · {site.tagline}
           </p>
           {/* barcode ornament */}
           <div aria-hidden className="flex h-5 items-stretch gap-0.75 opacity-50">

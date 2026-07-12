@@ -8,7 +8,7 @@ import { site } from "@/data/site";
 export const metadata: Metadata = {
   title: "Contact — Book a Free Discovery Call",
   description:
-    "Book a free discovery call with Kodinav — or reach out by email or WhatsApp. Every enquiry is answered personally by founder Abhinav Saxena within one business day.",
+    "Book a free discovery call with Kodinav, or reach out by email or WhatsApp. Every enquiry is answered personally by founder Abhinav Saxena within one business day.",
   keywords: [
     "contact software developer India",
     "book discovery call",
@@ -37,7 +37,7 @@ const channels = [
   {
     icon: MessageCircle,
     title: "WhatsApp",
-    body: `Prefer chat? Message ${site.phone} directly — useful for quick questions before committing to a call.`,
+    body: `Prefer chat? Message ${site.phone} directly. Useful for quick questions before committing to a call.`,
     href: site.whatsapp,
     label: "Open WhatsApp",
     external: true,
@@ -122,7 +122,7 @@ export default function ContactPage() {
                 <SectionHeading
                   eyebrow="Project Enquiry"
                   title="Tell me about your project."
-                  lead="A few honest answers help me come to our first conversation already prepared — often with a rough approach in hand."
+                  lead="A few honest answers help me come to our first conversation already prepared, often with a rough approach in hand."
                 />
                 <div className="glass flex items-start gap-4 rounded-2xl p-6">
                   <MapPin className="mt-1 size-5 shrink-0 text-accent-soft" />
@@ -130,7 +130,7 @@ export default function ContactPage() {
                     <h3 className="font-medium">Based in {site.location}</h3>
                     <p className="mt-1 text-sm leading-relaxed text-muted">
                       Working with clients in Delhi, Noida, Gurgaon, Ghaziabad
-                      and across India — and worldwide. Calls scheduled in your
+                      and across India, and worldwide. Calls scheduled in your
                       timezone.
                     </p>
                   </div>

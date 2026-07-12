@@ -54,8 +54,8 @@ export function LeadForm({
         <CheckCircle2 className="size-12 text-accent" />
         <h3 className="font-display text-3xl uppercase">Request received.</h3>
         <p className="max-w-sm text-pretty text-muted">
-          You&apos;ll hear back from Abhinav personally within one business day
-          — usually much sooner.
+          You&apos;ll hear back from Abhinav personally within one business day,
+          usually much sooner.
         </p>
       </motion.div>
     );

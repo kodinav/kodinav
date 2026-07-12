@@ -221,7 +221,7 @@ export default async function ServicePage({
 
       <CtaSection
         title={`Discuss your ${service.name.toLowerCase()} project.`}
-        lead="A discovery call gives you an honest scope and a fixed quote — and a clear 'this isn't worth building' if that's the truth."
+        lead="A discovery call gives you an honest scope and a fixed quote. And a clear 'this isn't worth building' if that's the truth."
       />
     </>
   );

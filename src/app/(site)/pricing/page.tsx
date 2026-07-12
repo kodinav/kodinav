@@ -8,7 +8,7 @@ import { site } from "@/data/site";
 
 export const metadata: Metadata = {
   title: "Pricing — Custom Software Projects from ₹75,000",
-  description: `Kodinav software projects start from ${site.priceFloor}, with a fixed, itemised quote after a free discovery call. No packages, no hidden costs, no mid-project surprises — you own the code.`,
+  description: `Kodinav software projects start from ${site.priceFloor}, with a fixed, itemised quote after a free discovery call. No packages, no hidden costs, no mid-project surprises. You own the code.`,
   keywords: [
     "software development cost India",
     "website development price India",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 const included = [
   "Discovery and written scope before any commitment",
-  "Fixed, itemised quote — priced per project, not per hour",
+  "Fixed, itemised quote priced per project, not per hour",
   "Design, development, testing and deployment",
   "Performance, SEO and security engineering as standard",
   "Post-launch support period included",
@@ -37,15 +37,15 @@ const included = [
 const pricingFaqs = [
   {
     q: "Why don't you show fixed packages?",
-    a: "Because packages force your project into a predefined box — you either pay for features you don't need or get squeezed on ones you do. Every Kodinav quote is built from your actual scope: each screen, workflow and integration itemised, so you can see exactly what you're paying for.",
+    a: "Because packages force your project into a predefined box. You either pay for features you don't need or get squeezed on ones you do. Every Kodinav quote is built from your actual scope: each screen, workflow and integration itemised, so you can see exactly what you're paying for.",
   },
   {
     q: "What does ₹75,000 actually get?",
-    a: "A focused project done properly — typically a custom business website engineered for speed and search visibility, or a small internal tool. Larger platforms (LMS, CRM, booking systems, mobile apps) range from ₹1.5 lakh to ₹20 lakh depending on scope. The discovery call gives you a real number for your real project.",
+    a: "A focused project done properly. Typically a custom business website engineered for speed and search visibility, or a small internal tool. Larger platforms (LMS, CRM, booking systems, mobile apps) range from ₹1.5 lakh to ₹20 lakh depending on scope. The discovery call gives you a real number for your real project.",
   },
   {
     q: "Can the price change mid-project?",
-    a: "Not for the agreed scope — that's the point of writing it down. If you add scope mid-project, the addition is quoted separately before any work begins, and you decide.",
+    a: "Not for the agreed scope. That's the point of writing it down. If you add scope mid-project, the addition is quoted separately before any work begins, and you decide.",
   },
   {
     q: "How do payments work?",
@@ -53,7 +53,7 @@ const pricingFaqs = [
   },
   {
     q: "What about ongoing costs after launch?",
-    a: "Hosting and infrastructure run at cost (often ₹500–₹5,000/month depending on scale) — billed directly to your accounts, which you own. Optional support retainers are quoted separately and cancellable anytime.",
+    a: "Hosting and infrastructure run at cost, often ₹500 to ₹5,000 a month depending on scale, billed directly to accounts you own. Optional support retainers are quoted separately and cancellable anytime.",
   },
 ];
 
@@ -93,7 +93,7 @@ export default function PricingPage() {
               </p>
               <p className="mt-4 max-w-md text-pretty leading-relaxed text-muted">
                 Typical engagements range from {site.priceFloor} for a focused
-                business website to ₹20 lakh for full platforms — LMS, ERP,
+                business website to ₹20 lakh for full platforms: LMS, ERP,
                 booking systems and mobile apps.
               </p>
               <ul className="mt-8 flex flex-col gap-3">
@@ -126,7 +126,7 @@ export default function PricingPage() {
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   Every screen, workflow and integration named in a document we
-                  both agree on — the foundation that makes a fixed quote
+                  both agree on. The foundation that makes a fixed quote
                   possible.
                 </p>
               </div>
@@ -162,7 +162,7 @@ export default function PricingPage() {
 
       <CtaSection
         title="Get a real number for your project."
-        lead="Thirty minutes of discovery gets you an honest scope and a fixed quote — or an honest 'you don't need this yet.'"
+        lead="Thirty minutes of discovery gets you an honest scope and a fixed quote. Or an honest 'you don't need this yet.'"
       />
     </>
   );

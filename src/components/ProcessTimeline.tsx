@@ -6,17 +6,17 @@ export const processSteps = [
   {
     step: "01",
     title: "Discovery",
-    body: "A structured conversation about your business, your customers and what success looks like. No jargon, no pressure — by the end we both know whether this project should exist.",
+    body: "A structured conversation about your business, your customers and what success looks like. No jargon, no pressure. By the end we both know whether this project should exist.",
   },
   {
     step: "02",
     title: "Research",
-    body: "I study how your business actually operates — your workflows, your competitors, and what your customers need to believe before they buy.",
+    body: "I study how your business actually operates: your workflows, your competitors, and what your customers need to believe before they buy.",
   },
   {
     step: "03",
     title: "Planning",
-    body: "A written scope naming every screen, workflow and integration. Both of us can point at the same document and see the same product — this is what makes fixed quotes possible.",
+    body: "A written scope naming every screen, workflow and integration. Both of us can point at the same document and see the same product. This is what makes fixed quotes possible.",
   },
   {
     step: "04",
@@ -26,7 +26,7 @@ export const processSteps = [
   {
     step: "05",
     title: "Architecture",
-    body: "Data models, infrastructure and integration decisions made deliberately — so the system scales with your growth instead of being rebuilt in two years.",
+    body: "Data models, infrastructure and integration decisions made deliberately, so the system scales with your growth instead of being rebuilt in two years.",
   },
   {
     step: "06",
@@ -36,12 +36,12 @@ export const processSteps = [
   {
     step: "07",
     title: "Testing",
-    body: "Automated tests, real-device checks and load testing where it matters — like the day 2,000 students press 'Start Test' at once.",
+    body: "Automated tests, real-device checks and load testing where it matters. Like the day 2,000 students press 'Start Test' at once.",
   },
   {
     step: "08",
     title: "Deployment",
-    body: "Launch handled end to end: hosting, domains, SSL, monitoring and backups. Launch day should be boring — that's the goal.",
+    body: "Launch handled end to end: hosting, domains, SSL, monitoring and backups. Launch day should be boring. That's the goal.",
   },
   {
     step: "09",

@@ -156,7 +156,7 @@ const founderSchema = {
   name: site.founder,
   jobTitle: "Founder & Software Engineer",
   description:
-    "Freelance web developer and full stack engineer in Delhi NCR, India. Founder of Kodinav — builds websites, web applications and mobile apps with React, Next.js, Node.js and Flutter.",
+    "Freelance web developer and full stack engineer in Delhi NCR, India. Founder of Kodinav. Builds websites, web applications and mobile apps with React, Next.js, Node.js and Flutter.",
   url: `${site.url}/about`,
   image: `${site.url}/founder.jpg`,
   email: site.email,

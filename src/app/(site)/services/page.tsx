@@ -10,7 +10,7 @@ import { site } from "@/data/site";
 export const metadata: Metadata = {
   title: "Services — Web, App, LMS, CRM, ERP & AI Development",
   description:
-    "Business websites, custom web applications, mobile apps, learning management systems (LMS), CRM, ERP, admin dashboards, AI integrations and e-commerce — engineered end-to-end by Kodinav in India, from ₹75,000.",
+    "Business websites, custom web applications, mobile apps, learning management systems (LMS), CRM, ERP, admin dashboards, AI integrations and e-commerce. Engineered end to end by Kodinav, from ₹75,000.",
   keywords: [
     "software development services India",
     "custom web application development",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Services | Kodinav — Independent Software Studio",
     description:
-      "From a business website to a full ERP — designed, engineered, deployed and supported under one roof.",
+      "From a business website to a full ERP. Designed, engineered, deployed and supported under one roof.",
     url: `${site.url}/services`,
     type: "website",
   },
@@ -49,7 +49,7 @@ export default function ServicesPage() {
               <span className="text-gradient">run on software</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              Websites, platforms, apps and internal systems — scoped honestly,
+              Websites, platforms, apps and internal systems. Scoped honestly,
               engineered properly, and supported after launch. Projects start
               from {site.priceFloor}.
             </p>
@@ -83,7 +83,7 @@ export default function ServicesPage() {
 
       <CtaSection
         title="Not sure which service fits?"
-        lead="That's what the discovery call is for. Describe the problem — I'll tell you what's worth building, what isn't, and what it would cost."
+        lead="That's what the discovery call is for. Describe the problem and I'll tell you what's worth building, what isn't, and what it would cost."
       />
     </>
   );

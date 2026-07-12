@@ -12,7 +12,7 @@ export const site = {
   location: "India",
   serviceAreas: ["Delhi", "Noida", "Gurgaon", "Ghaziabad", "Delhi NCR", "India"],
   description:
-    "Kodinav is an independent software studio. Freelance web developer Abhinav Saxena personally designs and builds fast, SEO-friendly websites, custom web applications, e-commerce stores and mobile apps with React, Next.js and Node.js — for clients worldwide.",
+    "Kodinav is an independent software studio. Freelance web developer Abhinav Saxena personally designs and builds fast, SEO-friendly websites, custom web applications, e-commerce stores and mobile apps with React, Next.js and Node.js, for clients worldwide.",
   priceFloor: "₹75,000",
   keywords: [
     "freelance web developer",

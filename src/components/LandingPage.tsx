@@ -24,9 +24,9 @@ export type LandingContent = {
 };
 
 const trustSignals = [
-  { icon: UserRound, text: "You work directly with the founder — no salespeople" },
+  { icon: UserRound, text: "You work directly with the founder. No salespeople" },
   { icon: Timer, text: "Response within one business day, usually sooner" },
-  { icon: ShieldCheck, text: "Fixed written quote — the price doesn't move" },
+  { icon: ShieldCheck, text: "Fixed written quote. The price doesn't move" },
 ];
 
 export function LandingPage({ content }: { content: LandingContent }) {
@@ -190,7 +190,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
             <SectionHeading
               eyebrow="Free Strategy Call"
               title={c.formTitle}
-              lead="Fill this in and you'll hear back within one business day — with real observations about your current online presence, not a canned pitch."
+              lead="Fill this in and you'll hear back within one business day, with real observations about your current online presence, not a canned pitch."
               align="center"
             />
           </Reveal>

@@ -7,7 +7,7 @@ import { site } from "@/data/site";
 
 export const metadata: Metadata = {
   title: `About — Independent Software Studio by ${site.founder}`,
-  description: `Kodinav is an independent software studio in India founded by ${site.founder}. Every website, web app and mobile app is personally designed, architected and built by the founder — direct communication, full ownership, no agency overhead.`,
+  description: `Kodinav is an independent software studio in India founded by ${site.founder}. Every website, web app and mobile app is personally designed, architected and built by the founder. Direct communication, full ownership, no agency overhead.`,
   keywords: [
     "about Kodinav",
     "Abhinav Saxena software engineer",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 const principles = [
   {
     title: "Personal ownership",
-    body: "My name is on every project. There is no one to pass blame to and no incentive to cut corners — the work is the reputation.",
+    body: "My name is on every project. There is no one to pass blame to and no incentive to cut corners. The work is the reputation.",
   },
   {
     title: "Quality over quantity",
@@ -35,7 +35,7 @@ const principles = [
   },
   {
     title: "Long-term relationships",
-    body: "The goal of every project is the next five years, not the invoice. Most clients stay for years — because the software keeps earning its keep.",
+    body: "The goal of every project is the next five years, not the invoice. Most clients stay for years, because the software keeps earning its keep.",
   },
   {
     title: "Honesty as strategy",
@@ -106,8 +106,8 @@ export default function AboutPage() {
               <p className="text-pretty leading-relaxed text-muted">
                 I&apos;m a full stack developer based in Delhi NCR who has
                 spent years designing and building web platforms, mobile apps
-                and business systems with React, Next.js, Node.js and Flutter —
-                from education platforms serving thousands of students to
+                and business systems with React, Next.js, Node.js and Flutter.
+                The range runs from education platforms serving thousands of students to
                 e-commerce and booking systems processing real revenue. Kodinav
                 is where that experience is applied with full ownership: I lead
                 every website development project personally, from the first
@@ -119,14 +119,14 @@ export default function AboutPage() {
                 opposite ways. Agencies sell you their best people in the
                 pitch, then staff your project with juniors. Marketplace
                 freelancers compete on price, which means competing on
-                shortcuts. An independent studio inverts both incentives — the
+                shortcuts. An independent studio inverts both incentives: the
                 person who wins your trust is the person who does the work, and
                 the work has to be good enough to carry the studio&apos;s entire
                 reputation.
               </p>
               <p className="text-pretty leading-relaxed text-muted">
-                When additional expertise is required — specialised design,
-                illustration, a second pair of engineering hands — I collaborate
+                When additional expertise is required, say specialised design,
+                illustration or a second pair of engineering hands, I collaborate
                 with a trusted network of designers and developers I&apos;ve
                 worked with for years. But architecture, quality and
                 accountability always stay with me.
@@ -158,7 +158,7 @@ export default function AboutPage() {
                   <h3 className="mb-1.5 font-semibold">Decisions made by a builder</h3>
                   <p className="text-sm leading-relaxed text-muted">
                     Every scope, estimate and architectural choice is made by
-                    someone who will personally implement it — which is why
+                    someone who will personally implement it. That is why
                     estimates hold and promises get kept.
                   </p>
                 </li>
@@ -193,7 +193,7 @@ export default function AboutPage() {
 
       <CtaSection
         title="Let's talk about your project."
-        lead="A discovery call is a conversation, not a pitch. Bring your problem — you'll leave with an honest assessment either way."
+        lead="A discovery call is a conversation, not a pitch. Bring your problem. You'll leave with an honest assessment either way."
       />
     </>
   );

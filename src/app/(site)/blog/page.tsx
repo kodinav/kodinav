@@ -10,7 +10,7 @@ import { site } from "@/data/site";
 export const metadata: Metadata = {
   title: "Blog — Software, Web Development, SEO & Business Growth",
   description:
-    "Plain-language writing on software, web development, performance, SEO, AI and business growth — the advice Kodinav gives clients, from the engineer's side of the table.",
+    "Plain-language writing on software, web development, performance, SEO, AI and business growth. The advice Kodinav gives clients, from the engineer's side of the table.",
   keywords: [
     "software development blog",
     "web development India blog",
@@ -56,7 +56,7 @@ export default function BlogPage() {
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
               Plain-language writing on software, performance, SEO and business
-              growth — the advice I give clients, published.
+              growth. The advice I give clients, published.
             </p>
           </Reveal>
         </div>
