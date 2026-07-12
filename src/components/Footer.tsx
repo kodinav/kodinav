@@ -16,8 +16,10 @@ export function Footer() {
       </div>
 
       <div className="pb-safe mx-auto max-w-7xl px-5 py-14 sm:px-8">
-        <div className="grid gap-12 md:grid-cols-[1.3fr_1fr_1fr_1fr]">
-          <div className="flex flex-col gap-4">
+        {/* 2-col on mobile so short link lists sit side by side instead of
+            stacking as sparse full-width columns */}
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12">
+          <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
             <p className="annotation">The Studio</p>
             <p className="max-w-xs text-sm leading-relaxed text-muted">
               Independent software studio. Website development, web
@@ -74,7 +76,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <p className="annotation mb-5">Contact</p>
             <ul className="flex flex-col gap-2.5">
               <li>
