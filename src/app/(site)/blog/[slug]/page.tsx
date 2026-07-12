@@ -126,7 +126,7 @@ export default async function BlogPostPage({
                   {section.paragraphs.map((p, j) => (
                     <p
                       key={j}
-                      className="mb-4 text-pretty text-[1.06rem] leading-relaxed text-muted"
+                      className="prose-justify mb-4 text-[1.06rem] leading-relaxed text-muted"
                     >
                       {p}
                     </p>

@@ -304,7 +304,7 @@ export default function Home() {
                 <h2 className="text-5xl sm:text-6xl">
                   Every project is <span className="text-gradient">personal</span>.
                 </h2>
-                <p className="text-pretty text-lg leading-relaxed text-muted">
+                <p className="prose-justify text-lg leading-relaxed text-muted">
                   Kodinav is an independent software studio founded by{" "}
                   <span className="text-foreground">{site.founder}</span>, one
                   experienced engineer who designs, architects and builds every
@@ -312,7 +312,7 @@ export default function Home() {
                   in plain language, and software built by someone whose
                   reputation depends on it working.
                 </p>
-                <p className="text-pretty leading-relaxed text-muted">
+                <p className="prose-justify leading-relaxed text-muted">
                   When additional expertise is required, I collaborate with a
                   trusted network of designers and developers. But ownership,
                   quality and accountability always stay with me.

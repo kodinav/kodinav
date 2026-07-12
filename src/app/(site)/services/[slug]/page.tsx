@@ -123,7 +123,7 @@ export default async function ServicePage({
             <h1 className="text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
               {service.headline}
             </h1>
-            <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
+            <p className="prose-justify max-w-2xl text-lg leading-relaxed text-muted">
               {service.intro}
             </p>
             <div className="flex flex-wrap gap-2">
@@ -141,7 +141,7 @@ export default async function ServicePage({
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-faint">
               Who this is for
             </p>
-            <p className="mt-3 leading-relaxed text-muted">{service.forWho}</p>
+            <p className="prose-justify mt-3 leading-relaxed text-muted">{service.forWho}</p>
           </div>
         </Reveal>
       </section>
@@ -175,7 +175,7 @@ export default async function ServicePage({
                 </span>
                 <div>
                   <h3 className="mb-1.5 font-semibold tracking-tight">{a.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted">{a.body}</p>
+                  <p className="prose-justify text-sm leading-relaxed text-muted">{a.body}</p>
                 </div>
               </div>
             </Reveal>

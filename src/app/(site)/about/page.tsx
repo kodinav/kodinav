@@ -103,7 +103,7 @@ export default function AboutPage() {
                   Est. 2024 — {site.location}
                 </figcaption>
               </figure>
-              <p className="text-pretty leading-relaxed text-muted">
+              <p className="prose-justify leading-relaxed text-muted">
                 I&apos;m a full stack developer based in Delhi NCR who has
                 spent years designing and building web platforms, mobile apps
                 and business systems with React, Next.js, Node.js and Flutter.
@@ -114,7 +114,7 @@ export default function AboutPage() {
                 discovery conversation to deployment and support, for clients
                 in Delhi, Noida, Gurgaon and across India.
               </p>
-              <p className="text-pretty leading-relaxed text-muted">
+              <p className="prose-justify leading-relaxed text-muted">
                 Why independent? Because the traditional models are broken in
                 opposite ways. Agencies sell you their best people in the
                 pitch, then staff your project with juniors. Marketplace
@@ -124,7 +124,7 @@ export default function AboutPage() {
                 the work has to be good enough to carry the studio&apos;s entire
                 reputation.
               </p>
-              <p className="text-pretty leading-relaxed text-muted">
+              <p className="prose-justify leading-relaxed text-muted">
                 When additional expertise is required, say specialised design,
                 illustration or a second pair of engineering hands, I collaborate
                 with a trusted network of designers and developers I&apos;ve

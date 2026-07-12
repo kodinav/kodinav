@@ -325,6 +325,15 @@ h2 {
   animation-delay: -3s;
 }
 
+/* Justified long-form prose. Auto-hyphenation prevents the whitespace
+   "rivers" that make naive justified text unreadable on the web. */
+.prose-justify {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-wrap: pretty;
+}
+
 /* Hide scrollbars on horizontally-scrolling chip rows */
 .scrollbar-none {
   scrollbar-width: none;

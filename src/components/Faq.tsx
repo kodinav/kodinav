@@ -40,7 +40,7 @@ export function Faq({ items }: { items: { q: string; a: string }[] }) {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="pb-6 pl-9 text-pretty leading-relaxed text-muted">
+                  <p className="prose-justify pb-6 pl-9 leading-relaxed text-muted">
                     {item.a}
                   </p>
                 </motion.div>

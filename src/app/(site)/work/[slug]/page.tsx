@@ -118,7 +118,7 @@ export default async function CaseStudyPage({
             <h1 className="text-balance text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
               {project.name}
             </h1>
-            <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
+            <p className="prose-justify max-w-2xl text-lg leading-relaxed text-muted">
               {cs.overview}
             </p>
             <div className="flex flex-wrap gap-2">
@@ -179,7 +179,7 @@ export default async function CaseStudyPage({
                   <h2 className="mb-3 text-2xl font-semibold tracking-tight">
                     {s.label}
                   </h2>
-                  <p className="text-pretty leading-relaxed text-muted">
+                  <p className="prose-justify leading-relaxed text-muted">
                     {cs[s.key]}
                   </p>
                 </div>
