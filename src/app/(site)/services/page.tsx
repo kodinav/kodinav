@@ -57,6 +57,35 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* Front-door offer: paid audit */}
+      <section className="mx-auto max-w-6xl px-6 pb-8">
+        <Reveal>
+          <Link
+            href="/website-audit"
+            className="card-hover ink group flex flex-col items-start justify-between gap-6 p-8 sm:flex-row sm:items-center sm:p-10"
+          >
+            <div className="flex flex-col gap-3">
+              <p className="annotation flex items-center gap-3">
+                <span className="crosshair text-accent" aria-hidden />
+                Start here — {site.audit.priceUsd}
+              </p>
+              <h2 className="font-display text-3xl uppercase sm:text-4xl">
+                Not sure what you need? Get a{" "}
+                <span className="text-gradient">website audit</span>.
+              </h2>
+              <p className="max-w-xl leading-relaxed text-muted">
+                A real engineer tells you exactly why your site is slow,
+                invisible on Google, or losing enquiries, with a prioritised fix
+                list. Delivered in {site.audit.turnaround}.
+              </p>
+            </div>
+            <span className="inline-flex shrink-0 items-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform group-hover:translate-x-1">
+              Order audit →
+            </span>
+          </Link>
+        </Reveal>
+      </section>
+
       <section className="mx-auto max-w-6xl px-6 pb-24">
         <Stagger className="grid gap-4 sm:grid-cols-2">
           {services.map((s) => (

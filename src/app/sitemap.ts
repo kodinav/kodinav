@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/process`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: `${site.url}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/website-audit`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${site.url}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.8 },
     { url: `${site.url}/coaching-institute-websites`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },

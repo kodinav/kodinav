@@ -55,6 +55,15 @@ export function Footer() {
                   Pricing
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/website-audit"
+                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
+                >
+                  <span className="mr-2 font-mono text-[0.625rem] text-faint">08</span>
+                  Website Audit
+                </Link>
+              </li>
             </ul>
           </div>
 

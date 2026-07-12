@@ -14,6 +14,16 @@ export const site = {
   description:
     "Kodinav is an independent software studio. Freelance web developer Abhinav Saxena personally designs and builds fast, SEO-friendly websites, custom web applications, e-commerce stores and mobile apps with React, Next.js and Node.js, for clients worldwide.",
   priceFloor: "₹75,000",
+  // Productized front-door offer: a paid website audit. Buyable by cold global
+  // traffic, converts into full projects. Set auditPaymentUrl to a Razorpay/
+  // Stripe/PayPal payment link to make the button charge directly; leave empty
+  // and the button routes to the order form (you send a payment link on reply).
+  audit: {
+    priceUsd: "$49",
+    priceInr: "₹3,999",
+    turnaround: "3 business days",
+    paymentUrl: "", // TODO: paste a Stripe/Razorpay/PayPal payment link here
+  },
   keywords: [
     "freelance web developer",
     "hire freelance web developer",

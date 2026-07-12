@@ -16,6 +16,7 @@ const sourceLabels: Record<string, string> = {
   "contact-page": "Contact page",
   "meta-ads-coaching": "Ads — Coaching",
   "meta-ads-clinic": "Ads — Clinic",
+  "website-audit": "★ Audit order",
   website: "Website",
 };
 
