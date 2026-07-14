@@ -8,6 +8,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Chip, Eyebrow, SectionHeading } from "@/components/ui";
 import { getService, services } from "@/data/services";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
@@ -37,6 +38,7 @@ export async function generateMetadata({
       description: service.short,
       url: `${site.url}/services/${service.slug}`,
       type: "website",
+      images: ogImage(service.name, "Service"),
     },
   };
 }

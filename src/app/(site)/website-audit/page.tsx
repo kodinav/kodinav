@@ -7,6 +7,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Eyebrow, SectionHeading } from "@/components/ui";
 import { Price } from "@/components/Price";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
       "Know exactly why your website underperforms, with a prioritised fix list. Delivered in 3 business days, from $49.",
     url: `${site.url}/website-audit`,
     type: "website",
+    images: ogImage("Find what's costing you customers", "Website Audit — from $49"),
   },
 };
 

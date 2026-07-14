@@ -9,6 +9,18 @@ const nextConfig: NextConfig = {
     // Serve AVIF/WebP where the browser supports them — smaller than JPEG
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    return [
+      {
+        // www → apex 301: without it, www serves duplicate content and
+        // splits link equity across two hosts
+        source: "/:path*",
+        has: [{ type: "host", value: "www.kodinav.com" }],
+        destination: "https://kodinav.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

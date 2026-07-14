@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LandingPage, type LandingContent } from "@/components/LandingPage";
 import { getProject } from "@/data/projects";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Websites for Coaching Institutes — Get More Admissions",
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
     title: "Websites That Help Coaching Institutes Get More Admissions",
     description:
       "Fast, credible websites built to rank for local coaching searches and capture admission enquiries. From ₹75,000.",
+    url: "/coaching-institute-websites",
     type: "website",
+    images: ogImage("More admissions for coaching institutes", "Coaching Institute Websites"),
   },
 };
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LandingPage, type LandingContent } from "@/components/LandingPage";
 import { getProject } from "@/data/projects";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Websites for Clinics & Doctors — Get More Patient Appointments",
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
     title: "Websites That Bring Patients To Your Clinic",
     description:
       "Credible, fast websites built to rank for local healthcare searches and capture appointment requests 24/7. From ₹75,000.",
+    url: "/clinic-websites",
     type: "website",
+    images: ogImage("Websites that bring patients to your clinic", "Clinic Websites"),
   },
 };
 

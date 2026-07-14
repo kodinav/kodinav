@@ -44,7 +44,8 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — Website Development & Custom Web Apps | Independent Software Studio`,
+    // ≤60 chars so Google shows it untruncated in SERPs
+    default: `${site.name} — Website Development & Custom Web Apps`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
@@ -52,7 +53,10 @@ export const metadata: Metadata = {
   authors: [{ name: site.founder, url: site.url }],
   creator: site.founder,
   publisher: site.name,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
   category: "technology",
   openGraph: {
     type: "website",

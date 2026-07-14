@@ -4,6 +4,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: `About — Independent Software Studio by ${site.founder}`,
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
     description: `An independent software studio in India. Every project personally led by ${site.founder}.`,
     url: `${site.url}/about`,
     type: "profile",
+    images: ogImage("Every project is personal", "About the Studio"),
   },
 };
 

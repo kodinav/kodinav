@@ -5,7 +5,10 @@ import { services } from "@/data/services";
 import { site } from "@/data/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  // Real content dates, bumped manually when pages meaningfully change.
+  // A `new Date()` here stamped every URL as modified on every regeneration
+  // (every 5 min under revalidate), which teaches Google to distrust lastmod.
+  const now = new Date("2026-07-14");
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: site.url, lastModified: now, changeFrequency: "monthly", priority: 1 },
@@ -15,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/process`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
     { url: `${site.url}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${site.url}/website-audit`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${site.url}/free-website-audit`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${site.url}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.8 },
     { url: `${site.url}/coaching-institute-websites`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },

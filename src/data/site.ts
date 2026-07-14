@@ -13,8 +13,9 @@ export const site = {
   calendly: "",
   location: "India",
   serviceAreas: ["Delhi", "Noida", "Gurgaon", "Ghaziabad", "Delhi NCR", "India"],
+  // ≤160 chars — Google truncates longer meta descriptions (own audit tool flagged the old 255-char one)
   description:
-    "Kodinav is an independent software studio. Freelance web developer Abhinav Saxena personally designs and builds fast, SEO-friendly websites, custom web applications, e-commerce stores and mobile apps with React, Next.js and Node.js, for clients worldwide.",
+    "Independent software studio. Founder Abhinav Saxena personally builds fast, SEO-friendly websites, web apps and mobile apps with React, Next.js and Node.js.",
   priceFloor: "₹75,000",
   priceFloorUsd: "$2,000",
   priceCeil: "₹20 lakh",
@@ -42,7 +43,6 @@ export const site = {
     "website development India",
     "custom website development",
     "business website development",
-    "website development services",
     "website developer Delhi",
     "website developer Noida",
     "website developer Gurgaon",

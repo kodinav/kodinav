@@ -8,6 +8,7 @@ import { Chip } from "@/components/ui";
 import { getPost, posts } from "@/data/posts";
 import { getService } from "@/data/services";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
@@ -32,11 +33,13 @@ export async function generateMetadata({
       url: `${site.url}/blog/${post.slug}`,
       publishedTime: post.date,
       authors: [site.founder],
+      images: ogImage(post.title, post.tag),
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
+      images: ogImage(post.title, post.tag).map((i) => i.url),
     },
   };
 }
@@ -68,8 +71,12 @@ export default async function BlogPostPage({
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    author: { "@type": "Person", name: site.founder },
-    publisher: { "@type": "Organization", name: site.name, url: site.url },
+    dateModified: post.date,
+    image: `${site.url}${ogImage(post.title, post.tag)[0].url}`,
+    mainEntityOfPage: `${site.url}/blog/${post.slug}`,
+    // Reference the sitewide Person/Organization nodes instead of re-declaring them
+    author: { "@id": `${site.url}/#founder` },
+    publisher: { "@id": `${site.url}/#studio` },
   };
 
   const crumbs = breadcrumbSchema([

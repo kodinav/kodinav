@@ -5,6 +5,7 @@ import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { posts } from "@/data/posts";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Blog — Software, Web Development, SEO & Business Growth",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
       "Writing on software, performance, SEO and business growth from an independent software studio.",
     url: `${site.url}/blog`,
     type: "website",
+    images: ogImage("Software, performance, SEO & growth", "Blog"),
   },
 };
 

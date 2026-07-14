@@ -4,6 +4,7 @@ import { ProcessTimeline } from "@/components/ProcessTimeline";
 import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Development Process — Discovery to Deployment",
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
       "A nine-step process from discovery to launch. Written scopes, usable slices, no surprises.",
     url: `${site.url}/process`,
     type: "website",
+    images: ogImage("The 09-step process — no surprises", "Process"),
   },
 };
 

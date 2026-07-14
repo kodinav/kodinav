@@ -76,8 +76,10 @@ export default async function CaseStudyPage({
     headline: `${project.name} — Case Study`,
     description: project.summary,
     image: `${site.url}${project.images.cover.src}`,
-    author: { "@type": "Person", name: site.founder, url: `${site.url}/about` },
-    publisher: { "@type": "Organization", name: site.name, url: site.url },
+    mainEntityOfPage: `${site.url}/work/${project.slug}`,
+    // Reference the sitewide Person/Organization nodes instead of re-declaring them
+    author: { "@id": `${site.url}/#founder` },
+    publisher: { "@id": `${site.url}/#studio` },
   };
 
   const crumbs = breadcrumbSchema([

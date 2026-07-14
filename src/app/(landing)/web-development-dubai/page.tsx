@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { LandingPage, type LandingContent } from "@/components/LandingPage";
 import { getProject } from "@/data/projects";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Web Development for Dubai & UAE Businesses — Fixed USD Quotes",
@@ -24,6 +25,7 @@ export const metadata: Metadata = {
       "Senior engineering at honest prices. Custom websites, e-commerce and web apps for GCC businesses, from $2,000 fixed.",
     url: `${site.url}/web-development-dubai`,
     type: "website",
+    images: ogImage("Web development for Dubai & UAE businesses", "Fixed USD Quotes"),
   },
 };
 

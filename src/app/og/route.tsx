@@ -1,11 +1,19 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
 
-export const alt = `${site.name} — ${site.tagline}`;
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
+/**
+ * Branded Open Graph card, parameterised by ?title= and ?tag=. Same
+ * draftsman language as the root opengraph-image: bone paper, ink frame,
+ * International Orange accent. Referenced via `ogImage()` in src/lib/og.ts.
+ */
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const title = (searchParams.get("title") || site.tagline).slice(0, 120);
+  const tag = (searchParams.get("tag") || site.tagline).slice(0, 40);
 
-export default async function Image() {
+  // Longer titles step down in size so they stay inside the frame
+  const fontSize = title.length > 70 ? 54 : title.length > 40 ? 64 : 78;
+
   return new ImageResponse(
     (
       <div
@@ -33,7 +41,7 @@ export default async function Image() {
           }}
         >
           <span style={{ fontWeight: 700 }}>Kodinav</span>
-          <span style={{ color: "#55503f" }}>Independent Software Studio</span>
+          <span style={{ color: "#55503f" }}>{tag}</span>
           <span
             style={{
               width: 20,
@@ -46,19 +54,14 @@ export default async function Image() {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            fontSize: 88,
+            fontSize,
             fontWeight: 800,
-            letterSpacing: -2,
-            lineHeight: 1.02,
+            letterSpacing: -1,
+            lineHeight: 1.05,
             textTransform: "uppercase",
           }}
         >
-          <span>We build software</span>
-          <span>
-            that helps businesses{" "}
-            <span style={{ color: "#ff4400" }}>grow.</span>
-          </span>
+          {title}
         </div>
         <div
           style={{
@@ -70,11 +73,18 @@ export default async function Image() {
             color: "#55503f",
           }}
         >
-          <span>Websites · Web Apps · Mobile Apps · AI</span>
+          <span>kodinav.com</span>
           <span>Founded by {site.founder}</span>
         </div>
       </div>
     ),
-    size
+    {
+      width: 1200,
+      height: 630,
+      headers: {
+        // Deterministic per query string — cache hard at the CDN
+        "Cache-Control": "public, max-age=86400, s-maxage=31536000, immutable",
+      },
+    }
   );
 }

@@ -7,6 +7,7 @@ import { Chip, Eyebrow } from "@/components/ui";
 import { Price } from "@/components/Price";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Services — Web, App, LMS, CRM, ERP & AI Development",
@@ -29,6 +30,7 @@ export const metadata: Metadata = {
       "From a business website to a full ERP. Designed, engineered, deployed and supported under one roof.",
     url: `${site.url}/services`,
     type: "website",
+    images: ogImage("One studio. The full stack.", "Services"),
   },
 };
 

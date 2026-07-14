@@ -4,6 +4,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { Reveal } from "@/components/motion";
 import { Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Contact — Book a Free Discovery Call",
@@ -22,6 +23,7 @@ export const metadata: Metadata = {
       "Book a free discovery call, or reach out by email or WhatsApp. Personal reply within one business day.",
     url: `${site.url}/contact`,
     type: "website",
+    images: ogImage("Book a free discovery call", "Contact"),
   },
 };
 

@@ -5,6 +5,7 @@ import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { projects } from "@/data/projects";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Work — Case Studies of Real Software Projects",
@@ -25,6 +26,7 @@ export const metadata: Metadata = {
       "Real, running software built end to end: education platforms, a travel product and an online store.",
     url: `${site.url}/work`,
     type: "website",
+    images: ogImage("Real projects, real outcomes", "Selected Work"),
   },
 };
 

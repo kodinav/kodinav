@@ -6,6 +6,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { Price } from "@/components/Price";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Pricing — Custom Software Projects from ₹75,000",
@@ -23,6 +24,7 @@ export const metadata: Metadata = {
     description: `Projects from ${site.priceFloor}. Fixed, itemised quotes after a free discovery call.`,
     url: `${site.url}/pricing`,
     type: "website",
+    images: ogImage("Honest pricing, fixed quotes", "Pricing"),
   },
 };
 
