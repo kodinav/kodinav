@@ -15,7 +15,7 @@ export const site = {
   serviceAreas: ["Delhi", "Noida", "Gurgaon", "Ghaziabad", "Delhi NCR", "India"],
   // ≤160 chars — Google truncates longer meta descriptions (own audit tool flagged the old 255-char one)
   description:
-    "Independent software studio. Founder Abhinav Saxena personally builds fast, SEO-friendly websites, web apps and mobile apps with React, Next.js and Node.js.",
+    "Independent software studio serving the US, the Gulf and clients worldwide. Founder Abhinav Saxena personally builds fast websites, web apps and mobile apps.",
   priceFloor: "₹75,000",
   priceFloorUsd: "$2,000",
   priceCeil: "₹20 lakh",
@@ -31,6 +31,14 @@ export const site = {
     paymentUrl: "", // TODO: paste a Stripe/Razorpay/PayPal payment link here
   },
   keywords: [
+    // Primary markets: USA & UAE
+    "web development company USA",
+    "hire remote web developer USA",
+    "offshore web development company",
+    "outsource web development",
+    "web development company Dubai",
+    "website development Dubai",
+    "web developer UAE",
     "freelance web developer",
     "hire freelance web developer",
     "remote web developer",

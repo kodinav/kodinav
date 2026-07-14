@@ -23,10 +23,12 @@ export async function generateMetadata({
   const service = getService((await params).slug);
   if (!service) return {};
   return {
-    title: `${service.name} — Development Services in India`,
+    title: `${service.name} — Development Services`,
     description: service.short,
     keywords: [
       service.name,
+      `${service.name} USA`,
+      `${service.name} Dubai`,
       `${service.name} India`,
       `${service.name} development`,
       ...service.stack,
@@ -62,7 +64,7 @@ export default async function ServicePage({
       name: site.name,
       url: site.url,
     },
-    areaServed: "IN",
+    areaServed: ["US", "AE", "IN"],
   };
 
   const faqSchema = {

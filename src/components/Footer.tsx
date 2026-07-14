@@ -30,6 +30,26 @@ export function Footer() {
               Working with ambitious businesses worldwide. Every timezone,
               one engineer accountable.
             </p>
+            {/* Region pages need internal links to rank organically —
+                without these they exist only in the sitemap */}
+            <ul className="flex flex-col gap-2">
+              <li>
+                <Link
+                  href="/web-development-usa"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  For US businesses →
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/web-development-dubai"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  For Dubai &amp; UAE businesses →
+                </Link>
+              </li>
+            </ul>
           </div>
 
           <div>

@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   category: "technology",
   openGraph: {
     type: "website",
-    locale: "en_IN",
+    locale: "en_US",
     url: site.url,
     siteName: site.name,
     title: `${site.name} — ${site.tagline}`,
@@ -116,13 +116,17 @@ const organizationSchema = {
   slogan: "We build software that helps businesses grow.",
   founder: { "@id": `${site.url}/#founder` },
   foundingDate: "2024",
+  // Primary target markets first — US and UAE lead, India follows
   areaServed: [
+    { "@type": "Country", name: "United States" },
+    { "@type": "Country", name: "United Arab Emirates" },
+    { "@type": "City", name: "Dubai" },
     ...site.serviceAreas.map((name) => ({ "@type": "City", name })),
     { "@type": "Country", name: "India" },
     "Worldwide",
   ],
   availableLanguage: ["English", "Hindi"],
-  priceRange: "₹₹₹",
+  priceRange: "$$",
   address: {
     "@type": "PostalAddress",
     addressRegion: "Delhi NCR",
@@ -195,7 +199,7 @@ const websiteSchema = {
   name: site.name,
   description: site.description,
   publisher: { "@id": `${site.url}/#studio` },
-  inLanguage: "en-IN",
+  inLanguage: "en",
 };
 
 // GA4 Measurement ID. Public by design (it ships in the page HTML); override

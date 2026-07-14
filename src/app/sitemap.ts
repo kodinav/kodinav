@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/coaching-institute-websites`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${site.url}/clinic-websites`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${site.url}/web-development-dubai`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/web-development-usa`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const projectPages: MetadataRoute.Sitemap = projects.map((p) => ({
