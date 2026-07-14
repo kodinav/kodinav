@@ -50,10 +50,19 @@ export function Footer() {
               ))}
               <li>
                 <Link
-                  href="/website-audit"
+                  href="/free-website-audit"
                   className="u-draw text-sm text-accent transition-colors hover:text-foreground"
                 >
                   <span className="mr-2 font-mono text-[0.625rem] text-faint">08</span>
+                  Free Website Audit
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/website-audit"
+                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
+                >
+                  <span className="mr-2 font-mono text-[0.625rem] text-faint">09</span>
                   Website Audit
                 </Link>
               </li>

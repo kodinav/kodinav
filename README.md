@@ -81,6 +81,20 @@ Per-page `title`/`description`/`keywords`/canonical + Open Graph. Structured dat
 
 Locally, no setup needed: leads go to `data/leads.json` (gitignored) and the dev password is `kodinav-dev-admin`. `/admin` is noindexed and disallowed in robots.txt.
 
+## Free website audit — the lead magnet
+
+**`/free-website-audit`** — a visitor pastes a URL and gets an instant, honest scan: ~20 real checks across speed, mobile, findability, enquiries and trust, scored per category, with the single most damaging finding pulled out as a headline sentence. No email is required to see the result; the email is asked for afterwards, in exchange for a hand-written breakdown, and lands in `/admin` as a lead with `source: free-audit`, the prospect's URL, and their top issue already in the message.
+
+- `src/lib/audit.ts` — the engine. Fetches the page and checks it. **Every finding must be literally true**: soft-404s are validated by content type, HTML entities are decoded before counting title length, and `nomodule` scripts are not counted as render-blocking. A false finding makes the whole tool worthless, so when a check cannot be measured reliably it is not reported at all.
+- The scanner fetches URLs typed in by strangers, so `assertPublicUrl()` resolves every hop (including redirects) and refuses private, loopback, link-local and cloud-metadata addresses. Do not weaken this.
+- Doubles as the cold-outreach engine: the headline sentence is exactly the "one true, specific finding" the outreach playbook says every message needs.
+
+**Environment variables:**
+
+| Var | Required | Purpose |
+|---|---|---|
+| `PAGESPEED_API_KEY` | Optional but wanted | Google PageSpeed Insights key. **Without it Google rate-limits us and the speed panel silently hides** — the scan still works, but you lose the most persuasive number on the page ("your site takes 8.9s on a phone"). Free key, 25k requests/day: Google Cloud Console → enable "PageSpeed Insights API" → create an API key. |
+
 ## Before launch — checklist
 
 1. ~~Phone/WhatsApp~~ **Done** (+91 81266 61493 site-wide). **Calendly URL** in `src/data/site.ts` is still a placeholder — replace when the account exists.

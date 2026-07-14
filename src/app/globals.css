@@ -198,6 +198,17 @@ h2 {
   color: var(--faint);
 }
 
+/* Drafting hatch — the "warning" fill on audit meters and severity swatches.
+   Texture, not hue, is what separates warning from pass and critical here: the
+   brand has exactly one accent, and status must survive greyscale and CVD. */
+.hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--foreground) 0 2px,
+    transparent 2px 5px
+  );
+}
+
 /* Crosshair registration mark */
 .crosshair {
   position: relative;
