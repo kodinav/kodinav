@@ -5,6 +5,8 @@ import {
   type AuditResult,
   type Category,
   type Finding,
+  type LinkPreview,
+  type PreviewIssue,
   type Severity,
   type SpeedResult,
 } from "./auditTypes";
@@ -765,4 +767,182 @@ export async function fetchSpeed(input: string): Promise<SpeedResult> {
   } finally {
     clearTimeout(timer);
   }
+}
+
+/* ------------------------------------------------------------------ *
+ * Link preview checker — reuses the same SSRF-guarded fetch and head
+ * parsing as the audit. Every issue emitted must be literally true.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Probes the og:image itself, following up to 3 redirect hops with the same
+ * public-IP guard as page fetches. Returns null when nothing conclusive can
+ * be said (e.g. the host blocks HEAD) — silence beats a false finding.
+ */
+async function probeImage(
+  start: URL
+): Promise<{ status: number; type: string | null } | null> {
+  let url = start;
+  for (let hop = 0; hop <= 3; hop++) {
+    try {
+      await assertPublicUrl(url);
+    } catch {
+      return null;
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8_000);
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        redirect: "manual",
+        signal: controller.signal,
+        headers: { "user-agent": UA, accept: "image/*,*/*" },
+        cache: "no-store",
+      });
+    } catch {
+      clearTimeout(timer);
+      return null;
+    }
+    clearTimeout(timer);
+    await res.body?.cancel().catch(() => {});
+
+    const location = res.headers.get("location");
+    if (res.status >= 300 && res.status < 400 && location) {
+      try {
+        url = new URL(location, url);
+      } catch {
+        return null;
+      }
+      continue;
+    }
+    return { status: res.status, type: res.headers.get("content-type") };
+  }
+  return null;
+}
+
+export async function fetchLinkPreview(input: string): Promise<LinkPreview> {
+  const trimmed = input.trim();
+  if (!trimmed) throw new AuditError("Enter a link to check.");
+  let url: URL;
+  try {
+    url = new URL(/^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`);
+  } catch {
+    throw new AuditError("That does not look like a link.");
+  }
+
+  const page = await safeFetch(url);
+  const html = stripComments(page.html);
+  const headEnd = html.search(/<\/head>/i);
+  const head = headEnd === -1 ? html : html.slice(0, headEnd);
+
+  const dec = (v: string | undefined | null) =>
+    v ? decodeEntities(v.trim()) : null;
+
+  const title = dec(head.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1]);
+  const description = dec(metaOf(head, "name", "description"));
+  const ogTitle = dec(metaOf(head, "property", "og:title"));
+  const ogDescription = dec(metaOf(head, "property", "og:description"));
+  const ogSiteName = dec(metaOf(head, "property", "og:site_name"));
+  const twitterCard = dec(
+    metaOf(head, "name", "twitter:card") ?? metaOf(head, "property", "twitter:card")
+  );
+  const ogImageRaw =
+    metaOf(head, "property", "og:image") ?? metaOf(head, "name", "og:image");
+
+  const issues: PreviewIssue[] = [];
+  let ogImage: string | null = null;
+  let image: { status: number; type: string | null } | null = null;
+
+  if (!ogImageRaw) {
+    issues.push({
+      severity: "critical",
+      text: "No og:image tag. WhatsApp, iMessage, LinkedIn and Facebook show this link as a bare text card with no picture.",
+      fix: "Add an og:image meta tag pointing to a 1200×630 image with an absolute https:// URL.",
+    });
+  } else {
+    const isAbsolute = /^https?:\/\//i.test(ogImageRaw);
+    try {
+      ogImage = new URL(ogImageRaw, page.finalUrl).toString();
+    } catch {
+      issues.push({
+        severity: "critical",
+        text: `The og:image value ("${ogImageRaw.slice(0, 80)}") is not a valid URL.`,
+        fix: "Point og:image at a real, absolute image URL.",
+      });
+    }
+    if (ogImage && !isAbsolute) {
+      issues.push({
+        severity: "warning",
+        text: "og:image is a relative path. The Open Graph spec expects a full URL, and some apps fail to resolve relative ones.",
+        fix: `Use the absolute URL instead: ${ogImage}`,
+      });
+    }
+    if (ogImage && /^http:\/\//i.test(ogImage)) {
+      issues.push({
+        severity: "warning",
+        text: "og:image is served over insecure http. Platforms that require https may skip it.",
+        fix: "Serve the preview image over https.",
+      });
+    }
+    if (ogImage) {
+      image = await probeImage(new URL(ogImage));
+      if (image && image.status >= 400) {
+        issues.push({
+          severity: "critical",
+          text: `The og:image itself fails to load (HTTP ${image.status}), so platforms have no picture to show.`,
+          fix: "Fix or replace the image URL, then re-share the link.",
+        });
+      } else if (
+        image &&
+        image.status < 400 &&
+        image.type &&
+        !/^image\//i.test(image.type)
+      ) {
+        issues.push({
+          severity: "critical",
+          text: `The og:image URL answers with "${image.type}", not an image, so platforms cannot render it.`,
+          fix: "Point og:image at an actual image file (JPG, PNG or WebP).",
+        });
+      }
+    }
+  }
+
+  if (!ogTitle) {
+    issues.push({
+      severity: "warning",
+      text: title
+        ? "No og:title tag — platforms fall back to the page <title>, which you have, so the text still shows."
+        : "No og:title and no <title> — platforms have nothing but the bare URL to show.",
+      fix: "Add an og:title meta tag with the headline you want on the shared card.",
+    });
+  }
+  if (!ogDescription && !description) {
+    issues.push({
+      severity: "warning",
+      text: "No og:description and no meta description — the card shows no supporting text.",
+      fix: "Add an og:description of one or two sentences.",
+    });
+  }
+  if (ogImage && twitterCard?.toLowerCase() !== "summary_large_image") {
+    issues.push({
+      severity: "warning",
+      text: twitterCard
+        ? `twitter:card is "${twitterCard}" — X shows a small square card instead of the full-width image.`
+        : "No twitter:card tag — X defaults to a small summary card instead of the full-width image.",
+      fix: 'Add <meta name="twitter:card" content="summary_large_image">.',
+    });
+  }
+
+  return {
+    finalUrl: page.finalUrl.toString(),
+    title,
+    description,
+    ogTitle,
+    ogDescription,
+    ogSiteName,
+    ogImage,
+    twitterCard,
+    image,
+    issues,
+  };
 }

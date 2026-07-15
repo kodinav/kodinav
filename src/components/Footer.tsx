@@ -111,6 +111,14 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/website-speed-test"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  Website Speed Test
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/mobile-friendly-test"
                   className="u-draw text-sm text-muted transition-colors hover:text-foreground"
                 >

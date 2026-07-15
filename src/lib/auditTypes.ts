@@ -97,3 +97,30 @@ export const SEVERITY_LABEL: Record<Severity, string> = {
   warning: "Worth fixing",
   pass: "Passed",
 };
+
+/* ------------------------------------------------------------------ *
+ * Link preview checker
+ * ------------------------------------------------------------------ */
+
+export type PreviewIssue = {
+  severity: "critical" | "warning";
+  text: string;
+  fix: string;
+};
+
+export type LinkPreview = {
+  finalUrl: string;
+  /** <title> — the SERP + fallback preview title. */
+  title: string | null;
+  /** meta description. */
+  description: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+  ogSiteName: string | null;
+  /** Absolute og:image URL, if declared and resolvable. */
+  ogImage: string | null;
+  twitterCard: string | null;
+  /** Result of probing the og:image itself; null when nothing conclusive. */
+  image: { status: number; type: string | null } | null;
+  issues: PreviewIssue[];
+};

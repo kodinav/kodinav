@@ -46,6 +46,34 @@ const tools = [
     tag: "Estimate",
   },
   {
+    href: "/website-speed-test",
+    name: "Website Speed Test",
+    blurb:
+      "Server response, page weight and Google's own mobile score — explained in business terms, not waterfall charts.",
+    tag: "Test",
+  },
+  {
+    href: "/compare-websites",
+    name: "Compare Two Websites",
+    blurb:
+      "Your site against a competitor's: five categories scored side by side, winner marked on every row.",
+    tag: "Comparison",
+  },
+  {
+    href: "/link-preview-checker",
+    name: "Link Preview Checker",
+    blurb:
+      "See the exact card WhatsApp and LinkedIn show for your link, and your Google snippet — with the missing tags named.",
+    tag: "Checker",
+  },
+  {
+    href: "/qr-code-generator",
+    name: "QR Code Generator",
+    blurb:
+      "Static QR codes that never expire. PNG for screens, print-quality SVG free — no signup, no watermark.",
+    tag: "Generator",
+  },
+  {
     href: "/mobile-friendly-test",
     name: "Mobile-Friendly Test",
     blurb:
