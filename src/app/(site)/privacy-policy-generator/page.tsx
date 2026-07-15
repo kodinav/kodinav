@@ -6,9 +6,9 @@ import { ogImage } from "@/lib/og";
 import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Free Privacy Policy Generator for Websites",
+  title: "Free Privacy Policy Generator — + Terms, Refund & Cookies",
   description:
-    "Generate a plain-language privacy policy for your website in a minute: forms, analytics, ads, payments covered. Free template generator, no signup.",
+    "Generate all four legal pages in one minute: privacy policy, terms of service, refund policy and cookie policy — plain language, free, no signup.",
   keywords: [
     "privacy policy generator",
     "free privacy policy generator",
@@ -72,7 +72,7 @@ export default function PrivacyPolicyGeneratorPage() {
             A privacy policy in <span className="text-gradient">plain language</span>.
           </>
         }
-        lead="Answer what your website actually does — forms, analytics, ads, payments — and get a policy draft a human can read. Required by ad platforms and payment providers before they let you spend a rupee, dirham or dollar."
+        lead="Answer what your website actually does and get all four documents — privacy policy, terms of service, refund policy and cookie policy — drafted in language a human can read. The full set other platforms charge a subscription for."
         wide
         tool={<PrivacyPolicyGenerator />}
         faqs={faqs}

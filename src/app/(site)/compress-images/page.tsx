@@ -9,7 +9,7 @@ import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Free Image Compressor — In Your Browser, No Upload",
   description:
-    "Compress images for your website free: resized and re-encoded as WebP on your own device — photos never upload anywhere. Up to 20 at once, no signup.",
+    "Compress images free with your choice of quality, size and format (WebP/JPEG), downloaded singly or as a ZIP — all on your device, nothing uploads.",
   keywords: [
     "image compressor",
     "compress image",

@@ -125,6 +125,43 @@ export function SslChecker() {
             )}
           </div>
 
+          {!expired && (
+            <div className="mt-6 border-t border-line pt-5">
+              <button
+                type="button"
+                onClick={() => {
+                  const remind = new Date(new Date(info.validTo).getTime() - 14 * 86_400_000);
+                  const d = remind.toISOString().slice(0, 10).replaceAll("-", "");
+                  const stamp = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
+                  const ics = [
+                    "BEGIN:VCALENDAR",
+                    "VERSION:2.0",
+                    "PRODID:-//Kodinav//SSL Checker//EN",
+                    "BEGIN:VEVENT",
+                    `UID:ssl-${info.host}-${d}@kodinav.com`,
+                    `DTSTAMP:${stamp}`,
+                    `DTSTART;VALUE=DATE:${d}`,
+                    `SUMMARY:Renew SSL certificate for ${info.host}`,
+                    `DESCRIPTION:Certificate expires ${new Date(info.validTo).toDateString()}. Check auto-renewal or renew manually. (Reminder created with kodinav.com/ssl-checker)`,
+                    "END:VEVENT",
+                    "END:VCALENDAR",
+                  ].join("\r\n");
+                  const a = document.createElement("a");
+                  a.href = `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
+                  a.download = `renew-ssl-${info.host}.ics`;
+                  a.click();
+                }}
+                className="border border-line-strong px-4 py-2.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent hover:text-accent"
+              >
+                Add renewal reminder to my calendar (.ics)
+              </button>
+              <p className="mt-2 text-xs text-faint">
+                Creates a calendar event 14 days before expiry — works with
+                Google Calendar, Apple Calendar and Outlook.
+              </p>
+            </div>
+          )}
+
           <div className="mt-6 border-t border-line pt-5">
             <Link href="/free-website-audit" className="u-draw font-mono text-xs uppercase tracking-[0.18em] text-accent">
               Check everything else too — run the full free audit →

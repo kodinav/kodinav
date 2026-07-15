@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 /**
@@ -16,6 +16,9 @@ const labelCls = "annotation mb-2 block";
 const SOURCES = ["google", "facebook", "instagram", "whatsapp", "linkedin", "newsletter", "qr-code", "youtube"];
 const MEDIUMS = ["cpc", "social", "email", "qr", "referral", "sms"];
 
+const HISTORY_KEY = "kodinav-utm-history";
+type HistoryItem = { link: string; campaign: string; date: string };
+
 export function UtmBuilder() {
   const [url, setUrl] = useState("");
   const [source, setSource] = useState("");
@@ -23,6 +26,19 @@ export function UtmBuilder() {
   const [campaign, setCampaign] = useState("");
   const [content, setContent] = useState("");
   const [copied, setCopied] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  // Load after mount (rAF keeps the linter honest and avoids hydration mismatch)
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      try {
+        setHistory(JSON.parse(localStorage.getItem(HISTORY_KEY) ?? "[]"));
+      } catch {
+        /* fresh start */
+      }
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   let link = "";
   let urlError = "";
@@ -46,6 +62,24 @@ export function UtmBuilder() {
     await navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 1600);
+    // On-device history only — nothing is sent to the server
+    const item: HistoryItem = { link, campaign: campaign.trim(), date: new Date().toISOString().slice(0, 10) };
+    const next = [item, ...history.filter((h) => h.link !== link)].slice(0, 20);
+    setHistory(next);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+  };
+
+  const exportCsv = () => {
+    const csv = ["date,campaign,link", ...history.map((h) => `${h.date},"${h.campaign.replaceAll('"', '""')}","${h.link.replaceAll('"', '""')}"`)].join("\n");
+    const a = document.createElement("a");
+    a.href = `data:text/csv;charset=utf-8,${encodeURIComponent(csv)}`;
+    a.download = "utm-links.csv";
+    a.click();
+  };
+
+  const clearHistory = () => {
+    localStorage.removeItem(HISTORY_KEY);
+    setHistory([]);
   };
 
   const chips = (opts: string[], value: string, set: (v: string) => void) => (
@@ -121,6 +155,35 @@ export function UtmBuilder() {
               Acquisition, labelled exactly as you tagged them — so you know
               which campaign actually brought the customer.
             </p>
+            {history.length > 0 && (
+              <div className="mt-6 border-t border-line pt-5">
+                <div className="flex items-baseline justify-between gap-4">
+                  <p className="annotation">Your recent links — saved on this device</p>
+                  <div className="flex gap-3">
+                    <button type="button" onClick={exportCsv} className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-accent hover:text-foreground">
+                      CSV
+                    </button>
+                    <button type="button" onClick={clearHistory} className="font-mono text-[0.625rem] uppercase tracking-[0.14em] text-faint hover:text-accent">
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                <ul className="mt-3 flex max-h-40 flex-col gap-2 overflow-auto">
+                  {history.map((h) => (
+                    <li key={h.link} className="min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => navigator.clipboard.writeText(h.link)}
+                        title="Copy"
+                        className="block w-full truncate text-left font-mono text-[0.6875rem] text-muted hover:text-foreground"
+                      >
+                        <span className="text-faint">{h.date}</span> · {h.campaign || "—"} · {h.link}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </>
         ) : (
           <p className="text-sm leading-relaxed text-muted">

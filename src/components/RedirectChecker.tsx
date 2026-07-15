@@ -14,17 +14,22 @@ function statusWord(s: number) {
   return `HTTP ${s}`;
 }
 
+type Variant = { label: string; trace: RedirectTrace | null; error: string };
+
 export function RedirectChecker() {
   const [url, setUrl] = useState("");
   const [state, setState] = useState<"idle" | "running" | "done" | "error">("idle");
   const [error, setError] = useState("");
   const [trace, setTrace] = useState<RedirectTrace | null>(null);
+  const [variants, setVariants] = useState<Variant[] | null>(null);
+  const [variantsBusy, setVariantsBusy] = useState(false);
 
   const run = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim() || state === "running") return;
     setState("running");
     setError("");
+    setVariants(null);
     try {
       const res = await fetch(`/api/tools/redirects?url=${encodeURIComponent(url.trim())}`);
       const data = await res.json();
@@ -35,6 +40,33 @@ export function RedirectChecker() {
       setError(err instanceof Error ? err.message : "Trace failed. Try again.");
       setState("error");
     }
+  };
+
+  /** The check most people actually need: do all four faces of the domain
+      land on one canonical address? */
+  const runVariants = async () => {
+    if (!trace || variantsBusy) return;
+    setVariantsBusy(true);
+    const host = new URL(trace.finalUrl).hostname.replace(/^www\./, "");
+    const targets = [
+      { label: `http://${host}`, u: `http://${host}` },
+      { label: `https://${host}`, u: `https://${host}` },
+      { label: `http://www.${host}`, u: `http://www.${host}` },
+      { label: `https://www.${host}`, u: `https://www.${host}` },
+    ];
+    const results: Variant[] = [];
+    for (const t of targets) {
+      try {
+        const res = await fetch(`/api/tools/redirects?url=${encodeURIComponent(t.u)}`);
+        const data = await res.json();
+        if (!res.ok) results.push({ label: t.label, trace: null, error: data.error || "failed" });
+        else results.push({ label: t.label, trace: data as RedirectTrace, error: "" });
+      } catch {
+        results.push({ label: t.label, trace: null, error: "failed" });
+      }
+    }
+    setVariants(results);
+    setVariantsBusy(false);
   };
 
   const redirects = trace ? trace.hops.length - 1 : 0;
@@ -113,6 +145,60 @@ export function RedirectChecker() {
               </p>
             )}
           </div>
+
+          <div className="mt-6 border-t border-line pt-5">
+            <button
+              type="button"
+              onClick={runVariants}
+              disabled={variantsBusy}
+              className="border border-line-strong px-4 py-2.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent hover:text-accent disabled:opacity-60"
+            >
+              {variantsBusy
+                ? "Checking all four…"
+                : `Check all 4 versions of ${new URL(trace.finalUrl).hostname.replace(/^www\./, "")}`}
+            </button>
+            <p className="mt-2 text-xs text-faint">
+              http / https × www / bare — all four should land on one address
+              in a single hop, or Google sees duplicate sites.
+            </p>
+          </div>
+
+          {variants && (
+            <div className="mt-5 border-t border-line pt-5">
+              <ul className="flex flex-col gap-2.5">
+                {variants.map((v) => {
+                  const finals = variants.filter((x) => x.trace).map((x) => x.trace!.finalUrl);
+                  const consistent = new Set(finals).size === 1;
+                  const hops = v.trace ? v.trace.hops.length - 1 : 0;
+                  const ok = v.trace && hops <= 1 && consistent;
+                  return (
+                    <li key={v.label} className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span aria-hidden className={`font-mono ${v.trace ? (ok ? "text-foreground/50" : "text-accent") : "text-accent"}`}>
+                        {v.trace ? (ok ? "✓" : "!") : "✕"}
+                      </span>
+                      <span className="font-mono text-xs text-foreground/90">{v.label}</span>
+                      <span className="text-xs text-muted">
+                        {v.trace
+                          ? `→ ${new URL(v.trace.finalUrl).hostname}${new URL(v.trace.finalUrl).pathname} (${hops} hop${hops === 1 ? "" : "s"})`
+                          : v.error}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+              {(() => {
+                const finals = variants.filter((x) => x.trace).map((x) => x.trace!.finalUrl);
+                const consistent = new Set(finals).size === 1 && finals.length === 4;
+                return (
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    {consistent
+                      ? "All four versions resolve to one canonical address — exactly right."
+                      : "The four versions don't all end at one address in one hop. Fix the odd ones out at your host or DNS so search engines see a single site."}
+                  </p>
+                );
+              })()}
+            </div>
+          )}
 
           <div className="mt-6 border-t border-line pt-5">
             <Link

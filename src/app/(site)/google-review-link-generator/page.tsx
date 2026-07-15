@@ -12,7 +12,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Free Google Review Link Generator — One-Tap Review Link & QR",
   description:
-    "Create a direct link that opens your Google review form with the stars ready to tap, plus a printable QR code. Free, instant, nothing stored.",
+    "A one-tap Google review link plus a printable counter sign with your QR and ready-to-send ask messages for WhatsApp, SMS and email. Free, nothing stored.",
   keywords: [
     "google review link generator",
     "google review link",
@@ -119,9 +119,9 @@ export default function GoogleReviewLinkGeneratorPage() {
               <span className="text-gradient">one tap</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              Generate a direct link that opens your Google review form with
-              the stars ready to tap — plus a QR code for the counter, the
-              bill and the box.
+              A direct link that opens your review form with the stars ready
+              to tap — plus a print-ready counter sign with your QR, and
+              polite ask-messages ready to send on WhatsApp, SMS or email.
             </p>
           </div>
           <div className="mt-14">

@@ -30,11 +30,20 @@ const CODES = [
 const inputCls =
   "w-full border border-line-strong bg-transparent px-4 py-3 text-base text-foreground placeholder:text-faint outline-none transition-colors focus:border-accent sm:text-sm";
 
+const TEMPLATES = [
+  { id: "enquiry", label: "Enquiry", text: "Hi! I found you through your website and I'd like to know more about your services." },
+  { id: "booking", label: "Booking", text: "Hi! I'd like to book an appointment. Could you share the available times?" },
+  { id: "order", label: "Order", text: "Hi! I'd like to place an order. Is this item available?" },
+  { id: "quote", label: "Quote", text: "Hi! Could you send me a price quote? Here's what I need: " },
+  { id: "support", label: "Support", text: "Hi! I need help with my recent order/booking. My details: " },
+];
+
 export function WhatsAppLinkGenerator() {
   const [cc, setCc] = useState("971");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [copiedEmbed, setCopiedEmbed] = useState(false);
   // Keyed by the link it encodes, so a stale QR is never shown for a new link
   const [qrFor, setQrFor] = useState<{ link: string; dataUrl: string } | null>(null);
 
@@ -109,6 +118,22 @@ export function WhatsAppLinkGenerator() {
           <label htmlFor="wa-msg" className="annotation mb-2 block">
             Pre-filled message (optional)
           </label>
+          <div className="mb-2 flex flex-wrap gap-1.5">
+            {TEMPLATES.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setMessage(t.text)}
+                className={`border px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] transition-colors ${
+                  message === t.text
+                    ? "border-accent text-accent"
+                    : "border-line text-faint hover:border-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
           <textarea
             id="wa-msg"
             rows={3}
@@ -173,6 +198,34 @@ export function WhatsAppLinkGenerator() {
                 </a>
               </div>
             )}
+            <div className="mt-6 border-t border-line pt-6">
+              <p className="annotation mb-3">Chat button for your website</p>
+              <pre className="max-h-40 overflow-auto border border-line p-3 font-mono text-[0.6875rem] leading-relaxed whitespace-pre-wrap text-foreground/90">
+{`<a href="${link}" target="_blank" rel="noopener"
+  style="position:fixed;bottom:20px;right:20px;z-index:99;
+  background:#25D366;color:#fff;padding:12px 18px;
+  border-radius:999px;font-family:sans-serif;font-size:15px;
+  text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,.25)">
+  Chat on WhatsApp</a>`}
+              </pre>
+              <button
+                type="button"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(
+                    `<a href="${link}" target="_blank" rel="noopener" style="position:fixed;bottom:20px;right:20px;z-index:99;background:#25D366;color:#fff;padding:12px 18px;border-radius:999px;font-family:sans-serif;font-size:15px;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,.25)">Chat on WhatsApp</a>`
+                  );
+                  setCopiedEmbed(true);
+                  setTimeout(() => setCopiedEmbed(false), 1600);
+                }}
+                className="u-draw mt-3 font-mono text-xs uppercase tracking-[0.18em] text-accent"
+              >
+                {copiedEmbed ? "Copied ✓" : "Copy embed code →"}
+              </button>
+              <p className="mt-2 text-xs leading-relaxed text-faint">
+                Paste before &lt;/body&gt; on any website for a floating
+                WhatsApp button — works on WordPress, Shopify, Wix, anything.
+              </p>
+            </div>
           </>
         ) : (
           <p className="text-sm leading-relaxed text-muted">

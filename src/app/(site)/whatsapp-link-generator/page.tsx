@@ -12,7 +12,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Free WhatsApp Link Generator — wa.me Link & QR Code",
   description:
-    "Create a click-to-chat WhatsApp link with a pre-filled message, plus a QR code — free, instant, and generated in your browser. Nothing is stored.",
+    "Click-to-chat WhatsApp link with message templates, a QR code, and a copy-paste chat button for your website. Free, in-browser, nothing stored.",
   keywords: [
     "whatsapp link generator",
     "wa.me link generator",

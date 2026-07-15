@@ -12,7 +12,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Link Preview Checker — WhatsApp, Google & Social Cards",
   description:
-    "See exactly how your link looks when shared on WhatsApp, LinkedIn and social — and on Google. Finds the missing og:image and tags, with plain fixes. Free.",
+    "Preview your link on WhatsApp, LinkedIn, X and Google — each rendered the way that platform actually shows it — with the missing tags named and fixed. Free.",
   keywords: [
     "link preview checker",
     "whatsapp link preview",

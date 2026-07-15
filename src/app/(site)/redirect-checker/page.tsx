@@ -8,7 +8,7 @@ import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Redirect Checker — Trace a URL's Full Redirect Chain",
   description:
-    "Trace every redirect hop a URL takes — status codes, 301 vs 302, chain length and total time. Free redirect chain checker, no signup.",
+    "Trace every redirect hop — status codes, 301 vs 302, total time — then check all four versions of your domain (www/bare, http/https) in one click. Free.",
   keywords: [
     "redirect checker",
     "redirect chain checker",

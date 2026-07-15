@@ -8,7 +8,7 @@ import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "SSL Certificate Checker — Expiry Date & Trust Test",
   description:
-    "Check any domain's SSL certificate free: expiry date, days remaining, issuer and whether browsers trust the chain. Instant, no signup.",
+    "Check any SSL certificate free: expiry, issuer, chain trust — and download a calendar reminder so renewal never catches you out. Instant, no signup.",
   keywords: [
     "ssl checker",
     "ssl certificate checker",

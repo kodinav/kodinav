@@ -8,7 +8,7 @@ import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Free Invoice Generator — GST & VAT Ready, Print to PDF",
   description:
-    "Create a clean, professional invoice in your browser: line items, GST/VAT, any currency, print or save as PDF. Free, no signup, nothing stored.",
+    "Professional invoices in your browser: logo, GST/VAT, discounts, amount in words, a scannable UPI payment QR, and details that save on your device. Free.",
   keywords: [
     "invoice generator",
     "free invoice generator",
@@ -72,7 +72,7 @@ export default function InvoiceGeneratorPage() {
             A clean invoice in <span className="text-gradient">two minutes</span>.
           </>
         }
-        lead="Line items, GST or VAT, any currency, straight to PDF — without creating an account anywhere or letting a template site watermark your paperwork."
+        lead="Logo, GST or VAT, discounts, the amount in words, and a scannable UPI payment QR printed on the invoice. Your details save on your own device and the invoice number increments itself — no account, no watermark."
         wide
         tool={<InvoiceGenerator />}
         faqs={faqs}

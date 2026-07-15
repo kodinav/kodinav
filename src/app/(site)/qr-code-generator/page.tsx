@@ -10,9 +10,9 @@ import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Free QR Code Generator — No Signup, No Expiry, PNG & SVG",
+  title: "Free QR Code Generator — WiFi, vCard, UPI, Logo — No Expiry",
   description:
-    "Generate QR codes that never expire: any link or text, print-quality SVG and PNG downloads, no signup, no watermark. Runs entirely in your browser.",
+    "QR codes that never expire: links, WiFi logins, contact cards, UPI payments and more — with your logo, custom colours, print-quality SVG. Free, in-browser.",
   keywords: [
     "qr code generator",
     "free qr code generator",
@@ -123,10 +123,11 @@ export default function QrCodeGeneratorPage() {
               QR codes that <span className="text-gradient">never expire</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              No signup, no watermark, no &ldquo;your code has been
+              Links, Wi-Fi logins, contact cards, UPI payments and WhatsApp
+              chats — with your logo in the centre and print-quality SVG. No
+              signup, no watermark, no &ldquo;your code has been
               deactivated&rdquo; email after you&apos;ve printed five hundred
-              menus. Static codes, PNG and print-quality SVG, made in your
-              browser.
+              menus.
             </p>
           </div>
           <div className="mt-14">
