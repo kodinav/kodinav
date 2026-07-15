@@ -18,7 +18,7 @@ export function Footer() {
       <div className="pb-safe mx-auto max-w-7xl px-5 py-14 sm:px-8">
         {/* 2-col on mobile so short link lists sit side by side instead of
             stacking as sparse full-width columns */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.3fr_1fr_1fr_1fr] md:gap-12">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.3fr_1fr_1fr_1fr_1fr] md:gap-10">
           <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
             <p className="annotation">The Studio</p>
             <p className="max-w-xs text-sm leading-relaxed text-muted">
@@ -95,6 +95,52 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+          </div>
+
+          <div>
+            <p className="annotation mb-5">Free Tools</p>
+            <ul className="flex flex-col gap-2.5">
+              <li>
+                <Link
+                  href="/website-cost-calculator"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  Cost Calculator
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/mobile-friendly-test"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  Mobile-Friendly Test
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/whatsapp-link-generator"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  WhatsApp Link Generator
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/google-review-link-generator"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  Review Link Generator
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/free-tools"
+                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
+                >
+                  All free tools →
+                </Link>
+              </li>
             </ul>
           </div>
 

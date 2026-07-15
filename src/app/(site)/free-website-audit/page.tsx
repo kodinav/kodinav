@@ -4,7 +4,7 @@ import { Gauge, Search, Smartphone, ShieldCheck, MessageSquare } from "lucide-re
 import { AuditScanner } from "@/components/AuditScanner";
 import { Faq } from "@/components/Faq";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
-import { Eyebrow, SectionHeading } from "@/components/ui";
+import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
@@ -212,6 +212,9 @@ export default function FreeWebsiteAuditPage() {
           </Reveal>
           <div className="mt-10">
             <Faq items={faqs} />
+          </div>
+          <div className="mt-12 text-center">
+            <ArrowLink href="/free-tools">Explore all free tools</ArrowLink>
           </div>
         </div>
       </section>
