@@ -66,6 +66,7 @@ export default function PrivacyPolicyGeneratorPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/privacy-policy-generator"
         eyebrow="Free Policy Generator"
         title={
           <>

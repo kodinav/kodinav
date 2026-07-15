@@ -65,6 +65,7 @@ export default function IsMyWebsiteDownPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/is-my-website-down"
         eyebrow="Free Down Checker"
         title={
           <>

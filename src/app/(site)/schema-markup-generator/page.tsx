@@ -66,6 +66,7 @@ export default function SchemaMarkupGeneratorPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/schema-markup-generator"
         eyebrow="Free Schema Generator"
         title={
           <>

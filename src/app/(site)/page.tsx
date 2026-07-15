@@ -10,6 +10,7 @@ import { ArrowLink, ButtonLink, Eyebrow, SectionHeading } from "@/components/ui"
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
+import { featuredTools, TOOL_COUNT } from "@/data/tools";
 
 const industries = [
   "Coaching Institutes",
@@ -363,6 +364,50 @@ export default function Home() {
               </footer>
             </blockquote>
           </Reveal>
+        </div>
+      </section>
+
+      {/* Free tools band — proof we give value before we ask for any */}
+      <section className="border-t border-line-strong">
+        <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
+          <Reveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <SectionHeading
+                eyebrow="Fig. 08 — Free Tools"
+                title={`${TOOL_COUNT} free tools. No signup.`}
+                lead="We built these for our own work, then opened them to everyone. Audit a website, price a project, generate a QR or an invoice — the things other platforms charge for or harvest your data to run. Free, and mostly in your browser."
+              />
+              <ArrowLink href="/free-tools" className="mb-2">
+                Browse all tools
+              </ArrowLink>
+            </div>
+          </Reveal>
+          <Stagger className="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {featuredTools.slice(0, 6).map((t, i) => (
+              <StaggerItem key={t.href} className="bg-background">
+                <Link
+                  href={t.href}
+                  className="group flex h-full flex-col gap-3 p-6 transition-colors duration-300 hover:bg-surface-raised sm:p-7"
+                >
+                  <div className="flex items-baseline justify-between">
+                    <span className="font-mono text-[0.625rem] text-faint">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      aria-hidden
+                      className="font-mono text-faint transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
+                    >
+                      ↗
+                    </span>
+                  </div>
+                  <h3 className="font-display text-xl leading-none uppercase transition-colors duration-300 group-hover:text-accent">
+                    {t.name}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted">{t.blurb}</p>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </div>
       </section>
 

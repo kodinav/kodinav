@@ -66,6 +66,7 @@ export default function BrokenLinkCheckerPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/broken-link-checker"
         eyebrow="Free Link Checker"
         title={
           <>

@@ -66,6 +66,7 @@ export default function RedirectCheckerPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/redirect-checker"
         eyebrow="Free Redirect Checker"
         title={
           <>

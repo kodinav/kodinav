@@ -7,6 +7,7 @@ import { Reveal } from "@/components/motion";
 import { Chip } from "@/components/ui";
 import { getPost, posts } from "@/data/posts";
 import { getService } from "@/data/services";
+import { getTool } from "@/data/tools";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
@@ -64,6 +65,10 @@ export default async function BlogPostPage({
   const relatedServiceLinks = (post.relatedServices ?? [])
     .map((s) => getService(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+  const relatedToolLinks = (post.relatedTools ?? [])
+    .map((href) => getTool(href))
+    .filter((t): t is NonNullable<typeof t> => Boolean(t));
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -154,6 +159,23 @@ export default async function BlogPostPage({
                     className="border border-line-strong px-4 py-2 font-mono text-[0.6875rem] tracking-[0.14em] uppercase transition-colors hover:border-accent hover:text-accent"
                   >
                     {s.name} →
+                  </Link>
+                ))}
+              </div>
+            </Reveal>
+          )}
+
+          {relatedToolLinks.length > 0 && (
+            <Reveal className="mt-8">
+              <p className="annotation mb-4">Free tools from this article</p>
+              <div className="flex flex-wrap gap-2.5">
+                {relatedToolLinks.map((t) => (
+                  <Link
+                    key={t.href}
+                    href={t.href}
+                    className="border border-line-strong px-4 py-2 font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-accent transition-colors hover:border-accent"
+                  >
+                    {t.name} →
                   </Link>
                 ))}
               </div>

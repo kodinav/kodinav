@@ -66,6 +66,7 @@ export default function EmailSignatureGeneratorPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/email-signature-generator"
         eyebrow="Free Signature Generator"
         title={
           <>

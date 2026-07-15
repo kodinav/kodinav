@@ -68,6 +68,7 @@ export default function CompressImagesPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/compress-images"
         eyebrow="Free Image Compressor"
         title={
           <>

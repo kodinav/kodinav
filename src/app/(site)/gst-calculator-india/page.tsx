@@ -62,6 +62,7 @@ export default function GstCalculatorIndiaPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/gst-calculator-india"
         eyebrow="Free GST Calculator"
         title={
           <>

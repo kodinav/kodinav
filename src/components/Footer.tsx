@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { site, nav } from "@/data/site";
 import { services } from "@/data/services";
+import { featuredTools, TOOL_COUNT } from "@/data/tools";
 
 export function Footer() {
   return (
@@ -55,17 +56,12 @@ export function Footer() {
           <div>
             <p className="annotation mb-5">Index</p>
             <ul className="flex flex-col gap-2.5">
-              {nav.map((item, i) => (
+              {[...nav, { label: "Process", href: "/process" }].map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`u-draw text-sm transition-colors hover:text-foreground ${
-                      item.href === "/free-website-audit" ? "text-accent" : "text-muted"
-                    }`}
+                    className="u-draw text-sm text-muted transition-colors hover:text-foreground"
                   >
-                    <span className="mr-2 font-mono text-[0.625rem] text-faint">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
                     {item.label}
                   </Link>
                 </li>
@@ -75,8 +71,7 @@ export function Footer() {
                   href="/website-audit"
                   className="u-draw text-sm text-accent transition-colors hover:text-foreground"
                 >
-                  <span className="mr-2 font-mono text-[0.625rem] text-faint">09</span>
-                  Website Audit
+                  Paid Website Audit
                 </Link>
               </li>
             </ul>
@@ -101,52 +96,22 @@ export function Footer() {
           <div>
             <p className="annotation mb-5">Free Tools</p>
             <ul className="flex flex-col gap-2.5">
-              <li>
-                <Link
-                  href="/website-cost-calculator"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  Cost Calculator
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/website-speed-test"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  Website Speed Test
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/mobile-friendly-test"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  Mobile-Friendly Test
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/whatsapp-link-generator"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  WhatsApp Link Generator
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/google-review-link-generator"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  Review Link Generator
-                </Link>
-              </li>
+              {featuredTools.map((t) => (
+                <li key={t.href}>
+                  <Link
+                    href={t.href}
+                    className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                  >
+                    {t.name}
+                  </Link>
+                </li>
+              ))}
               <li>
                 <Link
                   href="/free-tools"
                   className="u-draw text-sm text-accent transition-colors hover:text-foreground"
                 >
-                  All free tools →
+                  All {TOOL_COUNT} tools →
                 </Link>
               </li>
             </ul>

@@ -62,6 +62,7 @@ export default function VatCalculatorUaePage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/vat-calculator-uae"
         eyebrow="Free VAT Calculator"
         title={
           <>

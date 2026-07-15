@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { nav } from "@/data/site";
+import { featuredTools } from "@/data/tools";
+import { ToolsMenu } from "./ToolsMenu";
 import { Wordmark } from "./Wordmark";
 
 export function Navbar() {
@@ -63,16 +65,19 @@ export function Navbar() {
             {nav.map((item, i) => {
               const active =
                 item.href === pathname || pathname.startsWith(item.href + "/");
+              if ("mega" in item && item.mega) {
+                return (
+                  <li key={item.href}>
+                    <ToolsMenu active={active || pathname === "/free-tools"} />
+                  </li>
+                );
+              }
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
                     className={`u-draw font-mono text-[0.6875rem] uppercase tracking-[0.18em] transition-colors ${
-                      active
-                        ? "text-accent"
-                        : item.href === "/free-website-audit"
-                          ? "text-accent hover:text-foreground"
-                          : "text-foreground/80 hover:text-foreground"
+                      active ? "text-accent" : "text-foreground/80 hover:text-foreground"
                     }`}
                   >
                     <span className="mr-1.5 text-faint">{String(i + 1).padStart(2, "0")}</span>
@@ -151,6 +156,20 @@ export function Navbar() {
               transition={{ delay: 0.4 }}
               className="flex flex-col gap-4 pt-6"
             >
+              <div>
+                <p className="annotation mb-2.5">Popular free tools</p>
+                <div className="flex flex-wrap gap-2">
+                  {featuredTools.map((t) => (
+                    <Link
+                      key={t.href}
+                      href={t.href}
+                      className="border border-line px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted active:border-accent active:text-accent"
+                    >
+                      {t.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
               <Link
                 href="/contact"
                 className="flex min-h-13 items-center justify-center gap-3 bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.18em] text-[#efeae0] active:scale-[0.98]"

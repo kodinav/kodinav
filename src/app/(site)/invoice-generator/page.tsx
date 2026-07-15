@@ -66,6 +66,7 @@ export default function InvoiceGeneratorPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/invoice-generator"
         eyebrow="Free Invoice Generator"
         title={
           <>

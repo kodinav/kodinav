@@ -10,6 +10,8 @@ export type Post = {
   relatedServices?: string[];
   /** other post slugs to cross-link */
   relatedPosts?: string[];
+  /** free-tool hrefs to surface at the end of the article */
+  relatedTools?: string[];
 };
 
 export const posts: Post[] = [
@@ -1207,6 +1209,152 @@ export const posts: Post[] = [
     ],
     relatedServices: ["crm", "web-applications", "admin-dashboards"],
     relatedPosts: ["custom-software-vs-saas", "how-to-measure-if-your-website-makes-money"],
+  },
+  {
+    slug: "website-cost-dubai-2026",
+    title: "How Much Does a Website Cost in Dubai in 2026?",
+    excerpt:
+      "A straight answer for UAE businesses: what a website really costs in Dubai, why agency quotes vary so wildly, and how to tell what you are actually paying for.",
+    date: "2026-07-15",
+    readingTime: "8 min",
+    tag: "Pricing",
+    sections: [
+      {
+        paragraphs: [
+          "Ask five Dubai agencies what a website costs and you will get five answers between AED 3,000 and AED 60,000 for what sounds like the same thing. That spread is not a mystery, and it is not all margin. It reflects genuinely different products sold under the same word. This is an honest breakdown of what each price band actually buys a UAE business in 2026, so you can tell the difference before you sign.",
+        ],
+      },
+      {
+        heading: "The three price bands, and what each really is",
+        paragraphs: [
+          "At the bottom, roughly AED 1,500 to 5,000, you are buying a template. Someone installs a purchased theme, drops in your logo and text, and hands it over. It exists, it loads, and it looks like a thousand other sites because it is one of them. For a business that just needs a placeholder online, this is honest value. For a business that wants the website to bring in enquiries, it usually disappoints, because templates are built for breadth, not for your customer.",
+          "In the middle, roughly AED 7,500 to 20,000, you are buying custom work: a design made for your business, content structured around what your customers actually search for, and an build that loads fast and is set up so Google can understand it. This is the band where a website starts behaving like a salesperson instead of a brochure.",
+          "At the top, AED 20,000 to 50,000 and up, you are usually buying either a large site, real web-application features like bookings, accounts or e-commerce, or an agency's overhead: an office on Sheikh Zayed Road, a sales team, and account managers. Some of that overhead buys you reassurance. None of it buys you better engineering.",
+        ],
+      },
+      {
+        heading: "Why the same brief gets such different quotes",
+        paragraphs: [
+          "The biggest hidden variable is who does the work. An agency sells you its best people in the pitch, then often staffs the build with juniors. A marketplace freelancer competes on price, which means competing on shortcuts. An independent studio inverts both: the person who wins your trust is the person who does the work, and the work has to carry their whole reputation.",
+          "The second variable is what is included. A cheap quote frequently leaves out the things that make a website earn its keep: performance, SEO structure, analytics, content help, and support after launch. Those reappear later as paid extras, and the cheap quote turns out to be the expensive one.",
+        ],
+      },
+      {
+        heading: "What a UAE business should actually budget",
+        paragraphs: [
+          "For a serious custom business website built to rank in UAE search and convert visitors into enquiries, budget from around AED 7,500 (about USD 2,000). E-commerce with real payment integration, and web applications with bookings or accounts, are scoped individually and cost more depending on the features. The honest rule is that price should follow scope, and every page and feature should be named in the quote before any money changes hands.",
+          "Do not forget VAT. Most UAE quotes are stated before 5% VAT, and consumer-facing prices are generally required to include it. If you want to check the arithmetic on a quote, the free UAE VAT calculator below does it both directions in seconds.",
+        ],
+      },
+      {
+        heading: "How to protect yourself before you sign",
+        paragraphs: [
+          "Ask for a fixed, itemised quote in writing that names every page and feature. Ask who specifically will build it, and whether you own the code, domain and hosting at the end. Ask what happens after launch, and whether support is included or billed. A studio confident in its work answers all of these plainly. Vague answers are the real red flag, not the price.",
+          "Before you brief anyone, it helps to have a number of your own in mind. The free website cost calculator below gives you an honest range built from real studio pricing, so you walk into the conversation informed rather than guessing.",
+        ],
+      },
+    ],
+    relatedServices: ["business-websites", "ecommerce", "website-performance"],
+    relatedTools: ["/website-cost-calculator", "/vat-calculator-uae", "/free-website-audit"],
+    relatedPosts: ["website-development-cost-india", "freelance-web-developer-vs-agency"],
+  },
+  {
+    slug: "website-cost-usa-2026",
+    title: "How Much Does a Website Cost in the USA in 2026? What You're Really Paying For",
+    excerpt:
+      "US website prices range from a few hundred dollars to sixty thousand. Here is what each band actually buys, and why offshore engineering changed the maths.",
+    date: "2026-07-15",
+    readingTime: "8 min",
+    tag: "Pricing",
+    sections: [
+      {
+        paragraphs: [
+          "In the United States, a custom business website from an agency commonly runs USD 15,000 to 60,000, and enterprise projects go far higher. At the other end, template services quote a few hundred dollars a year. Both are selling something real, but they are not selling the same thing, and the gap between them is where most business owners overpay or underbuy. Here is what your money actually buys in 2026.",
+        ],
+      },
+      {
+        heading: "Where the money goes in a US agency quote",
+        paragraphs: [
+          "A large share of a US agency invoice is not engineering. It is office space, a sales team, project managers, and the layers of coordination that a multi-person shop needs to function. Those layers buy you process and reassurance. They do not, on their own, make your website faster, better structured, or more likely to rank. That is why two quotes for the same brief can differ by a factor of five: you are partly pricing the overhead, not the work.",
+          "The template end of the market removes the overhead by removing the custom work. You get a themed site you assemble yourself, which is fine for a placeholder and frustrating for a business that wants the site to generate leads. Templates are built to fit everyone, which means they fit no one's customers particularly well.",
+        ],
+      },
+      {
+        heading: "What offshore engineering changed",
+        paragraphs: [
+          "The reason a US business can now get senior-level custom work for a fraction of a local agency quote is simple: you can hire the engineering directly and skip the overhead. Working with an independent studio abroad, the same scope that costs USD 15,000 to 60,000 locally often starts around USD 2,000, because the invoice is engineering, not rent and account management.",
+          "The old objection was communication and timezones. In practice that is now a solved problem: written scopes, scheduled video calls, and the same messaging tools you already use with suppliers. India's working evening overlaps the US morning, so work finished during one day is waiting when yours begins. The real question is not onshore versus offshore. It is whether you are paying for engineering or for overhead.",
+        ],
+      },
+      {
+        heading: "What a US small business should budget",
+        paragraphs: [
+          "For a custom, fast, SEO-ready business website, a realistic floor working directly with a studio is around USD 2,000, with the final number following the scope: how many pages, whether you need e-commerce, bookings, accounts, or content written for you. Web applications and stores are scoped individually. The number that matters is not the headline price but whether it is fixed and itemised, so nothing appears mid-project.",
+        ],
+      },
+      {
+        heading: "How to compare quotes without getting fooled",
+        paragraphs: [
+          "Put the quotes side by side and check what each includes, not just the total. Does it cover performance, SEO structure, analytics, and support after launch, or are those extras? Who builds it? Do you own everything at the end? A low quote that omits half the work is not cheaper, it is deferred.",
+          "It also helps to know where your current site stands before you spend anything. The free website audit and the compare-websites tool below show you, in plain language, exactly what is helping or hurting your site against a competitor, so any quote you get is grounded in real problems rather than a salesperson's pitch.",
+        ],
+      },
+    ],
+    relatedServices: ["business-websites", "web-applications", "website-performance"],
+    relatedTools: ["/website-cost-calculator", "/compare-websites", "/free-website-audit"],
+    relatedPosts: ["freelance-web-developer-vs-agency", "website-development-cost-india"],
+  },
+  {
+    slug: "free-tools-to-check-your-website",
+    title: "The Free Tools Every Small Business Should Use to Check Their Website",
+    excerpt:
+      "You do not need to hire anyone to find out what is wrong with your website. A short, honest tour of the free checks that reveal what is costing you customers.",
+    date: "2026-07-15",
+    readingTime: "7 min",
+    tag: "Tools",
+    sections: [
+      {
+        paragraphs: [
+          "Most business owners never see their website the way a first-time visitor does. You open it on a fast connection, on a device that has cached everything, already knowing where to click. Your customers get none of that. The good news is you do not need to pay anyone to find the gap. A handful of free checks will tell you, in plain language, what is quietly costing you enquiries. Here is the tour, in the order worth doing them.",
+        ],
+      },
+      {
+        heading: "Start with the full picture",
+        paragraphs: [
+          "Before diving into any single metric, run one overall scan. A website audit checks the five things that decide whether a site earns its keep at once: how fast it loads, whether it works on a phone, whether Google can read it, whether a ready-to-buy visitor can actually reach you, and whether it looks trustworthy. It gives you a prioritised list instead of a pile of numbers, so you know what to fix first. The free audit linked below does exactly this, and it does not ask for your email to show you the result.",
+        ],
+      },
+      {
+        heading: "Then check speed and mobile, because that is where visitors leave",
+        paragraphs: [
+          "Speed is the cheapest conversion fix that exists, because every second of load time quietly sends people away before they see anything. A free speed test shows you your server response time, page weight, and Google's own mobile performance score, translated into what it means for your business rather than a waterfall chart.",
+          "Mobile matters just as much, and for a specific reason: Google predominantly ranks the mobile version of your site, and most of your visitors are on a phone. Google retired its own mobile-friendly test in 2023, but the check still matters, so a free mobile-friendly test tells you whether your page adapts, blocks zoom, or jumps around while loading.",
+        ],
+      },
+      {
+        heading: "Check the small things that lose trust",
+        paragraphs: [
+          "Two quiet killers are worth a minute each. First, how your link looks when shared: paste any page into a link preview checker and you will see the exact card WhatsApp, LinkedIn and Google show. If it is a bare grey box with no image, every share is a lost first impression. Second, broken links: a link checker finds the dead ends that send interested visitors to error pages and waste the attention Google gives your site.",
+          "If you sell locally, one more free win: a Google review link and a printable counter sign make it effortless for happy customers to leave the reviews that decide who shows up in local search. The tools to generate both are free and linked below.",
+        ],
+      },
+      {
+        heading: "What to do with what you find",
+        paragraphs: [
+          "Run these checks and you will usually find that your site needs three or four specific fixes, not a rebuild. That is good news, because specific problems have specific, affordable solutions. Fix the ones you can, and for the ones you cannot, at least you now know precisely what to ask for and roughly what it should cost, instead of being sold a rebuild you may not need.",
+          "Every one of these tools is free, most run entirely in your browser, and none of them harvest your data. We built them for our own work and opened them up, because a business that trusts our free tools is a business we would be glad to build software for one day.",
+        ],
+      },
+    ],
+    relatedServices: ["website-performance", "business-websites", "website-maintenance"],
+    relatedTools: [
+      "/free-website-audit",
+      "/website-speed-test",
+      "/mobile-friendly-test",
+      "/link-preview-checker",
+      "/broken-link-checker",
+    ],
+    relatedPosts: ["technical-seo-checklist", "why-your-business-website-is-slow"],
   },
 ];
 

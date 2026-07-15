@@ -71,14 +71,16 @@ export const site = {
   ],
 } as const;
 
+// Top-level navigation. `mega: true` marks the Tools entry, which the Navbar
+// renders as a dropdown over the whole free-tools suite instead of a plain
+// link. Process is intentionally not here (it's linked from the homepage
+// band, About and footer) to keep the bar to seven focused items.
 export const nav = [
   { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
+  { label: "Tools", href: "/free-tools", mega: true },
   { label: "Pricing", href: "/pricing" },
-  { label: "Process", href: "/process" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
-  // The free-audit lead magnet earns a top-level slot; Navbar/Footer render it in accent
-  { label: "Free Audit", href: "/free-website-audit" },
   { label: "Contact", href: "/contact" },
 ] as const;

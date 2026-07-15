@@ -67,6 +67,7 @@ export default function OgImageGeneratorPage() {
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
       ))}
       <ToolShell
+        crumb="/og-image-generator"
         eyebrow="Free OG Image Maker"
         title={
           <>
