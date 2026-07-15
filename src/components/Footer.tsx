@@ -195,7 +195,14 @@ export function Footer() {
 
         <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 sm:flex-row sm:items-center">
           <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-faint">
-            © {new Date().getFullYear()} {site.name} · {site.tagline}
+            © {new Date().getFullYear()} {site.name} · {site.tagline} ·{" "}
+            <Link href="/privacy-policy" className="u-draw hover:text-foreground">
+              Privacy
+            </Link>{" "}
+            ·{" "}
+            <Link href="/terms" className="u-draw hover:text-foreground">
+              Terms
+            </Link>
           </p>
           {/* barcode ornament */}
           <div aria-hidden className="flex h-5 items-stretch gap-0.75 opacity-50">

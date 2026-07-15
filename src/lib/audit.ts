@@ -5,8 +5,12 @@ import {
   type AuditResult,
   type Category,
   type Finding,
+  type LinkCheck,
+  type LinkCheckResult,
   type LinkPreview,
   type PreviewIssue,
+  type RedirectHop,
+  type RedirectTrace,
   type Severity,
   type SpeedResult,
 } from "./auditTypes";
@@ -47,7 +51,7 @@ function isPrivateIp(ip: string): boolean {
 
 export class AuditError extends Error {}
 
-async function assertPublicUrl(url: URL): Promise<void> {
+export async function assertPublicUrl(url: URL): Promise<void> {
   if (url.protocol !== "http:" && url.protocol !== "https:") {
     throw new AuditError("Only http:// and https:// addresses can be scanned.");
   }
@@ -944,5 +948,184 @@ export async function fetchLinkPreview(input: string): Promise<LinkPreview> {
     twitterCard,
     image,
     issues,
+  };
+}
+
+/* ------------------------------------------------------------------ *
+ * Redirect tracer — records every hop safeFetch would take.
+ * ------------------------------------------------------------------ */
+
+export async function traceRedirects(input: string): Promise<RedirectTrace> {
+  const trimmed = input.trim();
+  if (!trimmed) throw new AuditError("Enter a website address.");
+  let url: URL;
+  try {
+    url = new URL(/^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`);
+  } catch {
+    throw new AuditError("That does not look like a website address.");
+  }
+
+  const hops: RedirectHop[] = [];
+  const began = Date.now();
+
+  for (let hop = 0; hop <= 8; hop++) {
+    await assertPublicUrl(url);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        redirect: "manual",
+        signal: controller.signal,
+        headers: { "user-agent": UA, accept: "text/html,*/*" },
+        cache: "no-store",
+      });
+    } catch (err) {
+      clearTimeout(timer);
+      const aborted = err instanceof Error && err.name === "AbortError";
+      throw new AuditError(
+        aborted
+          ? "The site took longer than 15 seconds to respond, so the trace timed out."
+          : "Could not reach that site. Check the address, or try again in a moment."
+      );
+    }
+    clearTimeout(timer);
+    await res.body?.cancel().catch(() => {});
+    hops.push({ url: url.toString(), status: res.status });
+
+    const location = res.headers.get("location");
+    if (res.status >= 300 && res.status < 400 && location) {
+      if (hop === 8) throw new AuditError("That address redirects more than 8 times — browsers give up before that.");
+      try {
+        url = new URL(location, url);
+      } catch {
+        throw new AuditError("That site sent an invalid redirect.");
+      }
+      continue;
+    }
+    return {
+      hops,
+      finalUrl: url.toString(),
+      finalStatus: res.status,
+      totalMs: Date.now() - began,
+    };
+  }
+  throw new AuditError("That address redirects more than 8 times — browsers give up before that.");
+}
+
+/* ------------------------------------------------------------------ *
+ * Broken-link checker. Classification is deliberately conservative:
+ * only 404/410 are called broken. Sites that block robots (403/999)
+ * are reported as unverifiable, never as broken — a false "broken
+ * link" finding would poison the tool's whole purpose.
+ * ------------------------------------------------------------------ */
+
+const LINK_CAP = 40;
+
+async function probeLink(url: URL): Promise<{ status: number | null; state: LinkCheck["state"] }> {
+  try {
+    await assertPublicUrl(url);
+  } catch {
+    return { status: null, state: "unreachable" };
+  }
+  let target = url;
+  for (let hop = 0; hop <= 4; hop++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10_000);
+    let res: Response;
+    try {
+      res = await fetch(target, {
+        redirect: "manual",
+        signal: controller.signal,
+        headers: { "user-agent": UA, accept: "text/html,*/*" },
+        cache: "no-store",
+      });
+    } catch {
+      clearTimeout(timer);
+      return { status: null, state: "unreachable" };
+    }
+    clearTimeout(timer);
+    await res.body?.cancel().catch(() => {});
+
+    const location = res.headers.get("location");
+    if (res.status >= 300 && res.status < 400 && location) {
+      try {
+        target = new URL(location, target);
+      } catch {
+        return { status: res.status, state: "broken" };
+      }
+      try {
+        await assertPublicUrl(target);
+      } catch {
+        return { status: res.status, state: "unreachable" };
+      }
+      continue;
+    }
+    if (res.status === 404 || res.status === 410) return { status: res.status, state: "broken" };
+    if (res.status === 401 || res.status === 403 || res.status === 429 || res.status === 999)
+      return { status: res.status, state: "blocked" };
+    if (res.status >= 500) return { status: res.status, state: "server-error" };
+    return { status: res.status, state: "ok" };
+  }
+  return { status: null, state: "unreachable" };
+}
+
+export async function checkPageLinks(input: string): Promise<LinkCheckResult> {
+  const trimmed = input.trim();
+  if (!trimmed) throw new AuditError("Enter a website address.");
+  let url: URL;
+  try {
+    url = new URL(/^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`);
+  } catch {
+    throw new AuditError("That does not look like a website address.");
+  }
+
+  const page = await safeFetch(url);
+  const html = stripComments(page.html);
+
+  const seen = new Map<string, string>(); // href -> anchor text
+  const anchorRe = /<a\b[^>]*>([\s\S]*?)<\/a>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = anchorRe.exec(html)) !== null) {
+    const href = attrOf(m[0].slice(0, m[0].indexOf(">") + 1), "href");
+    if (!href) continue;
+    if (/^(#|mailto:|tel:|javascript:|whatsapp:|sms:)/i.test(href)) continue;
+    let abs: URL;
+    try {
+      abs = new URL(href, page.finalUrl);
+    } catch {
+      continue;
+    }
+    if (!/^https?:$/.test(abs.protocol)) continue;
+    abs.hash = "";
+    const key = abs.toString();
+    if (key === page.finalUrl.toString()) continue;
+    if (!seen.has(key)) {
+      const text = decodeEntities(m[1].replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+      seen.set(key, text.slice(0, 80));
+    }
+  }
+
+  const all = [...seen.entries()];
+  const capped = all.length > LINK_CAP;
+  const toCheck = all.slice(0, LINK_CAP);
+
+  const results: LinkCheck[] = new Array(toCheck.length);
+  let next = 0;
+  async function worker() {
+    while (next < toCheck.length) {
+      const i = next++;
+      const [href, text] = toCheck[i];
+      const probe = await probeLink(new URL(href));
+      results[i] = { url: href, text, status: probe.status, state: probe.state };
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(8, toCheck.length) }, worker));
+
+  return {
+    finalUrl: page.finalUrl.toString(),
+    totalFound: all.length,
+    checked: results,
+    capped,
   };
 }

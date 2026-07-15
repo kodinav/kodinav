@@ -124,3 +124,48 @@ export type LinkPreview = {
   image: { status: number; type: string | null } | null;
   issues: PreviewIssue[];
 };
+
+/* ------------------------------------------------------------------ *
+ * Redirect tracer, broken-link checker, SSL inspector
+ * ------------------------------------------------------------------ */
+
+export type RedirectHop = { url: string; status: number };
+
+export type RedirectTrace = {
+  hops: RedirectHop[];
+  finalUrl: string;
+  finalStatus: number;
+  /** Time from first request to final response headers. */
+  totalMs: number;
+};
+
+export type LinkCheckState = "ok" | "broken" | "server-error" | "blocked" | "unreachable";
+
+export type LinkCheck = {
+  url: string;
+  /** Anchor text as written on the page, truncated. */
+  text: string;
+  status: number | null;
+  state: LinkCheckState;
+};
+
+export type LinkCheckResult = {
+  finalUrl: string;
+  totalFound: number;
+  checked: LinkCheck[];
+  /** True when the page had more unique links than the per-scan cap. */
+  capped: boolean;
+};
+
+export type SslInfo = {
+  host: string;
+  /** Whether Node's CA store accepted the full chain. */
+  trusted: boolean;
+  trustError: string | null;
+  issuer: string | null;
+  subject: string | null;
+  validFrom: string;
+  validTo: string;
+  daysRemaining: number;
+  altNames: string[];
+};
