@@ -59,7 +59,9 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                    className={`u-draw text-sm transition-colors hover:text-foreground ${
+                      item.href === "/free-website-audit" ? "text-accent" : "text-muted"
+                    }`}
                   >
                     <span className="mr-2 font-mono text-[0.625rem] text-faint">
                       {String(i + 1).padStart(2, "0")}
@@ -68,15 +70,6 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link
-                  href="/free-website-audit"
-                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
-                >
-                  <span className="mr-2 font-mono text-[0.625rem] text-faint">08</span>
-                  Free Website Audit
-                </Link>
-              </li>
               <li>
                 <Link
                   href="/website-audit"

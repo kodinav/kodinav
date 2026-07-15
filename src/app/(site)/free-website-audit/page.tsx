@@ -10,11 +10,13 @@ import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Free Website Audit — Instant Speed, SEO & Mobile Check",
+  title: "Free Website Audit Tool — Instant SEO & Speed Check",
   description:
-    "Paste your URL and get an instant, honest website audit: speed, mobile, SEO, trust and the reasons visitors leave without enquiring. Free, no email required to see the result.",
+    "Audit your website free in 60 seconds. Speed, SEO, mobile and trust checked instantly, with a plain-language fix list. No email needed to see your results.",
   keywords: [
     "free website audit",
+    "website audit tool",
+    "audit my website",
     "free website checker",
     "website speed test",
     "free SEO audit",
@@ -25,12 +27,12 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: "/free-website-audit" },
   openGraph: {
-    title: "Free Website Audit — Instant Speed, SEO & Mobile Check",
+    title: "Free Website Audit Tool — Instant SEO & Speed Check",
     description:
-      "Paste your URL. Get an honest scan of what is costing you customers. Free, no email required to see the result.",
+      "Audit your website in 60 seconds. An honest scan of what is costing you customers — free, no email required to see the result.",
     url: `${site.url}/free-website-audit`,
     type: "website",
-    images: ogImage("Instant speed, SEO & mobile check", "Free Website Audit"),
+    images: ogImage("Audit your website in 60 seconds", "Free Website Audit Tool"),
   },
 };
 
@@ -89,6 +91,7 @@ const toolSchema = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   name: "Free Website Audit",
+  alternateName: "Kodinav Website Audit Tool",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Any",
   url: `${site.url}/free-website-audit`,
@@ -128,9 +131,9 @@ export default function FreeWebsiteAuditPage() {
         <div aria-hidden className="bg-grid absolute inset-0" />
         <div className="relative mx-auto max-w-5xl px-5 sm:px-8">
           <div className="flex flex-col items-center gap-6 text-center">
-            <Eyebrow>Free Instant Scan</Eyebrow>
+            <Eyebrow>Free Instant Website Audit</Eyebrow>
             <h1 className="text-balance text-4xl sm:text-6xl">
-              Find out what your website is{" "}
+              Audit your website. See what it&apos;s{" "}
               <span className="text-gradient">costing you</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">

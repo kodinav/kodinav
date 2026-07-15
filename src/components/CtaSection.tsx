@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site } from "@/data/site";
 import { Price } from "./Price";
 import { Reveal } from "./motion";
@@ -46,7 +47,10 @@ export function CtaSection({
             </ButtonLink>
           </div>
           <p className="annotation">
-            Projects from <Price inr={site.priceFloor} usd={site.priceFloorUsd} /> · Response within one business day
+            Projects from <Price inr={site.priceFloor} usd={site.priceFloorUsd} /> · Response within one business day ·{" "}
+            <Link href="/free-website-audit" className="u-draw text-accent">
+              Free website audit
+            </Link>
           </p>
         </Reveal>
       </div>

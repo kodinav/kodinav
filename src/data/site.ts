@@ -78,5 +78,7 @@ export const nav = [
   { label: "Process", href: "/process" },
   { label: "About", href: "/about" },
   { label: "Blog", href: "/blog" },
+  // The free-audit lead magnet earns a top-level slot; Navbar/Footer render it in accent
+  { label: "Free Audit", href: "/free-website-audit" },
   { label: "Contact", href: "/contact" },
 ] as const;

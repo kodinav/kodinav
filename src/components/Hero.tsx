@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ButtonLink } from "./ui";
 import { Stamp } from "./Stamp";
@@ -131,6 +132,12 @@ export function Hero() {
                 Explore Projects
               </ButtonLink>
             </div>
+            <p className="annotation -mt-2">
+              Not ready to talk?{" "}
+              <Link href="/free-website-audit" className="u-draw text-accent">
+                Run the free 60-second website audit →
+              </Link>
+            </p>
           </div>
 
           {/* spec sheet card */}

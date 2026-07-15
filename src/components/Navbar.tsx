@@ -68,7 +68,11 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     className={`u-draw font-mono text-[0.6875rem] uppercase tracking-[0.18em] transition-colors ${
-                      active ? "text-accent" : "text-foreground/80 hover:text-foreground"
+                      active
+                        ? "text-accent"
+                        : item.href === "/free-website-audit"
+                          ? "text-accent hover:text-foreground"
+                          : "text-foreground/80 hover:text-foreground"
                     }`}
                   >
                     <span className="mr-1.5 text-faint">{String(i + 1).padStart(2, "0")}</span>
