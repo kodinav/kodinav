@@ -26,7 +26,7 @@ export function ProjectCard({
           <ProjectShot image={project.images.cover} caption={project.name} />
         </div>
         <div className="flex flex-col gap-4">
-          <h3 className="font-display flex items-center gap-3 text-3xl uppercase tracking-wide sm:text-4xl">
+ <h3 className="font-display flex items-center gap-3 text-3xl tracking-wide sm:text-4xl">
             {project.name}
             <span
               aria-hidden
@@ -57,7 +57,7 @@ export function ProjectCard({
               <Chip key={t}>{t}</Chip>
             ))}
           </div>
-          <span className="u-draw mt-2 inline-flex w-fit items-center gap-2 font-mono text-xs tracking-[0.18em] text-foreground uppercase">
+          <span className="u-draw mt-2 inline-flex w-fit items-center gap-2 font-mono text-xs tracking-[0.14em] text-foreground uppercase">
             View case study
             <span aria-hidden className="text-accent">
               →

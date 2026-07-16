@@ -162,7 +162,7 @@ export default function WebsiteAuditPage() {
               first. Delivered in {site.audit.turnaround}.
             </p>
             <div className="flex flex-wrap items-baseline justify-center gap-3">
-              <span className="font-display text-5xl">
+ <span className="font-display text-5xl">
                 <Price inr={site.audit.priceInr} usd={site.audit.priceUsd} />
               </span>
               <span className="annotation text-faint">one-time, fixed</span>
@@ -171,13 +171,13 @@ export default function WebsiteAuditPage() {
               <Link
                 href={ctaHref}
                 {...(ctaExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="inline-flex min-h-13 items-center justify-center gap-3 border border-accent bg-accent px-8 py-4 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98]"
+                className="inline-flex min-h-13 items-center justify-center gap-3 border border-accent bg-accent px-8 py-4 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98]"
               >
                 Order My Audit →
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex min-h-13 items-center justify-center gap-3 border border-line-strong px-8 py-4 font-mono text-xs tracking-[0.18em] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+                className="inline-flex min-h-13 items-center justify-center gap-3 border border-line-strong px-8 py-4 font-mono text-xs tracking-[0.14em] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
               >
                 Prefer a call first?
               </Link>
@@ -204,7 +204,7 @@ export default function WebsiteAuditPage() {
               <StaggerItem key={d.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
                   <d.icon className="size-5 text-accent" />
-                  <h3 className="font-display text-xl leading-none uppercase">
+ <h3 className="font-display text-xl leading-none">
                     {d.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-muted">{d.body}</p>
@@ -228,7 +228,7 @@ export default function WebsiteAuditPage() {
                   <span className="font-mono text-sm text-accent">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="mt-3 mb-2 font-display text-xl uppercase leading-none">
+ <h3 className="mt-3 mb-2 font-display text-xl leading-none">
                     {s.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-muted">{s.body}</p>

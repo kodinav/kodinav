@@ -29,7 +29,7 @@ export function ToolsMenu({ active }: { active: boolean }) {
         href="/free-tools"
         onFocus={show}
         aria-expanded={open}
-        className={`u-draw flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.18em] transition-colors ${
+        className={`u-draw flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors ${
           active ? "text-accent" : "text-foreground/80 hover:text-foreground"
         }`}
       >
@@ -51,7 +51,7 @@ export function ToolsMenu({ active }: { active: boolean }) {
             onBlur={hide}
             className="absolute top-full left-1/2 z-50 mt-4 w-[min(64rem,90vw)] -translate-x-1/2"
           >
-            <div className="ink bg-noise relative border border-line-strong p-6 shadow-[6px_6px_0_0_var(--border-strong)]">
+            <div className="ink bg-noise relative border border-line-strong p-6 shadow-[0_28px_60px_-30px_rgba(14,26,20,0.6)]">
               <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr_1fr]">
                 {toolGroups.map((g) => (
                   <div key={g.id}>
@@ -78,7 +78,7 @@ export function ToolsMenu({ active }: { active: boolean }) {
                 </p>
                 <Link
                   href="/free-tools"
-                  className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-accent transition-colors hover:text-foreground"
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent transition-colors hover:text-foreground"
                 >
                   Browse all tools →
                 </Link>

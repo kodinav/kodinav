@@ -141,8 +141,8 @@ export default async function ServicePage({
 
       <section className="mx-auto max-w-4xl px-6 py-12">
         <Reveal>
-          <div className="glass rounded-2xl p-7">
-            <p className="text-xs font-medium uppercase tracking-[0.18em] text-faint">
+          <div className="glass rounded-md p-7">
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-faint">
               Who this is for
             </p>
             <p className="prose-justify mt-3 leading-relaxed text-muted">{service.forWho}</p>
@@ -173,7 +173,7 @@ export default async function ServicePage({
         <div className="mt-10 flex flex-col gap-4">
           {service.approach.map((a, i) => (
             <Reveal key={a.title} delay={i * 0.05}>
-              <div className="glass flex gap-6 rounded-2xl p-7">
+              <div className="glass flex gap-6 rounded-md p-7">
                 <span className="font-mono text-sm text-accent-soft">
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -209,7 +209,7 @@ export default async function ServicePage({
                   href={`/services/${r.slug}`}
                   className="card-hover glass group flex h-full flex-col gap-3 p-6"
                 >
-                  <h3 className="font-display text-xl leading-none uppercase transition-colors group-hover:text-accent">
+ <h3 className="font-display text-xl leading-none transition-colors group-hover:text-accent">
                     {r.name}
                   </h3>
                   <p className="text-sm leading-relaxed text-muted">{r.short}</p>

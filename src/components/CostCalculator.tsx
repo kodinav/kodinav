@@ -194,7 +194,7 @@ export function CostCalculator() {
         <p className="annotation mb-6 flex items-center justify-between">
           Estimated Range <span className="text-faint">No. 002</span>
         </p>
-        <p className="font-display text-[clamp(2rem,6vw,2.9rem)] leading-none uppercase">
+ <p className="font-display text-[clamp(2rem,6vw,2.9rem)] leading-none">
           {estimate}
         </p>
         {region === "intl" && (
@@ -226,13 +226,13 @@ export function CostCalculator() {
             href={`https://wa.me/${site.phoneRaw.replace("+", "")}?text=${waText}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
           >
             Get a fixed quote on WhatsApp →
           </a>
           <a
             href="/contact"
-            className="inline-flex items-center justify-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex items-center justify-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
           >
             Book a free discovery call
           </a>

@@ -38,7 +38,7 @@ export function CtaSection({
             <ButtonLink
               href={primaryHref}
               size="lg"
-              className="border-accent! bg-accent! text-[#efeae0]! hover:bg-[#efeae0]! hover:text-[#16140f]!"
+              className="hover:bg-background! hover:text-foreground! hover:border-background!"
             >
               {primaryLabel}
             </ButtonLink>

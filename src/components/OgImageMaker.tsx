@@ -13,8 +13,8 @@ const inputCls =
 const labelCls = "annotation mb-2 block";
 
 const THEMES = [
-  { id: "paper", label: "Paper", bg: "#efeae0", fg: "#16140f", accent: "#ff4400" },
-  { id: "ink", label: "Ink", bg: "#16140f", fg: "#efeae0", accent: "#ff4400" },
+  { id: "paper", label: "Paper", bg: "#f3f1e9", fg: "#14201a", accent: "#9a7a35" },
+  { id: "ink", label: "Ink", bg: "#0e1a14", fg: "#ecefe4", accent: "#c8a866" },
   { id: "custom", label: "Custom", bg: "#ffffff", fg: "#111111", accent: "#2563eb" },
 ] as const;
 
@@ -168,7 +168,7 @@ export function OgImageMaker() {
           <a
             href={dataUrl}
             download="og-image.png"
-            className="mt-5 inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+            className="mt-5 inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
           >
             Download PNG →
           </a>

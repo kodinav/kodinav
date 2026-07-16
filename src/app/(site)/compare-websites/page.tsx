@@ -140,7 +140,7 @@ export default function CompareWebsitesPage() {
             {points.map((p) => (
               <StaggerItem key={p.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
-                  <h3 className="font-display text-xl leading-none uppercase">{p.title}</h3>
+ <h3 className="font-display text-xl leading-none">{p.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{p.body}</p>
                 </div>
               </StaggerItem>

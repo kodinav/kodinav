@@ -67,12 +67,12 @@ export function ProcessTimeline({ compact = false }: { compact?: boolean }) {
           <div className="grid gap-4 py-8 sm:grid-cols-[7rem_1fr] sm:gap-10 sm:py-10">
             <span
               aria-hidden
-              className="font-display text-6xl leading-none text-foreground/15 transition-colors duration-300 group-hover:text-accent sm:text-7xl"
+ className="font-display text-6xl leading-none text-foreground/15 transition-colors duration-300 group-hover:text-accent sm:text-7xl"
             >
               {s.step}
             </span>
             <div>
-              <h3 className="font-display text-2xl tracking-wide uppercase sm:text-3xl">
+ <h3 className="font-display text-2xl tracking-wide sm:text-3xl">
                 {s.title}
               </h3>
               <p className="mt-3 max-w-xl text-pretty leading-relaxed text-muted">

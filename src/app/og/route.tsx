@@ -24,10 +24,10 @@ export async function GET(request: Request) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#efeae0",
-          color: "#16140f",
+          background: "#f3f1e9",
+          color: "#14201a",
           fontFamily: "sans-serif",
-          border: "16px solid #16140f",
+          border: "16px solid #14201a",
         }}
       >
         <div
@@ -41,12 +41,12 @@ export async function GET(request: Request) {
           }}
         >
           <span style={{ fontWeight: 700 }}>Kodinav</span>
-          <span style={{ color: "#55503f" }}>{tag}</span>
+          <span style={{ color: "#46564c" }}>{tag}</span>
           <span
             style={{
               width: 20,
               height: 20,
-              background: "#ff4400",
+              background: "#9a7a35",
               display: "flex",
             }}
           />
@@ -58,8 +58,7 @@ export async function GET(request: Request) {
             fontWeight: 800,
             letterSpacing: -1,
             lineHeight: 1.05,
-            textTransform: "uppercase",
-          }}
+                      }}
         >
           {title}
         </div>
@@ -70,7 +69,7 @@ export async function GET(request: Request) {
             fontSize: 22,
             letterSpacing: 3,
             textTransform: "uppercase",
-            color: "#55503f",
+            color: "#46564c",
           }}
         >
           <span>kodinav.com</span>

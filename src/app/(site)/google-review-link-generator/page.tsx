@@ -142,7 +142,7 @@ export default function GoogleReviewLinkGeneratorPage() {
             {whys.map((w) => (
               <StaggerItem key={w.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
-                  <h3 className="font-display text-xl leading-none uppercase">{w.title}</h3>
+ <h3 className="font-display text-xl leading-none">{w.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{w.body}</p>
                 </div>
               </StaggerItem>

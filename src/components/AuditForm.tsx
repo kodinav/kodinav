@@ -49,7 +49,7 @@ export function AuditForm() {
         className="flex flex-col items-center gap-4 py-12 text-center"
       >
         <CheckCircle2 className="size-12 text-accent" />
-        <h3 className="font-display text-3xl uppercase">Request received.</h3>
+ <h3 className="font-display text-3xl">Request received.</h3>
         <p className="max-w-sm text-pretty text-muted">
           You&apos;ll get a secure payment link and next steps by email within a
           few hours. Your audit report and walkthrough follow within 3 business
@@ -105,7 +105,7 @@ export function AuditForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="mt-2 inline-flex min-h-13 w-full items-center justify-center gap-2 border border-accent bg-accent px-8 py-4 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98] disabled:opacity-60 sm:col-span-2"
+        className="mt-2 inline-flex min-h-13 w-full items-center justify-center gap-2 border border-accent bg-accent px-8 py-4 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98] disabled:opacity-60 sm:col-span-2"
       >
         {status === "sending" && <Loader2 className="size-4 animate-spin" />}
         {status === "sending" ? "Sending…" : "Order My Audit →"}

@@ -60,7 +60,7 @@ export function WhatsAppLinkGenerator() {
     QRCode.toDataURL(link, {
       width: 480,
       margin: 1,
-      color: { dark: "#16140f", light: "#efeae0" },
+      color: { dark: "#14201a", light: "#f3f1e9" },
     }).then((dataUrl) => {
       if (!cancelled) setQrFor({ link, dataUrl });
     });
@@ -165,7 +165,7 @@ export function WhatsAppLinkGenerator() {
               <button
                 type="button"
                 onClick={copy}
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
               >
                 {copied ? "Copied ✓" : "Copy link"}
               </button>
@@ -173,7 +173,7 @@ export function WhatsAppLinkGenerator() {
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
               >
                 Test it →
               </a>
@@ -192,7 +192,7 @@ export function WhatsAppLinkGenerator() {
                 <a
                   href={qr}
                   download={`whatsapp-qr-${cc}${digits}.png`}
-                  className="u-draw mt-4 inline-block font-mono text-xs uppercase tracking-[0.18em] text-accent"
+                  className="u-draw mt-4 inline-block font-mono text-xs uppercase tracking-[0.14em] text-accent"
                 >
                   Download PNG →
                 </a>
@@ -217,7 +217,7 @@ export function WhatsAppLinkGenerator() {
                   setCopiedEmbed(true);
                   setTimeout(() => setCopiedEmbed(false), 1600);
                 }}
-                className="u-draw mt-3 font-mono text-xs uppercase tracking-[0.18em] text-accent"
+                className="u-draw mt-3 font-mono text-xs uppercase tracking-[0.14em] text-accent"
               >
                 {copiedEmbed ? "Copied ✓" : "Copy embed code →"}
               </button>

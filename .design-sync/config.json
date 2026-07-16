@@ -1,0 +1,83 @@
+{
+  "projectId": "5d8d76e1-75f8-4aad-a98d-e4eef807a0bd",
+  "shape": "package",
+  "pkg": "kodinav",
+  "globalName": "KodinavDS",
+  "srcDir": "src/components",
+  "tsconfig": "tsconfig.json",
+  "cssEntry": "kodinav.css",
+  "buildCmd": "npx @tailwindcss/cli@4 -i .design-sync/.cache/ds-entry.css -o .design-sync/.cache/kodinav.css",
+  "componentSrcMap": {
+    "AuditForm": null,
+    "AuditScanner": null,
+    "BlogList": null,
+    "BrokenLinkChecker": null,
+    "CompareWebsites": null,
+    "ContactForm": null,
+    "CostCalculator": null,
+    "Counter": null,
+    "DownChecker": null,
+    "Footer": null,
+    "Hero": null,
+    "ImageCompressor": null,
+    "InvoiceGenerator": null,
+    "LandingPage": null,
+    "LeadForm": null,
+    "LinkPreviewChecker": null,
+    "MobileFriendlyChecker": null,
+    "Navbar": null,
+    "OgImageMaker": null,
+    "PrivacyPolicyGenerator": null,
+    "QrGenerator": null,
+    "RedirectChecker": null,
+    "ReviewLinkGenerator": null,
+    "SchemaGenerator": null,
+    "SignatureGenerator": null,
+    "SpeedTest": null,
+    "SslChecker": null,
+    "TaxCalculator": null,
+    "ToolShell": null,
+    "ToolsMenu": null,
+    "UtmBuilder": null,
+    "WhatsAppLinkGenerator": null
+  },
+  "docsDir": "docs",
+  "dtsPropsFor": {
+    "ButtonLink": "href: string; children: React.ReactNode; variant?: \"primary\" | \"ghost\" | \"outline\"; size?: \"md\" | \"lg\"; className?: string; external?: boolean;",
+    "ArrowLink": "href: string; children: React.ReactNode; className?: string;",
+    "Eyebrow": "children: React.ReactNode;",
+    "SectionHeading": "eyebrow?: string; title: string; lead?: string; align?: \"left\" | \"center\";",
+    "Chip": "children: React.ReactNode;",
+    "Price": "inr: string; usd: string; className?: string;",
+    "Reveal": "children: React.ReactNode; delay?: number; y?: number; className?: string; as?: \"div\" | \"section\" | \"span\" | \"li\";",
+    "Stagger": "children: React.ReactNode; className?: string;",
+    "StaggerItem": "children: React.ReactNode; className?: string;",
+    "Faq": "items: { q: string; a: string }[];",
+    "Breadcrumbs": "items: { name: string; href?: string }[];",
+    "ProcessTimeline": "compact?: boolean;",
+    "TechStack": "/** This component takes no props. */",
+    "Wordmark": "className?: string; size?: \"md\" | \"lg\";",
+    "Stamp": "className?: string; size?: number;",
+    "CtaSection": "title?: string; lead?: string; primaryLabel?: string; primaryHref?: string;",
+    "ProjectCard": "project: { slug: string; name: string; industry: string; category: string; year: string; summary: string; stack: string[]; accent?: string; images: { cover: { src: string; alt: string } } }; index?: number;",
+    "ProjectShot": "image: { src: string; alt: string }; caption?: string; priority?: boolean; sizes?: string;",
+    "PhoneShot": "image: { src: string; alt: string }; className?: string;",
+    "BackToTop": "/** This component takes no props. */",
+    "StickyCta": "/** This component takes no props. */",
+    "WhatsAppFab": "/** This component takes no props. */"
+  },
+  "overrides": {
+    "ProcessTimeline": {
+      "cardMode": "column"
+    },
+    "Reveal": {
+      "cardMode": "column"
+    },
+    "WhatsAppFab": {
+      "cardMode": "single",
+      "primaryStory": "OnPage"
+    }
+  },
+  "readmeHeader": ".design-sync/conventions.md",
+  "guidelinesGlob": "guides/**/*.md"
+}

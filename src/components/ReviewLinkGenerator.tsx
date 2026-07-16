@@ -51,7 +51,7 @@ export function ReviewLinkGenerator() {
     QRCode.toDataURL(link, {
       width: 480,
       margin: 1,
-      color: { dark: "#16140f", light: "#efeae0" },
+      color: { dark: "#14201a", light: "#f3f1e9" },
     }).then((dataUrl) => {
       if (!cancelled) setQrFor({ link, dataUrl });
     });
@@ -78,8 +78,8 @@ export function ReviewLinkGenerator() {
     const esc = (s: string) => s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
     const html = `<!DOCTYPE html><html><head><title>Review sign</title><style>
       @page{size:A5;margin:0}
-      body{font-family:Georgia,serif;color:#16140f;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh}
-      .card{text-align:center;padding:40px;border:3px solid #16140f;margin:24px;max-width:420px}
+      body{font-family:Georgia,serif;color:#14201a;margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh}
+      .card{text-align:center;padding:40px;border:3px solid #14201a;margin:24px;max-width:420px}
       h1{font-size:30px;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px}
       .stars{font-size:26px;letter-spacing:6px;margin:10px 0 4px}
       p{color:#444;font-size:15px;line-height:1.5;margin:8px 0 20px}
@@ -171,7 +171,7 @@ export function ReviewLinkGenerator() {
               <button
                 type="button"
                 onClick={copy}
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
               >
                 {copied ? "Copied ✓" : "Copy link"}
               </button>
@@ -179,7 +179,7 @@ export function ReviewLinkGenerator() {
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
               >
                 Test it →
               </a>
@@ -199,14 +199,14 @@ export function ReviewLinkGenerator() {
                   <a
                     href={qr}
                     download="google-review-qr.png"
-                    className="u-draw font-mono text-xs uppercase tracking-[0.18em] text-accent"
+                    className="u-draw font-mono text-xs uppercase tracking-[0.14em] text-accent"
                   >
                     Download PNG →
                   </a>
                   <button
                     type="button"
                     onClick={printSign}
-                    className="u-draw font-mono text-xs uppercase tracking-[0.18em] text-accent"
+                    className="u-draw font-mono text-xs uppercase tracking-[0.14em] text-accent"
                   >
                     Print a counter sign →
                   </button>

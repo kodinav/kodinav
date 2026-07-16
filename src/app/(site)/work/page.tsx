@@ -55,7 +55,7 @@ export default function WorkPage() {
         <div aria-hidden className="bg-grid absolute inset-0" />
         <div className="relative mx-auto max-w-7xl px-6 sm:px-8">
           <Reveal className="flex max-w-3xl flex-col gap-6">
-            <Eyebrow>Featured Work — Fig. 00</Eyebrow>
+            <Eyebrow>Featured Work — No. 00</Eyebrow>
             <h1 className="text-balance text-5xl sm:text-6xl lg:text-7xl">
               Real, running <span className="text-gradient">software</span>.
             </h1>

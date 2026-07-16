@@ -23,7 +23,7 @@ export function SignatureGenerator() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [website, setWebsite] = useState("");
-  const [accent, setAccent] = useState("#ff4400");
+  const [accent, setAccent] = useState("#175a3d");
   const [copied, setCopied] = useState<"" | "rich" | "html">("");
 
   const site = website.trim().replace(/^https?:\/\//i, "");
@@ -117,14 +117,14 @@ export function SignatureGenerator() {
               <button
                 type="button"
                 onClick={copyRich}
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
               >
                 {copied === "rich" ? "Copied ✓" : "Copy signature"}
               </button>
               <button
                 type="button"
                 onClick={copyHtml}
-                className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
               >
                 {copied === "html" ? "Copied ✓" : "Copy HTML"}
               </button>

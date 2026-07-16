@@ -77,7 +77,7 @@ export function ToolShell({
               </div>
               <Link
                 href={`/services/${service.slug}`}
-                className="inline-flex shrink-0 items-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex shrink-0 items-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
               >
                 See the service →
               </Link>

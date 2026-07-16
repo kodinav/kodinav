@@ -144,7 +144,7 @@ export default function WhatsAppLinkGeneratorPage() {
             {uses.map((u) => (
               <StaggerItem key={u.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
-                  <h3 className="font-display text-xl leading-none uppercase">{u.title}</h3>
+ <h3 className="font-display text-xl leading-none">{u.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{u.body}</p>
                 </div>
               </StaggerItem>

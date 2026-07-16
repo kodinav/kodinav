@@ -104,7 +104,7 @@ export default function ServicesPage() {
                 <span className="crosshair text-accent" aria-hidden />
                 Start here — <Price inr={site.audit.priceInr} usd={site.audit.priceUsd} />
               </p>
-              <h2 className="font-display text-3xl uppercase sm:text-4xl">
+ <h2 className="font-display text-3xl sm:text-4xl">
                 Not sure what you need? Get a{" "}
                 <span className="text-gradient">website audit</span>.
               </h2>
@@ -114,7 +114,7 @@ export default function ServicesPage() {
                 list. Delivered in {site.audit.turnaround}.
               </p>
             </div>
-            <span className="inline-flex shrink-0 items-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform group-hover:translate-x-1">
+            <span className="inline-flex shrink-0 items-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform group-hover:translate-x-1">
               Order audit →
             </span>
           </Link>
@@ -131,7 +131,7 @@ export default function ServicesPage() {
             <div key={group.title} className="mb-16 last:mb-0">
               <Reveal>
                 <div className="mb-8 flex items-baseline justify-between gap-4 border-b border-line-strong pb-4">
-                  <h2 className="font-display text-2xl uppercase sm:text-3xl">
+ <h2 className="font-display text-2xl sm:text-3xl">
                     {group.title}
                   </h2>
                   <p className="annotation hidden sm:block">{group.note}</p>
@@ -142,7 +142,7 @@ export default function ServicesPage() {
                   <StaggerItem key={s.slug}>
                     <Link
                       href={`/services/${s.slug}`}
-                      className="card-hover glass group flex h-full flex-col gap-4 rounded-3xl p-8"
+                      className="card-hover glass group flex h-full flex-col gap-4 rounded-md p-8"
                     >
                       <h3 className="flex items-start justify-between gap-4 text-2xl font-semibold tracking-tight">
                         {s.name}

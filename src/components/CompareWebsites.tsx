@@ -97,7 +97,7 @@ export function CompareWebsites() {
         <button
           type="submit"
           disabled={state === "running"}
-          className="inline-flex items-center justify-center gap-2 self-end border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="inline-flex items-center justify-center gap-2 self-end border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
         >
           {state === "running" ? "Comparing…" : "Compare"}
         </button>
@@ -112,7 +112,7 @@ export function CompareWebsites() {
             className="absolute -top-1.5 -left-1.5 size-3 border border-line-strong bg-background"
           />
           <p className="annotation mb-2">The scoreboard</p>
-          <p className="font-display text-3xl uppercase sm:text-4xl">
+ <p className="font-display text-3xl sm:text-4xl">
             {winsA > winsB
               ? `${hostA} leads ${winsA}–${winsB}`
               : winsB > winsA

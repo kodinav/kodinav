@@ -17,16 +17,16 @@ export function ButtonLink({
   external?: boolean;
 }) {
   const base =
-    "group inline-flex items-center justify-center gap-3 font-mono text-xs uppercase tracking-[0.18em] transition-all duration-300 whitespace-nowrap border active:scale-[0.98]";
+    "group inline-flex items-center justify-center gap-3 rounded-xs font-mono text-xs uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap border active:scale-[0.99]";
   const sizes = {
     md: "px-6 py-3.5",
     lg: "px-8 py-4.5",
   };
   const variants = {
     primary:
-      "bg-foreground text-background border-foreground hover:bg-accent hover:border-accent hover:text-[#efeae0] hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--border-strong)]",
+      "bg-accent text-accent-contrast border-accent hover:bg-foreground hover:border-foreground hover:text-background",
     outline:
-      "border-line-strong text-foreground hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_var(--accent)]",
+      "border-line-strong text-foreground hover:border-accent hover:text-accent",
     ghost: "border-transparent text-muted hover:text-foreground",
   };
   const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
@@ -67,12 +67,12 @@ export function ArrowLink({
   return (
     <Link
       href={href}
-      className={`u-draw group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-foreground ${className}`}
+      className={`u-draw group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground ${className}`}
     >
       {children}
       <span
         aria-hidden
-        className="text-accent transition-transform duration-300 group-hover:translate-x-1"
+        className="text-brass transition-transform duration-300 group-hover:translate-x-1"
       >
         →
       </span>
@@ -83,7 +83,7 @@ export function ArrowLink({
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <p className="annotation flex items-center gap-3 text-foreground/70">
-      <span className="crosshair text-accent" aria-hidden />
+      <span className="crosshair text-brass" aria-hidden />
       {children}
     </p>
   );
@@ -104,7 +104,7 @@ export function SectionHeading({
   return (
     <div className={`flex flex-col gap-6 ${alignCls}`}>
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-      <h2 className="text-balance text-4xl text-foreground sm:text-6xl">
+      <h2 className="text-balance text-4xl text-foreground sm:text-[3.4rem] sm:leading-[1.06]">
         {title}
       </h2>
       {lead && (
@@ -118,7 +118,7 @@ export function SectionHeading({
 
 export function Chip({ children }: { children: ReactNode }) {
   return (
-    <span className="inline-flex items-center border border-line px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted">
+    <span className="inline-flex items-center rounded-xs border border-line px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted">
       {children}
     </span>
   );

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Archivo, Instrument_Serif, Space_Mono } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, Fragment_Mono } from "next/font/google";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -14,29 +14,28 @@ export const viewport: Viewport = {
   // Extend the paper background under the iPhone notch / Dynamic Island;
   // fixed elements pad themselves with env(safe-area-inset-*).
   viewportFit: "cover",
-  themeColor: "#efeae0",
+  themeColor: "#f3f1e9",
 };
 
-const anton = Anton({
-  weight: "400",
+/* "The Ledger" type stack. The CSS variable names are frozen across
+   redesigns (globals.css and older tooling reference them) — only the
+   fonts bound to them change: display + serif are both Fraunces, the
+   body is Hanken Grotesk, numerals and annotations are Fragment Mono. */
+
+const fraunces = Fraunces({
   subsets: ["latin"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
   variable: "--font-anton",
 });
 
-const instrument = Instrument_Serif({
+const fragmentMono = Fragment_Mono({
   weight: "400",
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  variable: "--font-instrument",
-});
-
-const spaceMono = Space_Mono({
-  weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-space-mono",
 });
 
-const archivo = Archivo({
+const hanken = Hanken_Grotesk({
   subsets: ["latin"],
   variable: "--font-archivo",
 });
@@ -219,7 +218,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${instrument.variable} ${spaceMono.variable} ${archivo.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${fragmentMono.variable} ${hanken.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Geo-aware pricing: set the region flag before paint (no flash).

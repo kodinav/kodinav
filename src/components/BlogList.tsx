@@ -73,7 +73,7 @@ export function BlogList({ posts }: { posts: PostSummary[] }) {
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="card-hover glass group block rounded-2xl p-7 sm:p-8"
+            className="card-hover glass group block rounded-md p-7 sm:p-8"
           >
             <div className="mb-3 flex flex-wrap items-center gap-3 text-xs text-faint">
               <Chip>{post.tag}</Chip>

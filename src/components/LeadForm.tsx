@@ -54,7 +54,7 @@ export function LeadForm({
         className="flex flex-col items-center gap-4 py-16 text-center"
       >
         <CheckCircle2 className="size-12 text-accent" />
-        <h3 className="font-display text-3xl uppercase">Request received.</h3>
+ <h3 className="font-display text-3xl">Request received.</h3>
         <p className="max-w-sm text-pretty text-muted">
           You&apos;ll hear back from Abhinav personally within one business day,
           usually much sooner.
@@ -166,7 +166,7 @@ export function LeadForm({
       <button
         type="submit"
         disabled={status === "sending"}
-        className="mt-2 inline-flex w-full items-center justify-center gap-3 border border-foreground bg-foreground px-8 py-4 font-mono text-xs uppercase tracking-[0.18em] text-background transition-all duration-300 hover:border-accent hover:bg-accent hover:text-[#efeae0] disabled:opacity-60 sm:col-span-2"
+        className="mt-2 inline-flex w-full items-center justify-center gap-3 border border-foreground bg-foreground px-8 py-4 font-mono text-xs uppercase tracking-[0.14em] text-background transition-all duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast disabled:opacity-60 sm:col-span-2"
       >
         {status === "sending" && <Loader2 className="size-4 animate-spin" />}
         {status === "sending" ? "Sending…" : submitLabel}

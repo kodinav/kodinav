@@ -54,7 +54,7 @@ export function DownChecker() {
         <button
           type="submit"
           disabled={state === "running"}
-          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
         >
           {state === "running" ? "Checking…" : "Check it"}
         </button>
@@ -65,7 +65,7 @@ export function DownChecker() {
       {state === "done" && result && (
         <div className="ink relative p-7 sm:p-8">
           <div aria-hidden className="absolute -top-1.5 -left-1.5 size-3 border border-line-strong bg-background" />
-          <p className="font-display text-4xl uppercase sm:text-5xl">
+ <p className="font-display text-4xl sm:text-5xl">
             {result.up ? (
               <>It&apos;s up — it&apos;s probably just you</>
             ) : result.status ? (

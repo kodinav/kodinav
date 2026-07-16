@@ -28,7 +28,7 @@ export function BackToTop() {
           type="button"
           aria-label="Back to top"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed right-[calc(1rem+env(safe-area-inset-right))] bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 hidden size-11 items-center justify-center border border-line-strong bg-background font-mono text-lg text-foreground shadow-[4px_4px_0_0_rgba(22,20,15,0.2)] transition-all duration-300 hover:border-accent hover:text-accent active:scale-95 sm:flex"
+          className="fixed right-[calc(1rem+env(safe-area-inset-right))] bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-40 hidden size-11 items-center justify-center border border-line-strong bg-background font-mono text-lg text-foreground shadow-[0_12px_24px_-14px_rgba(14,26,20,0.45)] transition-all duration-300 hover:border-accent hover:text-accent active:scale-95 sm:flex"
         >
           ↑
         </motion.button>

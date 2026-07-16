@@ -5,10 +5,10 @@ import { useMemo, useState } from "react";
 import { LEAD_STATUSES, type Lead, type LeadStatus } from "@/lib/leadTypes";
 
 const statusStyles: Record<LeadStatus, string> = {
-  new: "bg-accent text-[#efeae0] border-accent",
+  new: "bg-accent text-accent-contrast border-accent",
   contacted: "bg-foreground text-background border-foreground",
   qualified: "border-accent text-accent",
-  won: "bg-[#2d6a4f] text-[#efeae0] border-[#2d6a4f]",
+  won: "bg-[#2d6a4f] text-accent-contrast border-[#2d6a4f]",
   lost: "border-line-strong text-faint",
 };
 
@@ -141,7 +141,7 @@ export function AdminDashboard({ initialLeads }: { initialLeads: Lead[] }) {
       <div className="grid grid-cols-2 gap-px border border-line bg-line sm:grid-cols-4">
         {stats.map((s) => (
           <div key={s.label} className="bg-background p-5">
-            <p className="font-display text-4xl">{s.value}</p>
+ <p className="font-display text-4xl">{s.value}</p>
             <p className="annotation mt-1.5">{s.label}</p>
           </div>
         ))}
@@ -264,7 +264,7 @@ export function AdminDashboard({ initialLeads }: { initialLeads: Lead[] }) {
                             href={wa}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="border border-foreground bg-foreground px-4 py-2 font-mono text-[0.625rem] tracking-[0.14em] text-background uppercase transition-colors hover:border-accent hover:bg-accent hover:text-[#efeae0]"
+                            className="border border-foreground bg-foreground px-4 py-2 font-mono text-[0.625rem] tracking-[0.14em] text-background uppercase transition-colors hover:border-accent hover:bg-accent hover:text-accent-contrast"
                           >
                             WhatsApp →
                           </a>

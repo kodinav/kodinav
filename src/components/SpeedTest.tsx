@@ -92,7 +92,7 @@ export function SpeedTest() {
         <button
           type="submit"
           disabled={state === "running"}
-          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
         >
           {state === "running" ? "Testing…" : "Test speed"}
         </button>
@@ -109,7 +109,7 @@ export function SpeedTest() {
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
             <div>
               <p className="annotation mb-2">{result.finalUrl}</p>
-              <p className="font-display text-4xl uppercase sm:text-5xl">{verdict}</p>
+ <p className="font-display text-4xl sm:text-5xl">{verdict}</p>
             </div>
             <p className="font-mono text-sm text-foreground/80">
               Speed score: <span className="text-accent">{score}/100</span>
@@ -119,7 +119,7 @@ export function SpeedTest() {
           <dl className="mt-6 grid gap-4 sm:grid-cols-3">
             <div className="border border-line p-4">
               <dt className="annotation">Server response</dt>
-              <dd className="mt-2 font-display text-2xl uppercase">
+ <dd className="mt-2 font-display text-2xl">
                 {result.ttfbMs} ms
               </dd>
               <dd className="mt-1 text-xs text-muted">
@@ -128,7 +128,7 @@ export function SpeedTest() {
             </div>
             <div className="border border-line p-4">
               <dt className="annotation">Page HTML</dt>
-              <dd className="mt-2 font-display text-2xl uppercase">
+ <dd className="mt-2 font-display text-2xl">
                 {Math.round(result.htmlBytes / 1024)} KB
               </dd>
               <dd className="mt-1 text-xs text-muted">
@@ -137,7 +137,7 @@ export function SpeedTest() {
             </div>
             <div className="border border-line p-4">
               <dt className="annotation">Page complexity</dt>
-              <dd className="mt-2 font-display text-2xl uppercase">
+ <dd className="mt-2 font-display text-2xl">
                 {result.domElements.toLocaleString("en-US")}
               </dd>
               <dd className="mt-1 text-xs text-muted">
@@ -154,14 +154,14 @@ export function SpeedTest() {
               <dl className="grid gap-4 sm:grid-cols-4">
                 <div>
                   <dt className="annotation text-faint">Performance</dt>
-                  <dd className="mt-1 font-display text-3xl uppercase text-accent">
+ <dd className="mt-1 font-display text-3xl text-accent">
                     {speed.performance}/100
                   </dd>
                 </div>
                 {speed.lcpMs !== null && (
                   <div>
                     <dt className="annotation text-faint">Largest paint</dt>
-                    <dd className="mt-1 font-display text-3xl uppercase">
+ <dd className="mt-1 font-display text-3xl">
                       {(speed.lcpMs / 1000).toFixed(1)}s
                     </dd>
                     <dd className="text-xs text-muted">Google&apos;s bar: under 2.5s</dd>
@@ -170,7 +170,7 @@ export function SpeedTest() {
                 {speed.tbtMs !== null && (
                   <div>
                     <dt className="annotation text-faint">Blocking time</dt>
-                    <dd className="mt-1 font-display text-3xl uppercase">
+ <dd className="mt-1 font-display text-3xl">
                       {Math.round(speed.tbtMs)} ms
                     </dd>
                     <dd className="text-xs text-muted">Bar: under 200 ms</dd>
@@ -179,7 +179,7 @@ export function SpeedTest() {
                 {speed.cls !== null && (
                   <div>
                     <dt className="annotation text-faint">Layout shift</dt>
-                    <dd className="mt-1 font-display text-3xl uppercase">
+ <dd className="mt-1 font-display text-3xl">
                       {speed.cls.toFixed(2)}
                     </dd>
                     <dd className="text-xs text-muted">Bar: under 0.1</dd>
@@ -216,7 +216,7 @@ export function SpeedTest() {
             </p>
             <Link
               href="/free-website-audit"
-              className="u-draw mt-3 inline-block font-mono text-xs uppercase tracking-[0.18em] text-accent"
+              className="u-draw mt-3 inline-block font-mono text-xs uppercase tracking-[0.14em] text-accent"
             >
               Run the full free website audit →
             </Link>

@@ -21,7 +21,7 @@ export default function LandingLayout({
           </Link>
           <a
             href="#lead-form"
-            className="inline-flex min-h-11 items-center gap-2 border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.6875rem] tracking-[0.18em] text-background uppercase transition-all duration-300 hover:border-accent hover:bg-accent hover:text-[#efeae0] active:scale-[0.98]"
+            className="inline-flex min-h-11 items-center gap-2 border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.6875rem] tracking-[0.14em] text-background uppercase transition-all duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast active:scale-[0.98]"
           >
             Book Free Call <span aria-hidden>→</span>
           </a>

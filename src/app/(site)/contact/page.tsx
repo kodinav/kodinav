@@ -103,7 +103,7 @@ export default function ContactPage() {
                 href={c.href}
                 target={c.external ? "_blank" : undefined}
                 rel={c.external ? "noopener noreferrer" : undefined}
-                className="card-hover glass group flex h-full flex-col gap-3 rounded-2xl p-7"
+                className="card-hover glass group flex h-full flex-col gap-3 rounded-md p-7"
               >
                 <c.icon className="size-6 text-accent-soft" />
                 <h2 className="text-lg font-semibold tracking-tight">{c.title}</h2>
@@ -130,7 +130,7 @@ export default function ContactPage() {
                   title="Tell me about your project."
                   lead="A few honest answers help me come to our first conversation already prepared, often with a rough approach in hand."
                 />
-                <div className="glass flex items-start gap-4 rounded-2xl p-6">
+                <div className="glass flex items-start gap-4 rounded-md p-6">
                   <MapPin className="mt-1 size-5 shrink-0 text-accent-soft" />
                   <div>
                     <h3 className="font-medium">Based in {site.location}</h3>
@@ -146,7 +146,7 @@ export default function ContactPage() {
               </div>
             </Reveal>
             <Reveal delay={0.1}>
-              <div className="glass rounded-3xl p-7 sm:p-9">
+              <div className="glass rounded-md p-7 sm:p-9">
                 <ContactForm />
               </div>
             </Reveal>
@@ -166,9 +166,9 @@ export default function ContactPage() {
               />
             </Reveal>
             <Reveal delay={0.1} className="mt-10">
-              <div className="glass overflow-hidden rounded-3xl">
+              <div className="glass overflow-hidden rounded-md">
                 <iframe
-                  src={`${site.calendly}?hide_gdpr_banner=1&background_color=efeae0&text_color=16140f&primary_color=ff4400`}
+                  src={`${site.calendly}?hide_gdpr_banner=1&background_color=f3f1e9&text_color=14201a&primary_color=175a3d`}
                   title="Book a discovery call — Calendly"
                   loading="lazy"
                   className="h-175 w-full"

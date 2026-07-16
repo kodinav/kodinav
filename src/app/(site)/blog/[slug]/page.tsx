@@ -198,7 +198,7 @@ export default async function BlogPostPage({
       </article>
 
       <section className="mx-auto max-w-3xl px-6 py-12">
-        <h2 className="mb-6 text-sm font-medium uppercase tracking-[0.18em] text-faint">
+        <h2 className="mb-6 text-sm font-medium uppercase tracking-[0.14em] text-faint">
           Keep reading
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -206,7 +206,7 @@ export default async function BlogPostPage({
             <Link
               key={p.slug}
               href={`/blog/${p.slug}`}
-              className="card-hover glass block rounded-2xl p-6"
+              className="card-hover glass block rounded-md p-6"
             >
               <p className="mb-2 text-xs text-faint">{p.tag}</p>
               <h3 className="font-semibold tracking-tight">{p.title}</h3>

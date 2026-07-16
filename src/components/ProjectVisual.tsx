@@ -18,10 +18,6 @@ export function ProjectShot({
 }) {
   return (
     <figure className="relative border border-line-strong bg-surface-raised">
-      <span aria-hidden className="crosshair absolute -top-1.5 -left-1.5 z-10 text-line-strong" />
-      <span aria-hidden className="crosshair absolute -top-1.5 -right-1.5 z-10 text-line-strong" />
-      <span aria-hidden className="crosshair absolute -bottom-1.5 -left-1.5 z-10 text-line-strong" />
-      <span aria-hidden className="crosshair absolute -right-1.5 -bottom-1.5 z-10 text-line-strong" />
 
       {/* browser chrome */}
       <div className="flex items-center gap-2 border-b border-line-strong px-3 py-2.5">

@@ -148,7 +148,7 @@ export default function WebsiteCostCalculatorPage() {
             {drivers.map((d) => (
               <StaggerItem key={d.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
-                  <h3 className="font-display text-xl leading-none uppercase">{d.title}</h3>
+ <h3 className="font-display text-xl leading-none">{d.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{d.body}</p>
                 </div>
               </StaggerItem>

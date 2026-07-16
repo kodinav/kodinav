@@ -148,7 +148,7 @@ export default function QrCodeGeneratorPage() {
             {truths.map((t) => (
               <StaggerItem key={t.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
-                  <h3 className="font-display text-xl leading-none uppercase">{t.title}</h3>
+ <h3 className="font-display text-xl leading-none">{t.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{t.body}</p>
                 </div>
               </StaggerItem>

@@ -42,3 +42,8 @@ next-env.d.ts
 
 # lead register (admin panel data — never commit)
 /data/
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules

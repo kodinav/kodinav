@@ -139,7 +139,7 @@ export function ImageCompressor() {
             step={5}
             value={quality}
             onChange={(e) => setQuality(Number(e.target.value))}
-            className="w-full accent-[#ff4400]"
+            className="w-full accent-[#175a3d]"
           />
           <p className="mt-1 text-xs text-faint">80% is invisible for photos on screens.</p>
         </div>
@@ -169,7 +169,7 @@ export function ImageCompressor() {
           onFiles(e.dataTransfer.files);
         }}
       >
-        <span className="font-mono text-xs uppercase tracking-[0.18em] text-foreground">
+        <span className="font-mono text-xs uppercase tracking-[0.14em] text-foreground">
           {busy ? "Compressing…" : "Drop images here, or tap to choose"}
         </span>
         <span className="text-xs text-faint">
@@ -189,7 +189,7 @@ export function ImageCompressor() {
         <div className="ink relative p-7 sm:p-8">
           <div aria-hidden className="absolute -top-1.5 -left-1.5 size-3 border border-line-strong bg-background" />
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
-            <p className="font-display text-3xl uppercase sm:text-4xl">
+ <p className="font-display text-3xl sm:text-4xl">
               {fmtKb(totalBefore)} → {fmtKb(totalAfter)}
             </p>
             <div className="flex items-baseline gap-4">
@@ -200,7 +200,7 @@ export function ImageCompressor() {
                 <button
                   type="button"
                   onClick={downloadAll}
-                  className="border border-accent bg-accent px-4 py-2 font-mono text-[0.625rem] tracking-[0.16em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+                  className="border border-accent bg-accent px-4 py-2 font-mono text-[0.625rem] tracking-[0.16em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
                 >
                   Download all (.zip)
                 </button>
@@ -222,7 +222,7 @@ export function ImageCompressor() {
                 <a
                   href={i.url}
                   download={i.outName}
-                  className="border border-accent bg-accent px-4 py-2 font-mono text-[0.625rem] tracking-[0.16em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+                  className="border border-accent bg-accent px-4 py-2 font-mono text-[0.625rem] tracking-[0.16em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
                 >
                   Download
                 </a>

@@ -175,18 +175,18 @@ export function InvoiceGenerator() {
       )
       .join("");
     const html = `<!DOCTYPE html><html><head><title>Invoice ${esc(invNo)}</title><style>
-      body{font-family:Georgia,serif;color:#16140f;max-width:720px;margin:40px auto;padding:0 24px}
+      body{font-family:Georgia,serif;color:#14201a;max-width:720px;margin:40px auto;padding:0 24px}
       h1{font-size:26px;letter-spacing:2px;text-transform:uppercase;margin:0}
       .row{display:flex;justify-content:space-between;gap:24px;margin-top:28px}
       .muted{color:#555;font-size:13px;line-height:1.5;white-space:pre-line}
       .label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:6px}
       table{width:100%;border-collapse:collapse;margin-top:32px;font-size:14px}
-      th{font-size:10px;letter-spacing:2px;text-transform:uppercase;text-align:left;color:#888;border-bottom:2px solid #16140f;padding:8px 6px}
+      th{font-size:10px;letter-spacing:2px;text-transform:uppercase;text-align:left;color:#888;border-bottom:2px solid #14201a;padding:8px 6px}
       td{border-bottom:1px solid #ddd;padding:10px 6px;vertical-align:top}
       .r{text-align:right}
       .totals{margin-top:16px;margin-left:auto;width:300px;font-size:14px}
       .totals div{display:flex;justify-content:space-between;padding:6px 6px;border-bottom:1px solid #eee}
-      .totals .grand{border-top:2px solid #16140f;border-bottom:none;font-weight:bold;font-size:17px;padding-top:10px}
+      .totals .grand{border-top:2px solid #14201a;border-bottom:none;font-weight:bold;font-size:17px;padding-top:10px}
       .words{margin-top:10px;font-size:12px;color:#555;font-style:italic;text-align:right}
       .notes{margin-top:36px;font-size:13px;color:#555;white-space:pre-line}
       .pay{margin-top:32px;display:flex;gap:16px;align-items:center}
@@ -337,7 +337,7 @@ export function InvoiceGenerator() {
           )}
           <div className="flex items-baseline justify-between gap-6">
             <dt className="text-sm text-foreground">Total</dt>
-            <dd className="font-display text-3xl uppercase text-accent">{fmt(total)}</dd>
+ <dd className="font-display text-3xl text-accent">{fmt(total)}</dd>
           </div>
         </dl>
         {totalWords && (
@@ -353,7 +353,7 @@ export function InvoiceGenerator() {
           type="button"
           onClick={print}
           disabled={!ready}
-          className="mt-6 inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-50"
+          className="mt-6 inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-50"
         >
           Print / save as PDF →
         </button>

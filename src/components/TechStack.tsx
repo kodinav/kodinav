@@ -31,18 +31,18 @@ export function TechStack() {
           className="group border-b border-line"
         >
           <div className="grid grid-cols-[3rem_1fr_auto] items-baseline gap-4 px-2 py-3.5 transition-colors duration-200 group-hover:bg-accent sm:grid-cols-[4rem_1fr_1fr_auto] sm:px-4">
-            <span className="font-mono text-[0.625rem] text-faint transition-colors group-hover:text-[#16140f]/60">
+            <span className="font-mono text-[0.625rem] text-faint transition-colors group-hover:text-accent-contrast/60">
               {String(i + 1).padStart(2, "0")}
             </span>
-            <span className="font-display text-xl tracking-wide uppercase transition-colors group-hover:text-[#16140f] sm:text-2xl">
+ <span className="font-display text-xl tracking-wide transition-colors group-hover:text-accent-contrast sm:text-2xl">
               {tech.name}
             </span>
-            <span className="annotation hidden transition-colors group-hover:text-[#16140f]/70 sm:block">
+            <span className="annotation hidden transition-colors group-hover:text-accent-contrast/70 sm:block">
               {tech.note}
             </span>
             <span
               aria-hidden
-              className="font-mono text-sm text-faint transition-all duration-200 group-hover:translate-x-1 group-hover:text-[#16140f]"
+              className="font-mono text-sm text-faint transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent-contrast"
             >
               →
             </span>

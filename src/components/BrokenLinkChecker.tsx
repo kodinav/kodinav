@@ -57,7 +57,7 @@ export function BrokenLinkChecker() {
         <button
           type="submit"
           disabled={state === "running"}
-          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
         >
           {state === "running" ? "Checking links…" : "Find broken links"}
         </button>
@@ -74,7 +74,7 @@ export function BrokenLinkChecker() {
         <div className="ink relative p-7 sm:p-8">
           <div aria-hidden className="absolute -top-1.5 -left-1.5 size-3 border border-line-strong bg-background" />
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
-            <p className="font-display text-3xl uppercase sm:text-4xl">
+ <p className="font-display text-3xl sm:text-4xl">
               {broken.length === 0 ? "No broken links found" : `${broken.length} broken link${broken.length > 1 ? "s" : ""}`}
             </p>
             <p className="font-mono text-sm text-foreground/80">

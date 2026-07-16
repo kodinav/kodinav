@@ -149,7 +149,7 @@ export default async function CaseStudyPage({
         <Stagger className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {cs.results.map((r) => (
             <StaggerItem key={r.label}>
-              <div className="glass h-full rounded-2xl p-6 text-center">
+              <div className="glass h-full rounded-md p-6 text-center">
                 <p
                   className="text-3xl font-semibold tracking-tight"
                   style={{ color: project.accent }}
@@ -202,12 +202,12 @@ export default async function CaseStudyPage({
         <Stagger className="mt-10 grid gap-4 lg:grid-cols-2">
           {cs.challenges.map((c, i) => (
             <StaggerItem key={i}>
-              <div className="glass h-full rounded-2xl p-7">
-                <p className="mb-1 text-xs font-medium uppercase tracking-[0.18em] text-faint">
+              <div className="glass h-full rounded-md p-7">
+                <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-faint">
                   Challenge
                 </p>
                 <p className="mb-4 font-medium leading-relaxed">{c.challenge}</p>
-                <p className="mb-1 text-xs font-medium uppercase tracking-[0.18em] text-accent-soft">
+                <p className="mb-1 text-xs font-medium uppercase tracking-[0.14em] text-accent-soft">
                   Solution
                 </p>
                 <p className="text-sm leading-relaxed text-muted">{c.solution}</p>
@@ -282,9 +282,9 @@ export default async function CaseStudyPage({
               <Reveal key={p.slug}>
                 <Link
                   href={`/work/${p.slug}`}
-                  className="card-hover glass group flex h-full flex-col gap-3 rounded-2xl p-7"
+                  className="card-hover glass group flex h-full flex-col gap-3 rounded-md p-7"
                 >
-                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-faint">
+                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-faint">
                     {p.industry}
                   </p>
                   <h3 className="flex items-center gap-2 text-xl font-semibold tracking-tight">

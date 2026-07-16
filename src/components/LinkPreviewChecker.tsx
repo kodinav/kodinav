@@ -64,7 +64,7 @@ export function LinkPreviewChecker() {
         <button
           type="submit"
           disabled={state === "running"}
-          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
         >
           {state === "running" ? "Checking…" : "Check preview"}
         </button>
@@ -252,7 +252,7 @@ export function LinkPreviewChecker() {
               </p>
               <Link
                 href="/free-website-audit"
-                className="u-draw mt-3 inline-block font-mono text-xs uppercase tracking-[0.18em] text-accent"
+                className="u-draw mt-3 inline-block font-mono text-xs uppercase tracking-[0.14em] text-accent"
               >
                 Run the full free website audit →
               </Link>

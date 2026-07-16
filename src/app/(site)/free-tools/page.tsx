@@ -71,13 +71,13 @@ export default function FreeToolsPage() {
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/free-website-audit"
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
               >
                 Start with a free audit →
               </Link>
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent"
               >
                 What we build
               </Link>
@@ -110,7 +110,7 @@ export default function FreeToolsPage() {
                         ↗
                       </span>
                     </div>
-                    <h2 className="font-display text-2xl leading-none uppercase transition-colors duration-300 group-hover:text-accent">
+ <h2 className="font-display text-2xl leading-none transition-colors duration-300 group-hover:text-accent">
                       {t.name}
                     </h2>
                     <p className="text-sm leading-relaxed text-muted">{t.blurb}</p>
@@ -143,21 +143,21 @@ export default function FreeToolsPage() {
                 href="/services"
                 className="card-hover flex items-center justify-between border border-line-strong p-5 transition-colors hover:border-accent"
               >
-                <span className="font-display text-xl uppercase">Our services</span>
+ <span className="font-display text-xl">Our services</span>
                 <span aria-hidden className="text-accent">→</span>
               </Link>
               <Link
                 href="/work"
                 className="card-hover flex items-center justify-between border border-line-strong p-5 transition-colors hover:border-accent"
               >
-                <span className="font-display text-xl uppercase">Real projects</span>
+ <span className="font-display text-xl">Real projects</span>
                 <span aria-hidden className="text-accent">→</span>
               </Link>
               <Link
                 href="/contact"
-                className="card-hover flex items-center justify-between border border-accent bg-accent p-5 text-[#efeae0]"
+                className="card-hover flex items-center justify-between border border-accent bg-accent p-5 text-accent-contrast"
               >
-                <span className="font-display text-xl uppercase">Book a free call</span>
+ <span className="font-display text-xl">Book a free call</span>
                 <span aria-hidden>→</span>
               </Link>
             </Reveal>

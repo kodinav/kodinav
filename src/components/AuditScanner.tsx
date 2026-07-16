@@ -30,7 +30,7 @@ const inputCls =
   "w-full border border-line-strong bg-transparent px-4 py-3 text-base text-foreground placeholder:text-faint outline-none transition-colors focus:border-accent sm:text-sm";
 const labelCls = "annotation mb-2 block";
 const btnPrimary =
-  "inline-flex min-h-13 items-center justify-center gap-2 border border-accent bg-accent px-8 py-4 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98] disabled:opacity-60";
+  "inline-flex min-h-13 items-center justify-center gap-2 border border-accent bg-accent px-8 py-4 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98] disabled:opacity-60";
 
 /* The status channel. Colour never carries meaning alone: every severity
    ships an icon, a word, and a distinct fill (solid / hatched / solid-accent). */
@@ -102,14 +102,14 @@ function FindingRow({ finding }: { finding: Finding }) {
       >
         <Icon
           className={`size-3 ${
-            finding.severity === "critical" ? "text-[#efeae0]" : "text-foreground"
+            finding.severity === "critical" ? "text-accent-contrast" : "text-foreground"
           }`}
           strokeWidth={3}
         />
       </span>
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h4 className="font-display text-lg leading-none uppercase">{finding.title}</h4>
+ <h4 className="font-display text-lg leading-none">{finding.title}</h4>
           <span className="annotation">{SEVERITY_LABEL[finding.severity]}</span>
         </div>
         <p className="text-sm leading-relaxed text-muted">{finding.detail}</p>
@@ -143,12 +143,12 @@ function SpeedPanel({ speed, loading }: { speed: SpeedResult | null; loading: bo
       <p className="annotation mb-5">Google PageSpeed · real mobile device</p>
       <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
         <div>
-          <p className="font-display text-6xl leading-none">{speed.performance}</p>
+ <p className="font-display text-6xl leading-none">{speed.performance}</p>
           <p className="annotation mt-2">Speed score / 100</p>
         </div>
         {lcp && (
           <div>
-            <p className="font-display text-6xl leading-none">{lcp}s</p>
+ <p className="font-display text-6xl leading-none">{lcp}s</p>
             <p className="annotation mt-2">Until the page looks loaded</p>
           </div>
         )}
@@ -199,7 +199,7 @@ function ReportForm({ result }: { result: AuditResult }) {
         className="flex flex-col items-center gap-4 py-12 text-center"
       >
         <CheckCircle2 className="size-12 text-accent" />
-        <h3 className="font-display text-3xl uppercase">On its way.</h3>
+ <h3 className="font-display text-3xl">On its way.</h3>
         <p className="max-w-md text-pretty text-muted">
           I will send the written breakdown, in order of what to fix first, within
           a few hours. It comes from me, not a robot, and there is nothing to buy
@@ -413,10 +413,10 @@ export function AuditScanner() {
         <div>
           <p className="annotation mb-4">Report for {host}</p>
           <div className="flex items-end gap-4">
-            <p className="font-display text-7xl leading-none sm:text-8xl">{result.overall}</p>
+ <p className="font-display text-7xl leading-none sm:text-8xl">{result.overall}</p>
             <p className="annotation mb-2">out of 100</p>
           </div>
-          <p className="mt-4 font-display text-2xl uppercase leading-none text-accent">
+ <p className="mt-4 font-display text-2xl leading-none text-accent">
             {band.word}
           </p>
         </div>
@@ -431,7 +431,7 @@ export function AuditScanner() {
               setResult(null);
               setError("");
             }}
-            className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs uppercase tracking-[0.18em] transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs uppercase tracking-[0.14em] transition-colors hover:border-accent hover:text-accent"
           >
             <ArrowLeft className="size-3" />
             Scan another site
@@ -465,7 +465,7 @@ export function AuditScanner() {
       {/* Findings */}
       {problems.length > 0 && (
         <div className="mt-12">
-          <h3 className="font-display text-3xl uppercase sm:text-4xl">
+ <h3 className="font-display text-3xl sm:text-4xl">
             What is <span className="text-gradient">wrong</span>
           </h3>
           <div className="mt-6 border border-line px-6 sm:px-8">
@@ -478,7 +478,7 @@ export function AuditScanner() {
 
       {passes.length > 0 && (
         <div className="mt-10">
-          <h3 className="font-display text-2xl uppercase">What already works</h3>
+ <h3 className="font-display text-2xl">What already works</h3>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2">
             {passes.map((f) => (
               <li key={f.id} className="flex items-start gap-3 text-sm text-muted">
@@ -495,7 +495,7 @@ export function AuditScanner() {
       {/* Lead capture */}
       <div className="glass mt-12 p-7 sm:p-10">
         <p className="annotation mb-4">Free, and that is the whole offer</p>
-        <h3 className="font-display text-3xl uppercase leading-none sm:text-4xl">
+ <h3 className="font-display text-3xl leading-none sm:text-4xl">
           Want this written up{" "}
           <span className="text-gradient">properly</span>?
         </h3>
@@ -520,7 +520,7 @@ export function AuditScanner() {
         </p>
         <Link
           href="/website-audit"
-          className="inline-flex flex-none items-center justify-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs uppercase tracking-[0.18em] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+          className="inline-flex flex-none items-center justify-center gap-2 border border-line-strong px-6 py-3.5 font-mono text-xs uppercase tracking-[0.14em] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
         >
           See the paid audit →
         </Link>

@@ -233,7 +233,7 @@ export function PrivacyPolicyGenerator() {
             <button
               type="button"
               onClick={copy}
-              className="mt-4 inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5"
+              className="mt-4 inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5"
             >
               {copied ? "Copied ✓" : `Copy ${DOCS.find((d) => d.id === doc)!.label.toLowerCase()}`}
             </button>

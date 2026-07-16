@@ -138,7 +138,7 @@ export function TaxCalculator({
             )}
             <div className="flex items-baseline justify-between gap-6">
               <dt className="text-sm text-foreground">Total (including {taxName})</dt>
-              <dd className="font-display text-3xl uppercase text-accent">{fmt(gross)}</dd>
+ <dd className="font-display text-3xl text-accent">{fmt(gross)}</dd>
             </div>
           </dl>
         ) : (

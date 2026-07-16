@@ -367,10 +367,10 @@ export function QrGenerator() {
             {/* eslint-disable-next-line @next/next/no-img-element -- data URI generated client-side */}
             <img src={current.png} alt="Generated QR code" className="w-52 border border-line-strong" width={208} height={208} />
             <div className="mt-5 flex flex-wrap gap-3">
-              <a href={current.png} download={`qr-${kind}.png`} className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5">
+              <a href={current.png} download={`qr-${kind}.png`} className="inline-flex items-center gap-2 border border-accent bg-accent px-5 py-3 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5">
                 PNG — {size}px
               </a>
-              <a href={svgHref} download={`qr-${kind}.svg`} className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.18em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent">
+              <a href={svgHref} download={`qr-${kind}.svg`} className="inline-flex items-center gap-2 border border-line-strong px-5 py-3 font-mono text-xs tracking-[0.14em] text-foreground uppercase transition-colors hover:border-accent hover:text-accent">
                 SVG — print, any size
               </a>
             </div>

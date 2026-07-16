@@ -56,13 +56,13 @@ export function LandingPage({ content }: { content: LandingContent }) {
             <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
               <a
                 href="#lead-form"
-                className="inline-flex min-h-13 items-center justify-center gap-3 border border-accent bg-accent px-8 py-4 font-mono text-xs uppercase tracking-[0.18em] text-[#efeae0] transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98]"
+                className="inline-flex min-h-13 items-center justify-center gap-3 border border-accent bg-accent px-8 py-4 font-mono text-xs uppercase tracking-[0.14em] text-accent-contrast transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98]"
               >
                 Book Free Strategy Call
               </a>
               <a
                 href="#lead-form"
-                className="inline-flex min-h-13 items-center justify-center gap-3 border border-line-strong px-8 py-4 font-mono text-xs uppercase tracking-[0.18em] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:scale-[0.98]"
+                className="inline-flex min-h-13 items-center justify-center gap-3 border border-line-strong px-8 py-4 font-mono text-xs uppercase tracking-[0.14em] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:scale-[0.98]"
               >
                 Get a Free Website Audit
               </a>
@@ -75,7 +75,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
           <Stagger className="mx-auto mt-12 grid max-w-3xl gap-3 sm:grid-cols-3">
             {trustSignals.map((t) => (
               <StaggerItem key={t.text}>
-                <div className="glass flex h-full items-start gap-3 rounded-2xl p-4 text-left">
+                <div className="glass flex h-full items-start gap-3 rounded-md p-4 text-left">
                   <t.icon className="mt-0.5 size-4 shrink-0 text-accent-soft" />
                   <span className="text-xs leading-relaxed text-muted">{t.text}</span>
                 </div>
@@ -97,7 +97,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
           <Stagger className="mt-10 grid gap-4 sm:grid-cols-3">
             {c.painPoints.map((p) => (
               <StaggerItem key={p.title}>
-                <div className="glass h-full rounded-2xl p-6">
+                <div className="glass h-full rounded-md p-6">
                   <h3 className="mb-2 font-semibold tracking-tight">{p.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{p.body}</p>
                 </div>
@@ -150,7 +150,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
           <Stagger className="mt-6 grid gap-3 sm:grid-cols-3">
             {c.proofProject.impact.map((i) => (
               <StaggerItem key={i}>
-                <div className="glass h-full rounded-2xl p-5">
+                <div className="glass h-full rounded-md p-5">
                   <p className="text-sm leading-relaxed text-muted">{i}</p>
                 </div>
               </StaggerItem>
@@ -168,7 +168,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
           <div className="mt-10 grid gap-4 sm:grid-cols-3">
             {c.steps.map((s, i) => (
               <Reveal key={s.title} delay={i * 0.07}>
-                <div className="glass h-full rounded-2xl p-6">
+                <div className="glass h-full rounded-md p-6">
                   <span className="font-mono text-sm text-accent-soft">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -198,7 +198,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
             />
           </Reveal>
           <Reveal delay={0.1} className="mt-10">
-            <div className="glass rounded-3xl p-7 sm:p-10">
+            <div className="glass rounded-md p-7 sm:p-10">
               <LeadForm orgLabel={c.orgLabel} source={c.source} budgets={c.budgets} />
             </div>
           </Reveal>
@@ -217,7 +217,7 @@ export function LandingPage({ content }: { content: LandingContent }) {
           <Reveal className="mt-12 text-center">
             <a
               href="#lead-form"
-              className="inline-flex min-h-13 w-full items-center justify-center gap-3 border border-accent bg-accent px-8 py-4 font-mono text-xs uppercase tracking-[0.18em] text-[#efeae0] transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98] sm:w-auto"
+              className="inline-flex min-h-13 w-full items-center justify-center gap-3 border border-accent bg-accent px-8 py-4 font-mono text-xs uppercase tracking-[0.14em] text-accent-contrast transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground hover:bg-foreground hover:text-background active:scale-[0.98] sm:w-auto"
             >
               Book Free Strategy Call
             </a>

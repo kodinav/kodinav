@@ -56,7 +56,7 @@ export function Navbar() {
           <Link
             href="/"
             aria-label="Kodinav — home"
-            className={`relative z-50 shrink-0 ${open ? "text-[#efeae0]" : ""}`}
+            className={`relative z-50 shrink-0 ${open ? "text-accent-contrast" : ""}`}
           >
             <Wordmark />
           </Link>
@@ -76,7 +76,7 @@ export function Navbar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`u-draw font-mono text-[0.6875rem] uppercase tracking-[0.18em] transition-colors ${
+                    className={`u-draw font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors ${
                       active ? "text-accent" : "text-foreground/80 hover:text-foreground"
                     }`}
                   >
@@ -91,7 +91,7 @@ export function Navbar() {
           <div className="hidden lg:block">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-background transition-all duration-300 hover:border-accent hover:bg-accent hover:text-[#efeae0]"
+              className="inline-flex items-center gap-2 rounded-xs border border-accent bg-accent px-5 py-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent-contrast transition-colors duration-300 hover:border-foreground hover:bg-foreground hover:text-background"
             >
               Book a Call <span aria-hidden>→</span>
             </Link>
@@ -102,8 +102,8 @@ export function Navbar() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className={`relative z-50 -m-3 min-h-11 min-w-11 p-3 font-mono text-[0.6875rem] uppercase tracking-[0.18em] active:opacity-60 lg:hidden ${
-              open ? "text-[#efeae0]" : "text-foreground"
+            className={`relative z-50 -m-3 min-h-11 min-w-11 p-3 font-mono text-[0.6875rem] uppercase tracking-[0.14em] active:opacity-60 lg:hidden ${
+              open ? "text-accent-contrast" : "text-foreground"
             }`}
           >
             {open ? "Close ×" : "Menu ≡"}
@@ -137,7 +137,7 @@ export function Navbar() {
                     <span className="font-mono text-xs text-faint">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <span className="font-display text-[clamp(2.4rem,9.5vw,3rem)] uppercase leading-none transition-colors group-hover:text-accent group-active:text-accent">
+ <span className="font-display text-[clamp(2.4rem,9.5vw,3rem)] leading-none transition-colors group-hover:text-accent group-active:text-accent">
                       {item.label}
                     </span>
                     <span
@@ -172,7 +172,7 @@ export function Navbar() {
               </div>
               <Link
                 href="/contact"
-                className="flex min-h-13 items-center justify-center gap-3 bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.18em] text-[#efeae0] active:scale-[0.98]"
+                className="flex min-h-13 items-center justify-center gap-3 bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.14em] text-accent-contrast active:scale-[0.98]"
               >
                 Book Discovery Call →
               </Link>

@@ -142,7 +142,7 @@ export default function WebsiteSpeedTestPage() {
             {costs.map((c) => (
               <StaggerItem key={c.title} className="bg-background">
                 <div className="flex h-full flex-col gap-3 p-7">
-                  <h3 className="font-display text-xl leading-none uppercase">{c.title}</h3>
+ <h3 className="font-display text-xl leading-none">{c.title}</h3>
                   <p className="text-sm leading-relaxed text-muted">{c.body}</p>
                 </div>
               </StaggerItem>

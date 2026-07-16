@@ -77,7 +77,7 @@ export function MobileFriendlyChecker() {
         <button
           type="submit"
           disabled={state === "running"}
-          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.18em] text-[#efeae0] uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center justify-center gap-2 border border-accent bg-accent px-7 py-3.5 font-mono text-xs tracking-[0.14em] text-accent-contrast uppercase transition-transform hover:-translate-y-0.5 disabled:opacity-60"
         >
           {state === "running" ? "Testing…" : "Test my website"}
         </button>
@@ -94,7 +94,7 @@ export function MobileFriendlyChecker() {
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-5">
             <div>
               <p className="annotation mb-2">{result.finalUrl}</p>
-              <p className="font-display text-4xl uppercase sm:text-5xl">
+ <p className="font-display text-4xl sm:text-5xl">
                 {verdict}
               </p>
             </div>
@@ -136,7 +136,7 @@ export function MobileFriendlyChecker() {
             </p>
             <Link
               href="/free-website-audit"
-              className="u-draw mt-3 inline-block font-mono text-xs uppercase tracking-[0.18em] text-accent"
+              className="u-draw mt-3 inline-block font-mono text-xs uppercase tracking-[0.14em] text-accent"
             >
               Run the full free website audit →
             </Link>

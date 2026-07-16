@@ -89,7 +89,7 @@ export default function PricingPage() {
       <section className="mx-auto max-w-6xl px-6 pb-20">
         <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <Reveal>
-            <div className="glass h-full rounded-3xl p-8 sm:p-10">
+            <div className="glass h-full rounded-md p-8 sm:p-10">
               <p className="text-sm text-faint">Projects start from</p>
               <p className="mt-2 text-6xl font-semibold tracking-tight">
                 <Price inr={site.priceFloor} usd={site.priceFloorUsd} />
@@ -114,7 +114,7 @@ export default function PricingPage() {
 
           <Stagger className="flex flex-col gap-4">
             <StaggerItem>
-              <div className="glass rounded-3xl p-8">
+              <div className="glass rounded-md p-8">
                 <h2 className="text-xl font-semibold tracking-tight">
                   1 · Discovery call
                 </h2>
@@ -125,7 +125,7 @@ export default function PricingPage() {
               </div>
             </StaggerItem>
             <StaggerItem>
-              <div className="glass rounded-3xl p-8">
+              <div className="glass rounded-md p-8">
                 <h2 className="text-xl font-semibold tracking-tight">
                   2 · Written scope
                 </h2>
@@ -137,7 +137,7 @@ export default function PricingPage() {
               </div>
             </StaggerItem>
             <StaggerItem>
-              <div className="glass rounded-3xl p-8">
+              <div className="glass rounded-md p-8">
                 <h2 className="text-xl font-semibold tracking-tight">
                   3 · Fixed quote
                 </h2>

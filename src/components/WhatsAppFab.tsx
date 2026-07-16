@@ -12,7 +12,7 @@ export function WhatsAppFab() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Chat on WhatsApp (${site.phone})`}
-      className="fixed right-[calc(1.25rem+env(safe-area-inset-right))] bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-40 flex size-13 items-center justify-center border border-[#1da851] bg-[#25d366] text-[#083a20] shadow-[6px_6px_0_0_rgba(22,20,15,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1da851] hover:text-[#eafff2] active:scale-95"
+      className="fixed right-[calc(1.25rem+env(safe-area-inset-right))] bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-40 flex size-13 items-center justify-center border border-[#1da851] bg-[#25d366] text-[#083a20] shadow-[0_16px_32px_-18px_rgba(14,26,20,0.55)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1da851] hover:text-[#eafff2] active:scale-95"
     >
       <MessageCircle className="size-6" aria-hidden />
     </a>

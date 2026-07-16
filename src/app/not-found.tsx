@@ -22,7 +22,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-3 border border-foreground bg-foreground px-7 py-3.5 font-mono text-xs uppercase tracking-[0.18em] text-background transition-all duration-300 hover:border-accent hover:bg-accent hover:text-[#efeae0]"
+          className="inline-flex items-center gap-3 border border-foreground bg-foreground px-7 py-3.5 font-mono text-xs uppercase tracking-[0.14em] text-background transition-all duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast"
         >
           Back to home
         </Link>

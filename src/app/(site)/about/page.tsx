@@ -140,7 +140,7 @@ export default function AboutPage() {
             <div className="flex flex-col gap-6">
               <SectionHeading eyebrow="Why It Works" title="The independent advantage." />
               <ul className="flex flex-col gap-5">
-                <li className="glass rounded-2xl p-6">
+                <li className="glass rounded-md p-6">
                   <h3 className="mb-1.5 font-semibold">Direct communication</h3>
                   <p className="text-sm leading-relaxed text-muted">
                     You talk to the engineer, not an account manager relaying
@@ -148,7 +148,7 @@ export default function AboutPage() {
                     language, by the person who actually knows.
                   </p>
                 </li>
-                <li className="glass rounded-2xl p-6">
+                <li className="glass rounded-md p-6">
                   <h3 className="mb-1.5 font-semibold">No overhead in your invoice</h3>
                   <p className="text-sm leading-relaxed text-muted">
                     Agency pricing pays for office space, sales teams and
@@ -156,7 +156,7 @@ export default function AboutPage() {
                     Same budget, more software.
                   </p>
                 </li>
-                <li className="glass rounded-2xl p-6">
+                <li className="glass rounded-md p-6">
                   <h3 className="mb-1.5 font-semibold">Decisions made by a builder</h3>
                   <p className="text-sm leading-relaxed text-muted">
                     Every scope, estimate and architectural choice is made by
@@ -181,7 +181,7 @@ export default function AboutPage() {
           <Stagger className="mt-12 grid gap-4 sm:grid-cols-2">
             {principles.map((p) => (
               <StaggerItem key={p.title}>
-                <div className="card-hover glass h-full rounded-2xl p-7">
+                <div className="card-hover glass h-full rounded-md p-7">
                   <h3 className="mb-2 text-lg font-semibold tracking-tight">
                     {p.title}
                   </h3>

@@ -56,7 +56,7 @@ export function AdminLogin({ configured }: { configured: boolean }) {
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex min-h-12 items-center justify-center border border-foreground bg-foreground px-8 py-3.5 font-mono text-xs tracking-[0.18em] text-background uppercase transition-all duration-300 hover:border-accent hover:bg-accent hover:text-[#efeae0] active:scale-[0.98] disabled:opacity-60"
+            className="inline-flex min-h-12 items-center justify-center border border-foreground bg-foreground px-8 py-3.5 font-mono text-xs tracking-[0.14em] text-background uppercase transition-all duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast active:scale-[0.98] disabled:opacity-60"
           >
             {busy ? "Checking…" : "Enter →"}
           </button>
