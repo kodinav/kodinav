@@ -8,7 +8,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Real content dates, bumped manually when pages meaningfully change.
   // A `new Date()` here stamped every URL as modified on every regeneration
   // (every 5 min under revalidate), which teaches Google to distrust lastmod.
-  const now = new Date("2026-07-14");
+  // Bumped for the 2026-07-18 "Meridian" full-site redesign relaunch.
+  const now = new Date("2026-07-18");
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: site.url, lastModified: now, changeFrequency: "monthly", priority: 1 },

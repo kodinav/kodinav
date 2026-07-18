@@ -44,7 +44,16 @@ export function ToolShell({
   return (
     <>
       <section className="bg-noise relative overflow-hidden pt-32 pb-16 sm:pt-40">
-        <div aria-hidden className="bg-grid absolute inset-0" />
+        <div
+          aria-hidden
+          className="bg-grid absolute inset-0"
+          style={{
+            maskImage:
+              "radial-gradient(120% 80% at 50% 0%, black 35%, transparent 80%)",
+            WebkitMaskImage:
+              "radial-gradient(120% 80% at 50% 0%, black 35%, transparent 80%)",
+          }}
+        />
         <div className={`relative mx-auto ${wide ? "max-w-6xl" : "max-w-5xl"} px-5 sm:px-8`}>
           {toolEntry && (
             <Breadcrumbs items={[{ name: "Free Tools", href: "/free-tools" }, { name: toolEntry.name }]} />

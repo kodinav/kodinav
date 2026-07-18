@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Hanken_Grotesk, Fragment_Mono } from "next/font/google";
+import {
+  Bricolage_Grotesque,
+  Geist,
+  Geist_Mono,
+  Instrument_Serif,
+} from "next/font/google";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -14,30 +19,38 @@ export const viewport: Viewport = {
   // Extend the paper background under the iPhone notch / Dynamic Island;
   // fixed elements pad themselves with env(safe-area-inset-*).
   viewportFit: "cover",
-  themeColor: "#f3f1e9",
+  themeColor: "#f4f3ee",
 };
 
-/* "The Ledger" type stack. The CSS variable names are frozen across
+/* "Meridian" (v4) type stack. The CSS variable names are frozen across
    redesigns (globals.css and older tooling reference them) — only the
-   fonts bound to them change: display + serif are both Fraunces, the
-   body is Hanken Grotesk, numerals and annotations are Fragment Mono. */
+   typefaces bound to them change: display = Bricolage Grotesque, body =
+   Geist, numerals/annotations = Geist Mono, editorial accent = Instrument
+   Serif (the one flash of serif italic in an otherwise grotesk system). */
 
-const fraunces = Fraunces({
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  axes: ["opsz"],
   variable: "--font-anton",
 });
 
-const fragmentMono = Fragment_Mono({
-  weight: "400",
+const geistSans = Geist({
+  subsets: ["latin"],
+  variable: "--font-archivo",
+});
+
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-space-mono",
 });
 
-const hanken = Hanken_Grotesk({
+// Editorial accent only (headings' accent word, pull quotes) — kept out of the
+// preload set since it never carries the LCP text.
+const editorial = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-archivo",
+  variable: "--font-editorial",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -218,7 +231,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${fragmentMono.variable} ${hanken.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${display.variable} ${geistSans.variable} ${geistMono.variable} ${editorial.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         {/* Geo-aware pricing: set the region flag before paint (no flash).

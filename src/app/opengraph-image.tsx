@@ -16,10 +16,10 @@ export default async function Image() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#f3f1e9",
-          color: "#14201a",
+          background: "#f4f3ee",
+          color: "#16171b",
           fontFamily: "sans-serif",
-          border: "16px solid #14201a",
+          border: "14px solid #16171b",
         }}
       >
         <div
@@ -33,12 +33,12 @@ export default async function Image() {
           }}
         >
           <span style={{ fontWeight: 700 }}>Kodinav</span>
-          <span style={{ color: "#46564c" }}>Independent Software Studio</span>
+          <span style={{ color: "#52545b" }}>Independent Software Studio</span>
           <span
             style={{
               width: 20,
               height: 20,
-              background: "#9a7a35",
+              background: "#1b3ad6",
               display: "flex",
             }}
           />
@@ -51,12 +51,12 @@ export default async function Image() {
             fontWeight: 800,
             letterSpacing: -2,
             lineHeight: 1.02,
-                      }}
+          }}
         >
           <span>We build software</span>
           <span>
             that helps businesses{" "}
-            <span style={{ color: "#9a7a35" }}>grow.</span>
+            <span style={{ color: "#1b3ad6" }}>grow.</span>
           </span>
         </div>
         <div
@@ -66,7 +66,7 @@ export default async function Image() {
             fontSize: 22,
             letterSpacing: 3,
             textTransform: "uppercase",
-            color: "#46564c",
+            color: "#52545b",
           }}
         >
           <span>Websites · Web Apps · Mobile Apps · AI</span>

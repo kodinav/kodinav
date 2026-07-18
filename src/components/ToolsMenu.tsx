@@ -29,11 +29,10 @@ export function ToolsMenu({ active }: { active: boolean }) {
         href="/free-tools"
         onFocus={show}
         aria-expanded={open}
-        className={`u-draw flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors ${
-          active ? "text-accent" : "text-foreground/80 hover:text-foreground"
+        className={`u-draw flex items-center gap-1.5 font-mono text-[0.7rem] uppercase tracking-[0.15em] transition-colors ${
+          active ? "text-accent" : "text-foreground/75 hover:text-foreground"
         }`}
       >
-        <span className="text-faint">03</span>
         Tools
         <span aria-hidden className={`text-faint transition-transform duration-200 ${open ? "rotate-180" : ""}`}>
           ⌄
@@ -43,28 +42,28 @@ export function ToolsMenu({ active }: { active: boolean }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.16, ease: "easeOut" }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
             onFocus={show}
             onBlur={hide}
-            className="absolute top-full left-1/2 z-50 mt-4 w-[min(64rem,90vw)] -translate-x-1/2"
+            className="absolute top-full left-1/2 z-50 mt-4 w-[min(64rem,92vw)] -translate-x-1/2"
           >
-            <div className="ink bg-noise relative border border-line-strong p-6 shadow-[0_28px_60px_-30px_rgba(14,26,20,0.6)]">
-              <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr_1fr]">
+            <div className="overflow-hidden rounded-md border border-line-strong bg-surface-raised shadow-[0_36px_80px_-40px_rgba(22,23,27,0.45)]">
+              <div className="grid gap-px bg-line lg:grid-cols-3">
                 {toolGroups.map((g) => (
-                  <div key={g.id}>
-                    <p className="annotation mb-3 border-b border-line pb-2">{g.title}</p>
+                  <div key={g.id} className="bg-surface-raised p-6">
+                    <p className="annotation mb-4 text-accent">{g.title}</p>
                     <ul className="flex flex-col">
                       {toolsByGroup(g.id).map((t) => (
                         <li key={t.href}>
                           <Link
                             href={t.href}
-                            className="group flex items-baseline gap-2 py-1.5 text-sm text-muted transition-colors hover:text-accent"
+                            className="group -mx-2 flex items-baseline gap-2 rounded-[3px] px-2 py-1.5 transition-colors hover:bg-surface"
                           >
-                            <span aria-hidden className="text-faint transition-colors group-hover:text-accent">›</span>
-                            {t.name}
+                            <span aria-hidden className="translate-y-px text-faint transition-colors group-hover:text-accent">›</span>
+                            <span className="text-sm text-foreground/85 transition-colors group-hover:text-accent">{t.name}</span>
                           </Link>
                         </li>
                       ))}
@@ -72,13 +71,13 @@ export function ToolsMenu({ active }: { active: boolean }) {
                   </div>
                 ))}
               </div>
-              <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line px-6 py-4">
                 <p className="text-xs text-faint">
                   All {TOOL_COUNT} tools are free, no signup, and most run entirely in your browser.
                 </p>
                 <Link
                   href="/free-tools"
-                  className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent transition-colors hover:text-foreground"
+                  className="font-mono text-[0.7rem] uppercase tracking-[0.15em] text-accent transition-colors hover:text-foreground"
                 >
                   Browse all tools →
                 </Link>

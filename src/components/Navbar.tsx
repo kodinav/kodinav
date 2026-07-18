@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { nav } from "@/data/site";
 import { featuredTools } from "@/data/tools";
+import { ServicesMenu } from "./ServicesMenu";
 import { ToolsMenu } from "./ToolsMenu";
 import { Wordmark } from "./Wordmark";
 
@@ -41,17 +42,17 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`pt-safe fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
+        className={`pt-safe fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-300 ${
           open
             ? "border-transparent bg-transparent"
             : scrolled
-              ? "border-line bg-background/90 backdrop-blur-md"
+              ? "border-line bg-background/80 backdrop-blur-xl"
               : "border-transparent bg-transparent"
         }`}
       >
         <nav
           aria-label="Main"
-          className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8"
+          className="mx-auto flex max-w-7xl items-center gap-8 px-5 py-4 sm:px-8"
         >
           <Link
             href="/"
@@ -61,8 +62,8 @@ export function Navbar() {
             <Wordmark />
           </Link>
 
-          <ul className="hidden items-center gap-5 lg:flex xl:gap-7">
-            {nav.map((item, i) => {
+          <ul className="ml-auto hidden items-center gap-6 lg:flex xl:gap-8">
+            {nav.map((item) => {
               const active =
                 item.href === pathname || pathname.startsWith(item.href + "/");
               if ("mega" in item && item.mega) {
@@ -72,15 +73,23 @@ export function Navbar() {
                   </li>
                 );
               }
+              if (item.href === "/services") {
+                return (
+                  <li key={item.href}>
+                    <ServicesMenu active={active} />
+                  </li>
+                );
+              }
               return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`u-draw font-mono text-[0.6875rem] uppercase tracking-[0.14em] transition-colors ${
-                      active ? "text-accent" : "text-foreground/80 hover:text-foreground"
+                    className={`u-draw font-mono text-[0.7rem] uppercase tracking-[0.15em] transition-colors ${
+                      active
+                        ? "text-accent"
+                        : "text-foreground/75 hover:text-foreground"
                     }`}
                   >
-                    <span className="mr-1.5 text-faint">{String(i + 1).padStart(2, "0")}</span>
                     {item.label}
                   </Link>
                 </li>
@@ -88,21 +97,20 @@ export function Navbar() {
             })}
           </ul>
 
-          <div className="hidden lg:block">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-xs border border-accent bg-accent px-5 py-2.5 font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent-contrast transition-colors duration-300 hover:border-foreground hover:bg-foreground hover:text-background"
-            >
-              Book a Call <span aria-hidden>→</span>
-            </Link>
-          </div>
+          <Link
+            href="/contact"
+            className="hidden shrink-0 items-center gap-2 rounded-[3px] border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-background transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast lg:inline-flex"
+          >
+            Book a call
+            <span aria-hidden>→</span>
+          </Link>
 
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
-            className={`relative z-50 -m-3 min-h-11 min-w-11 p-3 font-mono text-[0.6875rem] uppercase tracking-[0.14em] active:opacity-60 lg:hidden ${
+            className={`relative z-50 -m-3 ml-auto min-h-11 min-w-11 p-3 font-mono text-[0.7rem] uppercase tracking-[0.15em] active:opacity-60 lg:hidden ${
               open ? "text-accent-contrast" : "text-foreground"
             }`}
           >
@@ -111,7 +119,7 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Full-screen ink overlay menu */}
+      {/* Full-screen ink overlay menu (mobile) */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -121,7 +129,8 @@ export function Navbar() {
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="ink bg-noise fixed inset-0 z-40 flex h-dvh touch-pan-y flex-col justify-between overflow-y-auto overscroll-contain px-6 pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] lg:hidden"
           >
-            <ul className="flex flex-col">
+            <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
+            <ul className="relative flex flex-col">
               {nav.map((item, i) => (
                 <motion.li
                   key={item.href}
@@ -137,13 +146,10 @@ export function Navbar() {
                     <span className="font-mono text-xs text-faint">
                       {String(i + 1).padStart(2, "0")}
                     </span>
- <span className="font-display text-[clamp(2.4rem,9.5vw,3rem)] leading-none transition-colors group-hover:text-accent group-active:text-accent">
+                    <span className="font-display text-[clamp(2.2rem,9vw,2.9rem)] leading-none tracking-tight transition-colors group-hover:text-accent group-active:text-accent">
                       {item.label}
                     </span>
-                    <span
-                      aria-hidden
-                      className="ml-auto font-mono text-lg text-faint"
-                    >
+                    <span aria-hidden className="ml-auto font-mono text-lg text-faint">
                       →
                     </span>
                   </Link>
@@ -154,7 +160,7 @@ export function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="flex flex-col gap-4 pt-6"
+              className="relative flex flex-col gap-4 pt-6"
             >
               <div>
                 <p className="annotation mb-2.5">Popular free tools</p>
@@ -163,7 +169,7 @@ export function Navbar() {
                     <Link
                       key={t.href}
                       href={t.href}
-                      className="border border-line px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted active:border-accent active:text-accent"
+                      className="rounded-[3px] border border-line px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted active:border-accent active:text-accent"
                     >
                       {t.name}
                     </Link>
@@ -172,12 +178,12 @@ export function Navbar() {
               </div>
               <Link
                 href="/contact"
-                className="flex min-h-13 items-center justify-center gap-3 bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.14em] text-accent-contrast active:scale-[0.98]"
+                className="flex min-h-13 items-center justify-center gap-3 rounded-[3px] bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.15em] text-accent-contrast active:scale-[0.98]"
               >
-                Book Discovery Call →
+                Book discovery call →
               </Link>
               <div className="flex items-center justify-between">
-                <p className="annotation">Independent Software Studio</p>
+                <p className="annotation">Independent software studio</p>
                 <p className="annotation">Est. 2024</p>
               </div>
             </motion.div>

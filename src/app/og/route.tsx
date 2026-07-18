@@ -2,9 +2,9 @@ import { ImageResponse } from "next/og";
 import { site } from "@/data/site";
 
 /**
- * Branded Open Graph card, parameterised by ?title= and ?tag=. Same
- * draftsman language as the root opengraph-image: bone paper, ink frame,
- * International Orange accent. Referenced via `ogImage()` in src/lib/og.ts.
+ * Branded Open Graph card, parameterised by ?title= and ?tag=. Matches the
+ * "Meridian" site language: warm paper, ink frame, cobalt accent mark.
+ * Referenced via `ogImage()` in src/lib/og.ts.
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -24,10 +24,10 @@ export async function GET(request: Request) {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "#f3f1e9",
-          color: "#14201a",
+          background: "#f4f3ee",
+          color: "#16171b",
           fontFamily: "sans-serif",
-          border: "16px solid #14201a",
+          border: "14px solid #16171b",
         }}
       >
         <div
@@ -41,12 +41,12 @@ export async function GET(request: Request) {
           }}
         >
           <span style={{ fontWeight: 700 }}>Kodinav</span>
-          <span style={{ color: "#46564c" }}>{tag}</span>
+          <span style={{ color: "#52545b" }}>{tag}</span>
           <span
             style={{
               width: 20,
               height: 20,
-              background: "#9a7a35",
+              background: "#1b3ad6",
               display: "flex",
             }}
           />
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
             fontWeight: 800,
             letterSpacing: -1,
             lineHeight: 1.05,
-                      }}
+          }}
         >
           {title}
         </div>
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
             fontSize: 22,
             letterSpacing: 3,
             textTransform: "uppercase",
-            color: "#46564c",
+            color: "#52545b",
           }}
         >
           <span>kodinav.com</span>
