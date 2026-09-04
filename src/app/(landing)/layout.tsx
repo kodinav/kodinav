@@ -43,6 +43,17 @@ export default function LandingLayout({
           >
             {site.email}
           </a>
+          {/* The one exception to "no navigation": ad platforms require a
+              reachable privacy policy on every landing page they send traffic to */}
+          <p className="font-mono text-[0.625rem] tracking-[0.16em] text-faint uppercase">
+            <Link href="/privacy-policy" className="hover:text-foreground">
+              Privacy
+            </Link>{" "}
+            &middot;{" "}
+            <Link href="/terms" className="hover:text-foreground">
+              Terms
+            </Link>
+          </p>
         </div>
       </footer>
     </>
