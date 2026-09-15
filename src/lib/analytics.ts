@@ -87,6 +87,19 @@ export async function recordEvent(event: AnalyticsEvent): Promise<void> {
   void cleanupOldFiles(day);
 }
 
+/** Deploy check: can this server write analytics? Writes and removes a probe file (or pings Redis). */
+export async function probeStorage(): Promise<"file-ok" | "redis-ok"> {
+  if (useRedis) {
+    await redis(["PING"]);
+    return "redis-ok";
+  }
+  const probe = path.join(/*turbopackIgnore: true*/ DIR, `.probe-${process.pid}`);
+  await fs.mkdir(/*turbopackIgnore: true*/ DIR, { recursive: true });
+  await fs.writeFile(/*turbopackIgnore: true*/ probe, "ok", "utf8");
+  await fs.unlink(/*turbopackIgnore: true*/ probe);
+  return "file-ok";
+}
+
 async function readDay(day: string): Promise<AnalyticsEvent[]> {
   let lines: string[];
   if (useRedis) {

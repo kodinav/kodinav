@@ -1,4 +1,4 @@
-import { recordEvent, visitorHash } from "@/lib/analytics";
+import { probeStorage, recordEvent, visitorHash } from "@/lib/analytics";
 import { BOT_UA, countryFrom, deviceFrom } from "@/lib/geo";
 import { clientIp, rateLimit } from "@/lib/rateLimit";
 import { classifySource } from "@/lib/trafficSource";
@@ -27,6 +27,13 @@ export async function POST(request: Request) {
     body = JSON.parse(raw);
   } catch {
     return done("invalid");
+  }
+
+  if (body.test === "storage") {
+    // Deploy check that storage is writable, without recording a fake visit
+    return probeStorage()
+      .then((result) => done(result))
+      .catch(() => done("storage-failed"));
   }
 
   const ts = Date.now();
