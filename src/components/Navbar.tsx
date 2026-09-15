@@ -97,6 +97,18 @@ export function Navbar() {
             })}
           </ul>
 
+          {/* Language entry for Hong Kong / Taiwan visitors (the zh-HK page
+              links onward to zh-TW) */}
+          <Link
+            href="/zh-hk"
+            hrefLang="zh-HK"
+            lang="zh-HK"
+            title="繁體中文（香港・台灣）"
+            className="hidden shrink-0 text-[0.8rem] text-foreground/75 transition-colors hover:text-accent lg:inline-flex"
+          >
+            繁中
+          </Link>
+
           <Link
             href="/contact"
             className="hidden shrink-0 items-center gap-2 rounded-[3px] border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-background transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast lg:inline-flex"
@@ -182,6 +194,14 @@ export function Navbar() {
               >
                 Book discovery call →
               </Link>
+              <div className="flex gap-5 text-sm text-muted">
+                <Link href="/zh-hk" hrefLang="zh-HK" lang="zh-HK" className="active:text-accent">
+                  香港（繁中）
+                </Link>
+                <Link href="/zh-tw" hrefLang="zh-TW" lang="zh-TW" className="active:text-accent">
+                  台灣（繁中）
+                </Link>
+              </div>
               <div className="flex items-center justify-between">
                 <p className="annotation">Independent software studio</p>
                 <p className="annotation">Est. 2024</p>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/data/site";
+import { fmtHkd, fmtTwd } from "@/lib/fx";
 
 /**
  * Interactive website cost estimator. All arithmetic is client-side and the
@@ -48,6 +49,13 @@ const FEATURES: { id: string; label: string; usd: Range; inr: Range; skipFor?: P
 
 const AED_PER_USD = 3.67;
 
+/** Local-currency hint under the USD estimate, chosen by the visitor's market. */
+function localHint(market: string | null, min: number, max: number) {
+  if (market === "hk") return `≈ ${fmtHkd(min)} – ${fmtHkd(max)}`;
+  if (market === "tw") return `≈ ${fmtTwd(min)} – ${fmtTwd(max)}`;
+  return `≈ ${fmtAed(min)} – ${fmtAed(max)}`;
+}
+
 function fmtUsd(n: number) {
   return `$${n.toLocaleString("en-US")}`;
 }
@@ -65,12 +73,15 @@ export function CostCalculator() {
   // INR for India, USD (with AED hint) for everyone else — same pre-paint
   // data-region signal the rest of the site uses.
   const [region, setRegion] = useState<"in" | "intl">("in");
+  const [market, setMarket] = useState<string | null>(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
-      if (document.documentElement.getAttribute("data-region") === "intl") {
+      const root = document.documentElement;
+      if (root.getAttribute("data-region") === "intl") {
         setRegion("intl");
       }
+      setMarket(root.getAttribute("data-market"));
     });
     return () => cancelAnimationFrame(id);
   }, []);
@@ -199,7 +210,7 @@ export function CostCalculator() {
         </p>
         {region === "intl" && (
           <p className="annotation mt-2 text-faint">
-            ≈ {fmtAed(min)} – {fmtAed(max)}
+            {localHint(market, min, max)}
           </p>
         )}
         <dl className="mt-6 flex flex-col gap-2.5 border-t border-line pt-5">

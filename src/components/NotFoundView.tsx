@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Wordmark } from "@/components/Wordmark";
 
-export default function NotFound() {
+/** The branded 404 body, shared by the (en) not-found and the global 404. */
+export function NotFoundView() {
   return (
     <main className="bg-noise relative flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden px-6 text-center">
       <div aria-hidden className="bg-grid absolute inset-0" />

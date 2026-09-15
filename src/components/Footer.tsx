@@ -36,6 +36,40 @@ export function Footer() {
             <ul className="flex flex-col gap-2">
               <li>
                 <Link
+                  href="/web-development-hong-kong"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  For Hong Kong businesses →
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/web-development-taiwan"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  For Taiwan businesses →
+                </Link>
+              </li>
+              <li className="flex gap-4">
+                <Link
+                  href="/zh-hk"
+                  hrefLang="zh-HK"
+                  lang="zh-HK"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  香港（繁中）
+                </Link>
+                <Link
+                  href="/zh-tw"
+                  hrefLang="zh-TW"
+                  lang="zh-TW"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  台灣（繁中）
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/web-development-usa"
                   className="u-draw text-sm text-muted transition-colors hover:text-foreground"
                 >

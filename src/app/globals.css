@@ -101,6 +101,69 @@ html {
 :root[data-region="intl"] .price-intl {
   display: inline;
 }
+.price-hk,
+.price-tw {
+  display: none;
+}
+:root[data-market="hk"] .price-intl,
+:root[data-market="tw"] .price-intl {
+  display: none;
+}
+:root[data-market="hk"] .price-hk,
+:root[data-market="tw"] .price-tw {
+  display: inline;
+}
+
+/* ---------- Traditional Chinese pages (/zh-hk, /zh-tw) ----------
+   None of the Latin webfonts carry CJK glyphs, so Chinese characters fall
+   through to the platform's Traditional Chinese system font. Listing them
+   explicitly picks the right regional glyph set (HK vs Taiwan standards)
+   instead of whatever CJK font the OS guesses first — and ships zero bytes. */
+:root:lang(zh-HK) {
+  --font-cjk: "PingFang HK", "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK HK", "Noto Sans HK",
+    "Noto Sans TC", "Noto Sans CJK TC", sans-serif;
+}
+:root:lang(zh-TW) {
+  --font-cjk: "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", "Noto Sans TC", "PingFang HK",
+    sans-serif;
+}
+:root:lang(zh-HK) body,
+:root:lang(zh-TW) body {
+  font-family: var(--font-archivo), var(--font-cjk);
+}
+/* Unlayered, so these beat the (inlined) Tailwind font utilities on zh pages */
+:root:lang(zh-HK) :is(h1, h2, .font-display),
+:root:lang(zh-TW) :is(h1, h2, .font-display) {
+  font-family: var(--font-anton), var(--font-cjk);
+}
+:root:lang(zh-HK) :is(.font-mono, .annotation),
+:root:lang(zh-TW) :is(.font-mono, .annotation) {
+  font-family: var(--font-space-mono), var(--font-cjk);
+  letter-spacing: 0.06em;
+}
+/* The serif-italic accent word doesn't translate: hanzi have no italic, and
+   browsers fake one by slanting. Chinese accents keep the cobalt, drop the slant. */
+:root:lang(zh-HK) :is(.text-gradient, .text-accent-gradient),
+:root:lang(zh-TW) :is(.text-gradient, .text-accent-gradient) {
+  font-family: var(--font-anton), var(--font-cjk);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1em;
+  line-height: inherit;
+}
+/* CJK doesn't hyphenate, and wide Latin tracking reads as gaps between hanzi */
+:root:lang(zh-HK) .prose-justify,
+:root:lang(zh-TW) .prose-justify {
+  hyphens: manual;
+  -webkit-hyphens: manual;
+}
+:root:lang(zh-HK) h1,
+:root:lang(zh-HK) h2,
+:root:lang(zh-TW) h1,
+:root:lang(zh-TW) h2 {
+  letter-spacing: 0;
+  line-height: 1.2;
+}
 
 body {
   background: var(--background);

@@ -27,6 +27,8 @@ export async function generateMetadata({
     description: service.short,
     keywords: [
       service.name,
+      `${service.name} Hong Kong`,
+      `${service.name} Taiwan`,
       `${service.name} USA`,
       `${service.name} Dubai`,
       `${service.name} India`,
@@ -64,7 +66,7 @@ export default async function ServicePage({
       name: site.name,
       url: site.url,
     },
-    areaServed: ["US", "AE", "IN"],
+    areaServed: ["HK", "TW", "US", "AE", "IN"],
   };
 
   const faqSchema = {

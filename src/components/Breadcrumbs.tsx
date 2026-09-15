@@ -8,15 +8,18 @@ import Link from "next/link";
  */
 export function Breadcrumbs({
   items,
+  home = { name: "Home", href: "/" },
 }: {
   items: { name: string; href?: string }[];
+  /** Root crumb — translated pages point this at their own language home. */
+  home?: { name: string; href: string };
 }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-faint">
         <li>
-          <Link href="/" className="transition-colors hover:text-accent">
-            Home
+          <Link href={home.href} className="transition-colors hover:text-accent">
+            {home.name}
           </Link>
         </li>
         {items.map((item, i) => (

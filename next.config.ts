@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   // prerendered HTML to 5 minutes so a new deploy self-heals quickly instead
   // of serving year-old HTML that references deleted CSS/JS chunks.
   expireTime: 300,
+  experimental: {
+    // The site has a root layout per language ((en), zh-hk, zh-tw), so
+    // unmatched URLs need app/global-not-found.tsx to render a branded 404.
+    globalNotFound: true,
+  },
   images: {
     // Serve AVIF/WebP where the browser supports them — smaller than JPEG
     formats: ["image/avif", "image/webp"],

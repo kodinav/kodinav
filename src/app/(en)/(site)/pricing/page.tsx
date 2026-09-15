@@ -44,7 +44,7 @@ const pricingFaqs = [
   },
   {
     q: "What does the starting price get?",
-    a: "A focused project done properly. Typically a custom business website engineered for speed and search visibility, or a small internal tool. Indian clients start from ₹75,000; international clients from $2,000. Larger platforms like an LMS, CRM, booking system or mobile app scale up from there depending on scope. The discovery call gives you a real, fixed number for your real project, in your currency.",
+    a: "A focused project done properly. Typically a custom business website engineered for speed and search visibility, or a small internal tool. Indian clients start from ₹75,000; international clients from $2,000 (about HK$16,000 in Hong Kong or NT$62,000 in Taiwan). Larger platforms like an LMS, CRM, booking system or mobile app scale up from there depending on scope. The discovery call gives you a real, fixed number for your real project, in your currency.",
   },
   {
     q: "Can the price change mid-project?",

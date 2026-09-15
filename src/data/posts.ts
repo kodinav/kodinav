@@ -1,3 +1,6 @@
+import type { HreflangCluster } from "@/lib/i18n";
+import { priceBands, rangeHkd, rangeTwd, rangeUsd, toHkd } from "@/lib/fx";
+
 export type Post = {
   slug: string;
   title: string;
@@ -5,7 +8,16 @@ export type Post = {
   date: string; // ISO
   readingTime: string;
   tag: string;
-  sections: { heading?: string; paragraphs: string[] }[];
+  sections: {
+    heading?: string;
+    paragraphs: string[];
+    /** Rendered after the paragraphs — real tables are what answer engines quote. */
+    table?: { head: string[]; rows: string[][] };
+  }[];
+  /** hreflang cluster (lib/i18n.ts) when the post has regional/language variants */
+  hreflang?: HreflangCluster;
+  /** Prominent link to the market page the post supports */
+  marketLink?: { href: string; label: string };
   /** service slugs to link at the end of the article for internal linking */
   relatedServices?: string[];
   /** other post slugs to cross-link */
@@ -1355,6 +1367,155 @@ export const posts: Post[] = [
       "/broken-link-checker",
     ],
     relatedPosts: ["technical-seo-checklist", "why-your-business-website-is-slow"],
+  },
+  {
+    slug: "website-cost-hong-kong-2026",
+    title: "How Much Does a Website Cost in Hong Kong in 2026?",
+    excerpt:
+      "A straight answer for Hong Kong businesses: what a website really costs in HKD, why quotes range so widely, and how to compare them without being misled.",
+    date: "2026-09-15",
+    readingTime: "8 min",
+    tag: "Pricing",
+    hreflang: "cost",
+    marketLink: {
+      href: "/web-development-hong-kong",
+      label: "Web design & development for Hong Kong businesses",
+    },
+    sections: [
+      {
+        paragraphs: [
+          `The short answer: at an independent studio like Kodinav, a custom business website for a Hong Kong company costs ${rangeHkd(priceBands.business)}, an online shop ${rangeHkd(priceBands.ecommerce)}, and a web application with accounts, bookings or dashboards from HK$${toHkd(priceBands.webapp[0]).toLocaleString("en-US")}. You will see Hong Kong quotes far below and far above those numbers, because template packages, freelancers and agencies are selling different products under the same word.`,
+          "This guide breaks down what each price level really buys in 2026, the costs that are specific to Hong Kong websites, and how to compare quotes without being misled by the headline figure.",
+        ],
+      },
+      {
+        heading: "Kodinav's Hong Kong price bands",
+        paragraphs: [
+          "These are the studio's real prices, set in US dollars and converted at the HKD peg, rounded up. Every project still gets a fixed, itemised quote after a short discovery call.",
+        ],
+        table: {
+          head: ["Project", "Price (HKD)", "Typical timeline"],
+          rows: [
+            ["Landing page", rangeHkd(priceBands.landing), "1–2 weeks"],
+            ["Business website (up to 5 pages)", rangeHkd(priceBands.business), "3–6 weeks"],
+            ["Second language (English + Traditional Chinese)", `+ ${rangeHkd(priceBands.bilingual)}`, "Quoted with the site"],
+            ["E-commerce store", rangeHkd(priceBands.ecommerce), "4–8 weeks"],
+            ["Web application", rangeHkd(priceBands.webapp), "6–12 weeks"],
+          ],
+        },
+      },
+      {
+        heading: "Why Hong Kong website quotes vary so much",
+        paragraphs: [
+          "The word 'website' covers very different products. At one end is a template: a purchased theme or a site builder with your logo, text and photos dropped in. It is quick and inexpensive, and for a business that only needs a basic presence it can be the right call. Its limits show when you need real speed, a distinctive design, or a site that brings in enquiries.",
+          "In the middle is custom work: a design made for your business, content structured around what your customers actually search for, and a build engineered for speed and search visibility. This is where a website starts working like a salesperson instead of a brochure.",
+          "At the top are large sites and genuine applications, such as shops with complex catalogues, booking systems or member portals, along with agency projects priced to cover account managers, an office and a sales team as well as the build itself.",
+        ],
+      },
+      {
+        heading: "What pushes the price up in Hong Kong",
+        paragraphs: [
+          `Two languages. Most Hong Kong businesses need English and Traditional Chinese. Done properly, that means a separate URL for each language, correct language and hreflang tags so Google shows the right version, and a second set of content. At Kodinav a second language adds ${rangeHkd(priceBands.bilingual)}.`,
+          "Payments. Accepting cards through Stripe or PayPal is straightforward. Adding FPS, AlipayHK or WeChat Pay HK usually means working through a payment provider that supports them, which adds integration and testing time.",
+          "Bookings, accounts and integrations. Anything that stores customer data or connects to another system, such as a CRM, WhatsApp Business or an inventory system, is software rather than pages, and it is priced accordingly.",
+          "Content. If nobody on your team can write the copy in both languages, budget for a copywriter or translator. Waiting on content is the most common reason Hong Kong website launches slip.",
+        ],
+      },
+      {
+        heading: "The costs after launch",
+        paragraphs: [
+          "Hosting for a well-built business website is modest, and it should be billed at cost on an account registered to you. Domain renewals are small and annual. Maintenance is optional: some businesses want monthly updates and monitoring, others only call when something needs changing. Ask for all of these numbers in writing before you sign, because ongoing fees are where an unusually cheap quote often recovers its margin.",
+        ],
+      },
+      {
+        heading: "How to compare quotes fairly",
+        paragraphs: [
+          "Ask every provider the same five questions. Who exactly will build the site? Is the price fixed, and what does it include? Will I own the code, domain and hosting accounts? How fast is it on a phone, and can you show me a live example? What happens after launch, and what does support cost?",
+          "A studio confident in its work answers all five plainly. Vague answers are a bigger warning sign than a high price.",
+          "Before requesting quotes, it helps to have your own number in mind. The free website cost calculator below gives an honest range for your specific pages and features, and the free website audit shows what your current site is costing you in speed and search visibility.",
+        ],
+      },
+    ],
+    relatedServices: ["business-websites", "ecommerce", "web-applications"],
+    relatedTools: ["/website-cost-calculator", "/hong-kong-profits-tax-calculator", "/free-website-audit"],
+    relatedPosts: ["website-cost-taiwan-2026", "freelance-web-developer-vs-agency"],
+  },
+  {
+    slug: "website-cost-taiwan-2026",
+    title: "How Much Does a Website Cost in Taiwan in 2026?",
+    excerpt:
+      "A straight answer for Taiwan businesses and exporters: what a website really costs in US$ and NT$, what changes the price, and how to compare quotes.",
+    date: "2026-09-15",
+    readingTime: "8 min",
+    tag: "Pricing",
+    hreflang: "cost",
+    marketLink: {
+      href: "/web-development-taiwan",
+      label: "Web design & development for Taiwan businesses",
+    },
+    sections: [
+      {
+        paragraphs: [
+          `The short answer: at an independent studio like Kodinav, a custom corporate website for a Taiwan business costs ${rangeUsd(priceBands.business)} (about ${rangeTwd(priceBands.business)}), an online store ${rangeUsd(priceBands.ecommerce)} (about ${rangeTwd(priceBands.ecommerce)}), and a web application from US$${priceBands.webapp[0].toLocaleString("en-US")}. You will see quotes in Taiwan far below and far above those numbers, because template packages, freelancers and agencies are selling different products under the same word.`,
+          "This guide explains what each level buys, the Taiwan-specific details that change the price, and how to compare quotes without being misled by the headline number.",
+        ],
+      },
+      {
+        heading: "Kodinav's Taiwan price bands",
+        paragraphs: [
+          "Quotes are fixed in US dollars. NT$ figures are approximate conversions at NT$31 per US dollar, rounded up, and every project gets a fixed, itemised quote after a discovery call.",
+        ],
+        table: {
+          head: ["Project", "Price (US$)", "Approx. NT$", "Typical timeline"],
+          rows: [
+            ["Landing page", rangeUsd(priceBands.landing), rangeTwd(priceBands.landing), "1–2 weeks"],
+            ["Corporate website (up to 5 pages)", rangeUsd(priceBands.business), rangeTwd(priceBands.business), "3–6 weeks"],
+            ["Second language (Traditional Chinese + English)", `+ ${rangeUsd(priceBands.bilingual)}`, `+ ${rangeTwd(priceBands.bilingual)}`, "Quoted with the site"],
+            ["E-commerce store", rangeUsd(priceBands.ecommerce), rangeTwd(priceBands.ecommerce), "4–8 weeks"],
+            ["Web application", rangeUsd(priceBands.webapp), rangeTwd(priceBands.webapp), "6–12 weeks"],
+          ],
+        },
+      },
+      {
+        heading: "Template, custom or application: what you are actually buying",
+        paragraphs: [
+          "At the entry level is a template: a purchased theme, or a hosted store platform such as SHOPLINE or CYBERBIZ, with your logo, text and photos added. It launches quickly and costs little, and for a business that only needs a basic presence it can be the right choice. The limits show when you need real speed, a distinctive brand, or a site that brings in enquiries and orders.",
+          "In the middle is a custom website: a design built around your brand, content planned around how your customers search, and a build engineered for speed and SEO. At this level the website starts to behave like a salesperson rather than an online brochure.",
+          "At the top are large sites and genuine applications, such as stores with complex product structures, booking systems or member platforms, along with agency projects priced to cover sales staff, project managers and an office.",
+        ],
+      },
+      {
+        heading: "What changes the price in Taiwan",
+        paragraphs: [
+          "Payments and e-invoices. Connecting a Taiwanese gateway such as ECPay, NewebPay or TapPay, and issuing uniform e-invoices automatically at checkout, adds integration and testing time. It also removes hours of manual reconciliation and invoicing every month.",
+          "Logistics and convenience-store pickup. Many shoppers in Taiwan prefer to collect orders at a convenience store. Letting customers choose a pickup store at checkout through a logistics provider's API adds scope to an e-commerce build.",
+          "LINE. An add-friend button is simple. LINE Login, linking member accounts or sending order notifications through a LINE Official Account is integration work, and it is priced as such.",
+          `A second language. Exporters usually need an English version. Done properly, each language gets its own URLs and hreflang tags, plus a second set of content. At Kodinav a second language adds ${rangeUsd(priceBands.bilingual)} (about ${rangeTwd(priceBands.bilingual)}).`,
+        ],
+      },
+      {
+        heading: "English websites for Taiwanese exporters",
+        paragraphs: [
+          "For manufacturers and exporters, the English website is not there to look pretty. Its job is to help an overseas buyer find a specification quickly, trust your factory and send an inquiry. Clear product categories, specification tables, downloadable catalogues, certifications and an RFQ form, combined with pages planned around the product terms buyers search for, are where this kind of website earns its return.",
+        ],
+      },
+      {
+        heading: "The costs after launch",
+        paragraphs: [
+          "Hosting for a well-built corporate site is modest and should be paid at cost on an account in your name. Domains renew annually for very little. Payment-gateway fees are charged per transaction by the gateway. Maintenance is optional. Ask for every ongoing cost in writing before you sign, because that is where an unusually cheap quote often recovers its margin.",
+        ],
+      },
+      {
+        heading: "How to compare quotes fairly",
+        paragraphs: [
+          "Ask every provider the same five questions. Who exactly will build the site? Is the price fixed, and what does it include? Will I own the code, domain and hosting accounts? How fast is it on a phone, and can you show me a live example? What happens after launch, and what does support cost?",
+          "A studio confident in its work answers all five plainly. Vague answers are a bigger warning sign than a high price. The free website cost calculator below gives you an honest range before you start asking.",
+        ],
+      },
+    ],
+    relatedServices: ["business-websites", "ecommerce", "web-applications"],
+    relatedTools: ["/website-cost-calculator", "/taiwan-business-tax-calculator", "/free-website-audit"],
+    relatedPosts: ["website-cost-hong-kong-2026", "custom-website-vs-wordpress-wix"],
   },
 ];
 

@@ -195,6 +195,20 @@ export const tools: Tool[] = [
     service: "business-websites",
   },
   {
+    href: "/hong-kong-profits-tax-calculator",
+    name: "Hong Kong Profits Tax Calculator",
+    blurb: "Two-tiered 8.25% / 16.5% profits tax, with your effective rate.",
+    group: "business",
+    service: "web-applications",
+  },
+  {
+    href: "/taiwan-business-tax-calculator",
+    name: "Taiwan Business Tax Calculator",
+    blurb: "Add or remove 5% business tax, in whole NT dollars.",
+    group: "business",
+    service: "ecommerce",
+  },
+  {
     href: "/gst-calculator-india",
     name: "GST Calculator (India)",
     blurb: "All slabs, both directions, with the CGST/SGST split.",

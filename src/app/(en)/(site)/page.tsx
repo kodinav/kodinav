@@ -100,7 +100,7 @@ const homeFaqs = [
   },
   {
     q: "Do you work with international clients?",
-    a: "Yes. The studio is based in India and works with businesses in the US, the UAE and worldwide — one engineer accountable across every timezone.",
+    a: "Yes. The studio is based in India and works with businesses in Hong Kong, Taiwan, the US, the UAE and worldwide — one engineer accountable across every timezone. Websites can be built in English, Traditional Chinese or both.",
   },
 ];
 
@@ -133,6 +133,41 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ---- Hong Kong & Taiwan: primary markets, linked from the strongest
+           page on the site so the market pages inherit its authority ---- */}
+      <section aria-labelledby="markets-heading" className="border-b border-line">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-1.5">
+            <p className="annotation">Now serving Hong Kong &amp; Taiwan</p>
+            <h2 id="markets-heading" className="text-xl sm:text-2xl">
+              Websites and web apps, in English and <span lang="zh-Hant">繁體中文</span>.
+            </h2>
+          </div>
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:flex sm:flex-wrap sm:gap-x-8">
+            {[
+              { href: "/web-development-hong-kong", label: "Hong Kong", lang: "en" },
+              { href: "/zh-hk", label: "香港（繁中）", lang: "zh-HK" },
+              { href: "/web-development-taiwan", label: "Taiwan", lang: "en" },
+              { href: "/zh-tw", label: "台灣（繁中）", lang: "zh-TW" },
+            ].map((m) => (
+              <li key={m.href}>
+                <Link
+                  href={m.href}
+                  hrefLang={m.lang}
+                  lang={m.lang}
+                  className="group inline-flex items-center gap-2 py-1 text-sm text-foreground transition-colors hover:text-accent"
+                >
+                  {m.label}
+                  <span aria-hidden className="text-faint transition-transform group-hover:translate-x-0.5 group-hover:text-accent">
+                    →
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

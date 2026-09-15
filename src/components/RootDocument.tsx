@@ -1,118 +1,5 @@
-import type { Metadata, Viewport } from "next";
-import {
-  Bricolage_Grotesque,
-  Geist,
-  Geist_Mono,
-  Instrument_Serif,
-} from "next/font/google";
 import { site } from "@/data/site";
-import "./globals.css";
-
-// Re-generate prerendered pages at most every 5 minutes. This caps the
-// s-maxage sent to Hostinger's CDN, so a fresh deploy stops being masked by
-// year-long cached HTML that references deleted asset chunks.
-export const revalidate = 300;
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  // Extend the paper background under the iPhone notch / Dynamic Island;
-  // fixed elements pad themselves with env(safe-area-inset-*).
-  viewportFit: "cover",
-  themeColor: "#f4f3ee",
-};
-
-/* "Meridian" (v4) type stack. The CSS variable names are frozen across
-   redesigns (globals.css and older tooling reference them) — only the
-   typefaces bound to them change: display = Bricolage Grotesque, body =
-   Geist, numerals/annotations = Geist Mono, editorial accent = Instrument
-   Serif (the one flash of serif italic in an otherwise grotesk system). */
-
-const display = Bricolage_Grotesque({
-  subsets: ["latin"],
-  variable: "--font-anton",
-});
-
-const geistSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-archivo",
-});
-
-const geistMono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--font-space-mono",
-});
-
-// Editorial accent only (headings' accent word, pull quotes) — kept out of the
-// preload set since it never carries the LCP text.
-const editorial = Instrument_Serif({
-  weight: "400",
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  variable: "--font-editorial",
-  preload: false,
-});
-
-export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    // ≤60 chars so Google shows it untruncated in SERPs
-    default: `${site.name} — Website Development & Custom Web Apps`,
-    template: `%s — ${site.name}`,
-  },
-  description: site.description,
-  keywords: [...site.keywords],
-  authors: [{ name: site.founder, url: site.url }],
-  creator: site.founder,
-  publisher: site.name,
-  alternates: {
-    canonical: "/",
-    types: { "application/rss+xml": "/feed.xml" },
-  },
-  category: "technology",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: site.url,
-    siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
-    description: site.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} — ${site.tagline}`,
-    description: site.description,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  appleWebApp: {
-    capable: true,
-    title: site.name,
-    statusBarStyle: "default",
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  // Google Search Console verification. Present both as a DNS TXT record and
-  // here as an HTML meta tag, so a URL-prefix property verifies instantly
-  // without waiting on Google's DNS cache. Override via env var if needed.
-  verification: {
-    google:
-      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
-      "9EfehS5fC17OPIdiq4iYrrrTR5EeBVwhno6duhgYp3A",
-    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
-      ? { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
-      : undefined,
-  },
-};
+import { fontVariables } from "@/lib/fonts";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -128,8 +15,11 @@ const organizationSchema = {
   slogan: "We build software that helps businesses grow.",
   founder: { "@id": `${site.url}/#founder` },
   foundingDate: "2024",
-  // Primary target markets first — US and UAE lead, India follows
+  // Primary target markets first — Hong Kong and Taiwan lead (2026-09),
+  // then the established US/UAE markets, then India
   areaServed: [
+    { "@type": "AdministrativeArea", name: "Hong Kong" },
+    { "@type": "Country", name: "Taiwan" },
     { "@type": "Country", name: "United States" },
     { "@type": "Country", name: "United Arab Emirates" },
     { "@type": "City", name: "Dubai" },
@@ -155,6 +45,7 @@ const organizationSchema = {
     "React Development",
     "Next.js Development",
     "SEO-Friendly Website Development",
+    "Multilingual Website Development",
     "Learning Management Systems",
     "CRM Development",
     "ERP Development",
@@ -211,7 +102,7 @@ const websiteSchema = {
   name: site.name,
   description: site.description,
   publisher: { "@id": `${site.url}/#studio` },
-  inLanguage: "en",
+  inLanguage: ["en", "zh-HK", "zh-TW"],
 };
 
 // GA4 Measurement ID. Public by design (it ships in the page HTML); override
@@ -223,23 +114,33 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "G-X8JNSHE7G2";
 // broke the production build; keep this a plain inline script. Empty = pixel off.
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || "";
 
-export default function RootLayout({
+/**
+ * The <html>/<body> document shared by every root layout. Each document
+ * language gets its own root layout (Next only lets a root layout set
+ * <html lang>), and they all render through this so fonts, structured data,
+ * analytics and the pre-paint region script stay identical everywhere.
+ */
+export function RootDocument({
+  lang,
   children,
-}: Readonly<{
+}: {
+  lang: "en" | "zh-HK" | "zh-TW";
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
-      lang="en"
+      lang={lang}
       suppressHydrationWarning
-      className={`${display.variable} ${geistSans.variable} ${geistMono.variable} ${editorial.variable} h-full antialiased`}
+      className={`${fontVariables} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        {/* Geo-aware pricing: set the region flag before paint (no flash).
-            India (Asia/Kolkata timezone or en-IN locale) sees ₹, else USD. */}
+        {/* Geo-aware pricing: set the region flags before paint (no flash).
+            India (Asia/Kolkata timezone or en-IN locale) sees ₹, else USD;
+            Hong Kong / Macau and Taiwan (timezone or zh-HK/zh-TW locale)
+            additionally get data-market so prices show HK$ / NT$. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=(Intl.DateTimeFormat().resolvedOptions().timeZone||'');var l=(navigator.language||'');var india=/Kolkata|Calcutta/i.test(t)||/[-_]IN$/i.test(l);document.documentElement.setAttribute('data-region',india?'in':'intl');}catch(e){document.documentElement.setAttribute('data-region','in');}})();`,
+            __html: `(function(){try{var t=(Intl.DateTimeFormat().resolvedOptions().timeZone||'');var l=(navigator.language||'');var india=/Kolkata|Calcutta/i.test(t)||/[-_]IN$/i.test(l);var r=document.documentElement;r.setAttribute('data-region',india?'in':'intl');var hk=/Hong_Kong|Macau/i.test(t)||/^zh[-_](HK|MO)/i.test(l);var tw=/Taipei/i.test(t)||/^zh[-_]TW/i.test(l);if(hk)r.setAttribute('data-market','hk');else if(tw)r.setAttribute('data-market','tw');}catch(e){document.documentElement.setAttribute('data-region','in');}})();`,
           }}
         />
         <script

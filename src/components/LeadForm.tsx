@@ -11,19 +11,71 @@ const inputCls =
 
 const labelCls = "annotation mb-2 block";
 
+/** A select option whose submitted value can differ from its visible label. */
+export type LeadOption = string | { value: string; label: string };
+
+/**
+ * Visible copy for the form. Translated pages (zh-HK / zh-TW) pass their own;
+ * option *values* stay English so every lead reads the same in /admin.
+ */
+export type LeadFormLabels = {
+  name: string;
+  namePlaceholder: string;
+  phone: string;
+  phonePlaceholder: string;
+  email: string;
+  website: string;
+  websiteOptional: string;
+  budget: string;
+  budgetPlaceholder: string;
+  timeline: string;
+  timelinePlaceholder: string;
+  sending: string;
+  error: string;
+  privacy: string;
+  successTitle: string;
+  successBody: string;
+};
+
+const englishLabels: LeadFormLabels = {
+  name: "Your Name",
+  namePlaceholder: "Full name",
+  phone: "Phone / WhatsApp",
+  phonePlaceholder: "+91",
+  email: "Email",
+  website: "Current Website",
+  websiteOptional: "(if any)",
+  budget: "Budget Range",
+  budgetPlaceholder: "Select budget",
+  timeline: "Timeline",
+  timelinePlaceholder: "Select timeline",
+  sending: "Sending…",
+  error: "Something went wrong. Please try again, or WhatsApp directly.",
+  privacy: "No spam, no obligation. Your details are used only to respond to this enquiry.",
+  successTitle: "Request received.",
+  successBody:
+    "You'll hear back from Abhinav personally within one business day, usually much sooner.",
+};
+
+const optionValue = (o: LeadOption) => (typeof o === "string" ? o : o.value);
+const optionLabel = (o: LeadOption) => (typeof o === "string" ? o : o.label);
+
 export function LeadForm({
   orgLabel = "Company Name",
   source = "website",
   budgets = ["₹75,000 – ₹1.5 lakh", "₹1.5 – ₹4 lakh", "₹4 – ₹10 lakh", "₹10 lakh+", "Not sure yet"],
   timelines = ["As soon as possible", "Within 1 month", "1–3 months", "Just exploring"],
   submitLabel = "Book Free Strategy Call",
+  labels,
 }: {
   orgLabel?: string;
   source?: string;
-  budgets?: string[];
-  timelines?: string[];
+  budgets?: LeadOption[];
+  timelines?: LeadOption[];
   submitLabel?: string;
+  labels?: Partial<LeadFormLabels>;
 }) {
+  const t = { ...englishLabels, ...labels };
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">(
     "idle"
   );
@@ -54,11 +106,8 @@ export function LeadForm({
         className="flex flex-col items-center gap-4 py-16 text-center"
       >
         <CheckCircle2 className="size-12 text-accent" />
- <h3 className="font-display text-3xl">Request received.</h3>
-        <p className="max-w-sm text-pretty text-muted">
-          You&apos;ll hear back from Abhinav personally within one business day,
-          usually much sooner.
-        </p>
+        <h3 className="font-display text-3xl">{t.successTitle}</h3>
+        <p className="max-w-sm text-pretty text-muted">{t.successBody}</p>
       </motion.div>
     );
   }
@@ -67,20 +116,20 @@ export function LeadForm({
     <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
       <div>
         <label htmlFor="lead-name" className={labelCls}>
-          Your Name *
+          {t.name} *
         </label>
         <input
           id="lead-name"
           name="name"
           required
           autoComplete="name"
-          placeholder="Full name"
+          placeholder={t.namePlaceholder}
           className={inputCls}
         />
       </div>
       <div>
         <label htmlFor="lead-phone" className={labelCls}>
-          Phone / WhatsApp *
+          {t.phone} *
         </label>
         <input
           id="lead-phone"
@@ -88,13 +137,13 @@ export function LeadForm({
           required
           type="tel"
           autoComplete="tel"
-          placeholder="+91"
+          placeholder={t.phonePlaceholder}
           className={inputCls}
         />
       </div>
       <div>
         <label htmlFor="lead-email" className={labelCls}>
-          Email *
+          {t.email} *
         </label>
         <input
           id="lead-email"
@@ -121,7 +170,7 @@ export function LeadForm({
       </div>
       <div className="sm:col-span-2">
         <label htmlFor="lead-website" className={labelCls}>
-          Current Website <span className="text-faint">(if any)</span>
+          {t.website} <span className="text-faint">{t.websiteOptional}</span>
         </label>
         <input
           id="lead-website"
@@ -134,30 +183,30 @@ export function LeadForm({
       </div>
       <div>
         <label htmlFor="lead-budget" className={labelCls}>
-          Budget Range *
+          {t.budget} *
         </label>
         <select id="lead-budget" name="budget" required className={inputCls} defaultValue="">
           <option value="" disabled>
-            Select budget
+            {t.budgetPlaceholder}
           </option>
           {budgets.map((b) => (
-            <option key={b} value={b}>
-              {b}
+            <option key={optionValue(b)} value={optionValue(b)}>
+              {optionLabel(b)}
             </option>
           ))}
         </select>
       </div>
       <div>
         <label htmlFor="lead-timeline" className={labelCls}>
-          Timeline *
+          {t.timeline} *
         </label>
         <select id="lead-timeline" name="timeline" required className={inputCls} defaultValue="">
           <option value="" disabled>
-            Select timeline
+            {t.timelinePlaceholder}
           </option>
-          {timelines.map((t) => (
-            <option key={t} value={t}>
-              {t}
+          {timelines.map((o) => (
+            <option key={optionValue(o)} value={optionValue(o)}>
+              {optionLabel(o)}
             </option>
           ))}
         </select>
@@ -169,16 +218,16 @@ export function LeadForm({
         className="mt-2 inline-flex w-full items-center justify-center gap-3 border border-foreground bg-foreground px-8 py-4 font-mono text-xs uppercase tracking-[0.14em] text-background transition-all duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast disabled:opacity-60 sm:col-span-2"
       >
         {status === "sending" && <Loader2 className="size-4 animate-spin" />}
-        {status === "sending" ? "Sending…" : submitLabel}
+        {status === "sending" ? t.sending : submitLabel}
       </button>
 
       {status === "error" && (
         <p className="text-sm text-red-400 sm:col-span-2">
-          Something went wrong. Please try again, or WhatsApp directly.
+          {t.error}
         </p>
       )}
       <p className="text-center text-xs text-faint sm:col-span-2">
-        No spam, no obligation. Your details are used only to respond to this enquiry.
+        {t.privacy}
       </p>
     </form>
   );

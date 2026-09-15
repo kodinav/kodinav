@@ -3,6 +3,7 @@ import { posts } from "@/data/posts";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
+import { clusterFor } from "@/lib/i18n";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Real content dates, bumped manually when pages meaningfully change.
@@ -10,6 +11,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // (every 5 min under revalidate), which teaches Google to distrust lastmod.
   // Bumped for the 2026-07-18 "Meridian" full-site redesign relaunch.
   const now = new Date("2026-07-18");
+  // Hong Kong & Taiwan launch: new market pages, zh-HK / zh-TW sections, tools
+  const hkTwLaunch = new Date("2026-09-15");
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: site.url, lastModified: now, changeFrequency: "monthly", priority: 1 },
@@ -50,6 +53,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/clinic-websites`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${site.url}/web-development-dubai`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${site.url}/web-development-usa`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    // Hong Kong & Taiwan — English market pages and tools
+    { url: `${site.url}/web-development-hong-kong`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${site.url}/web-development-taiwan`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${site.url}/hong-kong-profits-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${site.url}/taiwan-business-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
+    // Traditional Chinese sections
+    { url: `${site.url}/zh-hk`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${site.url}/zh-hk/website-cost`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/zh-hk/profits-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${site.url}/zh-tw`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${site.url}/zh-tw/website-cost`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/zh-tw/business-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
   ];
 
   const projectPages: MetadataRoute.Sitemap = projects.map((p) => ({
@@ -73,5 +88,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...servicePages, ...projectPages, ...postPages];
+  // Every URL in an hreflang cluster lists the whole cluster, mirroring the
+  // <link rel="alternate"> tags on the pages themselves.
+  return [...staticPages, ...servicePages, ...projectPages, ...postPages].map((entry) => {
+    const cluster = clusterFor(entry.url.slice(site.url.length) || "/");
+    if (!cluster) return entry;
+    const languages = Object.fromEntries(
+      Object.entries(cluster).map(([lang, path]) => [lang, `${site.url}${path}`])
+    );
+    return { ...entry, alternates: { languages } };
+  });
 }

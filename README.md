@@ -67,6 +67,16 @@ Desktop breakpoints are untouched; everything below is gated to small screens or
 
 Per-page `title`/`description`/`keywords`/canonical + Open Graph. Structured data: `ProfessionalService` + `WebSite` (root), `CollectionPage` (work), `Service` + `FAQPage` (service pages), `Article` (case studies + blog). Sitemap, robots and a dynamic OG image are generated. Alt text on every project image.
 
+## Markets & languages — Hong Kong and Taiwan
+
+Primary growth markets since 2026-09. Full plan, keyword map and the steps only the owner can do: `docs/seo/hong-kong-taiwan-plan.md`.
+
+- **One root layout per document language**, because only a root layout can set `<html lang>`: `src/app/(en)/` (everything English: site, landing pages, admin), `src/app/zh-hk/` (`lang="zh-HK"`) and `src/app/zh-tw/` (`lang="zh-TW"`). They share `RootDocument` and `lib/rootMetadata.ts`. Unmatched URLs render `app/global-not-found.tsx` (`experimental.globalNotFound`).
+- **Market pages** render through one template, `components/MarketPage.tsx`. Content lives in `src/data/markets/{hk,tw}-{en,zh}.ts`, each version written separately in local vocabulary rather than translated (HK: 網店/軟件/私隱; Taiwan: 電商/軟體/隱私).
+- **hreflang** clusters live in `src/lib/i18n.ts`. Pages call `localeAlternates()` and the sitemap mirrors the clusters automatically, so new translated pages go there.
+- **Prices** in HK$ and NT$ derive from USD bands in `src/lib/fx.ts`. `<Price>` shows HK$ or NT$ to Hong Kong and Taiwan visitors on every English page. Review `TWD_PER_USD` quarterly.
+- **Answer engines:** `/llms.txt` is generated from the data files; `robots.ts` names AI crawlers explicitly; `scripts/indexnow.mjs` pushes URLs to Bing after a deploy. FAQ answers are always in the HTML (`Faq.tsx` collapses with CSS and never unmounts).
+
 ## Admin panel — lead register
 
 **`/admin`** — password-protected dashboard where every form submission lands. Stats (total / new / last-7-days / won), filter by status and source, per-lead detail with one-tap WhatsApp / Call / Email, status pipeline (new → contacted → qualified → won/lost), follow-up notes, delete, and CSV export.
@@ -107,4 +117,4 @@ Locally, no setup needed: leads go to `data/leads.json` (gitignored) and the dev
 
 ## Deployment
 
-Built for Vercel (zero config) but works anywhere Node runs. All pages are static except `/api/lead` and the OG image.
+Hosted on Hostinger (Node); pushing to `main` deploys automatically. All pages are static except the API routes and the OG image. After deploying new or changed pages, run `node scripts/indexnow.mjs`.

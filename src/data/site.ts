@@ -15,7 +15,7 @@ export const site = {
   serviceAreas: ["Delhi", "Noida", "Gurgaon", "Ghaziabad", "Delhi NCR", "India"],
   // ≤160 chars — Google truncates longer meta descriptions (own audit tool flagged the old 255-char one)
   description:
-    "Independent software studio serving the US, the Gulf and clients worldwide. Founder Abhinav Saxena personally builds fast websites, web apps and mobile apps.",
+    "Independent software studio serving Hong Kong, Taiwan and clients worldwide. Founder Abhinav Saxena personally builds fast websites, web apps and mobile apps.",
   priceFloor: "₹75,000",
   priceFloorUsd: "$2,000",
   priceCeil: "₹20 lakh",
@@ -31,7 +31,18 @@ export const site = {
     paymentUrl: "", // TODO: paste a Stripe/Razorpay/PayPal payment link here
   },
   keywords: [
-    // Primary markets: USA & UAE
+    // Primary markets since 2026-09: Hong Kong & Taiwan
+    "web design Hong Kong",
+    "web development company Hong Kong",
+    "website development Hong Kong",
+    "outsource web development Hong Kong",
+    "web design Taiwan",
+    "web development company Taiwan",
+    "網頁設計 香港",
+    "網站開發 香港",
+    "網站架設 台灣",
+    "網頁設計 台灣",
+    // Established markets: USA & UAE
     "web development company USA",
     "hire remote web developer USA",
     "offshore web development company",

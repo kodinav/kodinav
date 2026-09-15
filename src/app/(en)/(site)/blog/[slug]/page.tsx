@@ -10,6 +10,7 @@ import { getService } from "@/data/services";
 import { getTool } from "@/data/tools";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { localeAlternates } from "@/lib/i18n";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
@@ -26,7 +27,9 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
-    alternates: { canonical: `/blog/${post.slug}` },
+    alternates: post.hreflang
+      ? localeAlternates(post.hreflang, `/blog/${post.slug}`)
+      : { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: "article",
       title: post.title,
@@ -89,7 +92,15 @@ export default async function BlogPostPage({
     { name: post.title, path: `/blog/${post.slug}` },
   ]);
 
-  const related = posts.filter((p) => p.slug !== slug).slice(0, 2);
+  // Curated cross-links first (they were declared but never read), then the
+  // most recent posts to fill the two slots.
+  const curated = (post.relatedPosts ?? [])
+    .map((s) => getPost(s))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p) && p!.slug !== slug);
+  const related = [
+    ...curated,
+    ...posts.filter((p) => p.slug !== slug && !curated.includes(p)),
+  ].slice(0, 2);
 
   return (
     <>
@@ -143,10 +154,58 @@ export default async function BlogPostPage({
                       {p}
                     </p>
                   ))}
+                  {section.table && (
+                    <div className="mt-2 mb-4 overflow-x-auto">
+                      <table className="w-full min-w-[32rem] border-collapse text-left text-sm">
+                        <thead>
+                          <tr className="border-b border-line-strong">
+                            {section.table.head.map((h) => (
+                              <th key={h} scope="col" className="annotation py-3 pr-4 font-normal">
+                                {h}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {section.table.rows.map((row) => (
+                            <tr key={row[0]} className="border-b border-line">
+                              {row.map((cell, k) =>
+                                k === 0 ? (
+                                  <th key={k} scope="row" className="py-3 pr-4 font-medium text-foreground">
+                                    {cell}
+                                  </th>
+                                ) : (
+                                  <td key={k} className="tabular py-3 pr-4 text-muted">
+                                    {cell}
+                                  </td>
+                                )
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </section>
               </Reveal>
             ))}
           </div>
+
+          {post.marketLink && (
+            <Reveal className="mt-12">
+              <Link
+                href={post.marketLink.href}
+                className="group flex items-center justify-between gap-4 border border-line-strong bg-surface-raised p-6 transition-colors hover:border-accent"
+              >
+                <span className="font-medium text-foreground group-hover:text-accent">
+                  {post.marketLink.label}
+                </span>
+                <span aria-hidden className="font-mono text-accent transition-transform group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
+            </Reveal>
+          )}
 
           {relatedServiceLinks.length > 0 && (
             <Reveal className="mt-12 border-t border-line pt-8">
