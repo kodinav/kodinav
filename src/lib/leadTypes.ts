@@ -26,4 +26,13 @@ export type Lead = {
   message?: string;
   userAgent?: string;
   note?: string;
+  /* First-touch attribution for the visit that produced the lead */
+  landingPage?: string;
+  referrer?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  gclid?: boolean;
+  /** ISO country guessed from the browser timezone (see lib/geo.ts) */
+  country?: string;
 };

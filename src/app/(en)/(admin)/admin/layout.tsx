@@ -19,7 +19,7 @@ export default function AdminLayout({
           <Link href="/" aria-label="Kodinav — home">
             <Wordmark />
           </Link>
-          <span className="annotation">Studio Admin — Leads</span>
+          <span className="annotation">Studio Admin</span>
         </div>
       </header>
       <main className="pb-safe mx-auto w-full max-w-6xl flex-1 px-5 py-10 sm:px-8">

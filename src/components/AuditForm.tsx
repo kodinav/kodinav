@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { trackLead } from "@/lib/fbq";
+import { getAttribution } from "@/lib/attribution";
 
 const inputCls =
   "w-full border border-line-strong bg-transparent px-4 py-3 text-base text-foreground placeholder:text-faint outline-none transition-colors focus:border-accent sm:text-sm";
@@ -31,7 +32,7 @@ export function AuditForm() {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, source: "website-audit" }),
+        body: JSON.stringify({ ...data, source: "website-audit", attribution: getAttribution() }),
       });
       if (!res.ok) throw new Error("failed");
       trackLead("website-audit");

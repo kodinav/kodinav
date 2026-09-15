@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, Loader2 } from "lucide-react";
 import { trackLead } from "@/lib/fbq";
+import { getAttribution } from "@/lib/attribution";
 
 const inputCls =
   // text-base on mobile: 16px stops iOS Safari from zooming into focused fields
@@ -88,7 +89,7 @@ export function LeadForm({
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, source }),
+        body: JSON.stringify({ ...data, source, attribution: getAttribution() }),
       });
       if (!res.ok) throw new Error("failed");
       trackLead(source);

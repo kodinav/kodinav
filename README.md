@@ -77,9 +77,18 @@ Primary growth markets since 2026-09. Full plan, keyword map and the steps only 
 - **Prices** in HK$ and NT$ derive from USD bands in `src/lib/fx.ts`. `<Price>` shows HK$ or NT$ to Hong Kong and Taiwan visitors on every English page. Review `TWD_PER_USD` quarterly.
 - **Answer engines:** `/llms.txt` is generated from the data files; `robots.ts` names AI crawlers explicitly; `scripts/indexnow.mjs` pushes URLs to Bing after a deploy. FAQ answers are always in the HTML (`Faq.tsx` collapses with CSS and never unmounts).
 
-## Admin panel — lead register
+## Admin panel — analytics, search and leads
 
-**`/admin`** — password-protected dashboard where every form submission lands. Stats (total / new / last-7-days / won), filter by status and source, per-lead detail with one-tap WhatsApp / Call / Email, status pipeline (new → contacted → qualified → won/lost), follow-up notes, delete, and CSV export.
+**`/admin`** — password-protected, four tabs:
+
+- **Overview** — visitors, page views, leads, WhatsApp/email/call clicks, time on page, enquiry rate (each vs the previous period), daily charts, a Hong Kong & Taiwan snapshot, channels, sources, countries and latest leads.
+- **Traffic** — every page (views, visitors, time, entries), channels, sources, **AI assistants** (ChatGPT, Perplexity, Copilot, Gemini, Claude), UTM campaigns, landing pages, countries, page language, devices and actions.
+- **Search** — Google Search Console (clicks, impressions, CTR, position, top queries and pages filterable to Hong Kong/Taiwan, index status of the HK/TW pages via URL Inspection, sitemaps) and Bing Webmaster Tools. Each shows setup steps until its credentials are set.
+- **Leads** — the lead register below, now with each lead's country, referrer, landing page and campaign.
+
+**Analytics** are first-party and cookie-free: `lib/trackerScript.ts` (inline script in `RootDocument`) beacons to `/api/track`, which filters bots and stores one NDJSON file per day in `data/analytics/` (or Upstash lists when configured). No IPs are stored; unique visitors use a hash with a daily-rotating salt. `/admin` pages and automated browsers are not tracked (append `?kdn_allow=1` to test with Playwright). Days are bucketed in Hong Kong time.
+
+**Leads tab** — every form submission lands here. Stats (total / new / last-7-days / won), filter by status and source, per-lead detail with one-tap WhatsApp / Call / Email, status pipeline (new → contacted → qualified → won/lost), follow-up notes, delete, and CSV export.
 
 **Environment variables:**
 
@@ -88,6 +97,9 @@ Primary growth markets since 2026-09. Full plan, keyword map and the steps only 
 | `ADMIN_PASSWORD` | **Yes (prod)** | Login password + session-signing secret. Without it, `/admin` refuses logins in production. |
 | `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN` | On serverless | Persistent lead storage. **Required on Vercel** — without it leads write to `data/leads.json`, which does not survive serverless deploys. Free tier at upstash.com is plenty. |
 | `LEAD_WEBHOOK_URL` | Optional | Mirrors every lead to a webhook (Zapier/Make/Sheets) as backup/notification. |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | Optional | Service-account key (raw JSON or base64) for the Search tab. The account's email must be added as a user on the Search Console property. `GSC_SITE_URL` overrides property auto-detection. |
+| `BING_WEBMASTER_API_KEY` | Optional | Bing Webmaster Tools API key for the Search tab. |
+| `ANALYTICS_SALT` | Optional | Secret for the daily visitor hash (falls back to `ADMIN_PASSWORD`). `ANALYTICS_DIR` overrides the storage folder. |
 
 Locally, no setup needed: leads go to `data/leads.json` (gitignored) and the dev password is `kodinav-dev-admin`. `/admin` is noindexed and disallowed in robots.txt.
 

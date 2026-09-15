@@ -17,6 +17,13 @@ const sourceLabels: Record<string, string> = {
   "meta-ads-coaching": "Ads — Coaching",
   "meta-ads-clinic": "Ads — Clinic",
   "website-audit": "★ Audit order",
+  "free-audit": "Free audit",
+  "google-ads-uae": "Ads — UAE",
+  "google-ads-usa": "Ads — USA",
+  "market-hk-en": "Hong Kong (EN)",
+  "market-hk-zh": "Hong Kong (中文)",
+  "market-tw-en": "Taiwan (EN)",
+  "market-tw-zh": "Taiwan (中文)",
   website: "Website",
 };
 
@@ -99,11 +106,6 @@ export function AdminDashboard({ initialLeads }: { initialLeads: Lead[] }) {
     });
   }
 
-  async function logout() {
-    await fetch("/api/admin/login", { method: "DELETE" });
-    router.refresh();
-  }
-
   return (
     <div className="flex flex-col gap-8">
       {/* header */}
@@ -128,12 +130,6 @@ export function AdminDashboard({ initialLeads }: { initialLeads: Lead[] }) {
           >
             Export CSV
           </a>
-          <button
-            onClick={logout}
-            className="border border-line-strong px-4 py-2.5 font-mono text-[0.625rem] tracking-[0.16em] uppercase text-faint transition-colors hover:border-accent hover:text-accent"
-          >
-            Log out
-          </button>
         </div>
       </div>
 
@@ -242,6 +238,17 @@ export function AdminDashboard({ initialLeads }: { initialLeads: Lead[] }) {
                             [
                               "Received",
                               new Date(lead.receivedAt).toLocaleString("en-IN"),
+                            ],
+                            ["Country", lead.country && lead.country !== "ZZ" ? lead.country : undefined],
+                            ["Came from", lead.referrer ? lead.referrer.replace(/^https?:\/\//, "") : lead.landingPage ? "Direct / unknown" : undefined],
+                            ["Landing page", lead.landingPage],
+                            [
+                              "Campaign",
+                              lead.utmSource
+                                ? [lead.utmSource, lead.utmMedium, lead.utmCampaign].filter(Boolean).join(" / ")
+                                : lead.gclid
+                                  ? "Google Ads (gclid)"
+                                  : undefined,
                             ],
                           ] as const
                         )

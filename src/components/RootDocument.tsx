@@ -1,5 +1,6 @@
 import { site } from "@/data/site";
 import { fontVariables } from "@/lib/fonts";
+import { trackerScript } from "@/lib/trackerScript";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -156,6 +157,8 @@ export function RootDocument({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         {children}
+        {/* First-party, cookieless analytics feeding /admin (lib/trackerScript.ts) */}
+        <script dangerouslySetInnerHTML={{ __html: trackerScript }} />
         {/* Google Analytics 4 */}
         {GA_ID && (
           <>

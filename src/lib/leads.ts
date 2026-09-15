@@ -37,7 +37,7 @@ const useRedis = Boolean(REDIS_URL && REDIS_TOKEN);
 
 async function readFileStore(): Promise<Lead[]> {
   try {
-    const raw = await fs.readFile(FILE_PATH, "utf8");
+    const raw = await fs.readFile(/*turbopackIgnore: true*/ FILE_PATH, "utf8");
     return JSON.parse(raw) as Lead[];
   } catch {
     return [];
@@ -45,10 +45,10 @@ async function readFileStore(): Promise<Lead[]> {
 }
 
 async function writeFileStore(leads: Lead[]): Promise<void> {
-  await fs.mkdir(path.dirname(FILE_PATH), { recursive: true });
+  await fs.mkdir(/*turbopackIgnore: true*/ path.dirname(FILE_PATH), { recursive: true });
   const tmp = `${FILE_PATH}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(leads, null, 2), "utf8");
-  await fs.rename(tmp, FILE_PATH);
+  await fs.writeFile(/*turbopackIgnore: true*/ tmp, JSON.stringify(leads, null, 2), "utf8");
+  await fs.rename(/*turbopackIgnore: true*/ tmp, FILE_PATH);
 }
 
 export async function addLead(

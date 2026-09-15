@@ -15,6 +15,12 @@ const COLUMNS = [
   "website",
   "message",
   "note",
+  "country",
+  "landingPage",
+  "referrer",
+  "utmSource",
+  "utmMedium",
+  "utmCampaign",
 ] as const;
 
 function cell(value: unknown): string {

@@ -25,6 +25,7 @@ import {
   type Severity,
   type SpeedResult,
 } from "@/lib/auditTypes";
+import { getAttribution } from "@/lib/attribution";
 
 const inputCls =
   "w-full border border-line-strong bg-transparent px-4 py-3 text-base text-foreground placeholder:text-faint outline-none transition-colors focus:border-accent sm:text-sm";
@@ -179,6 +180,7 @@ function ReportForm({ result }: { result: AuditResult }) {
         body: JSON.stringify({
           ...data,
           source: "free-audit",
+          attribution: getAttribution(),
           website: result.finalUrl,
           message: `Free scan: ${result.overall}/100 — ${criticals} critical, ${warnings} to fix. Top issue: ${result.headline}`,
         }),
@@ -296,6 +298,8 @@ export function AuditScanner() {
     setSpeed(null);
 
     try {
+      // Count scans in the admin analytics (no-op if the tracker is not loaded)
+      (window as { kdnTrack?: (name: string) => void }).kdnTrack?.("audit");
       const res = await fetch("/api/audit/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

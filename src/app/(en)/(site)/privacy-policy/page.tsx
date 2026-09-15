@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const updated = "15 July 2026";
+const updated = "15 September 2026";
 
 function H({ children }: { children: React.ReactNode }) {
   return <h2 className="mt-10 mb-3 text-xl font-semibold tracking-tight">{children}</h2>;
@@ -63,6 +63,16 @@ export default function PrivacyPolicyPage() {
             aggregated; it does not identify you to us personally. If we run
             advertising, ad platforms such as Meta or Google may also set a
             measurement cookie so we know an ad led to a visit.
+          </P>
+          <P>
+            We also keep our own basic, cookie-free visit statistics on our
+            server: the page viewed, the referring website or campaign, the
+            country inferred from your browser&apos;s time zone, device type
+            and time on the page. We do not store your IP address; a daily
+            changing, one-way code lets us count unique visitors without
+            recognising anyone from one day to the next. When you send an
+            enquiry, we note which page and referrer your visit started from,
+            so we know which of our pages and campaigns work.
           </P>
           <P>
             <strong className="text-foreground">Free tools.</strong> Most of
