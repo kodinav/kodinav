@@ -63,6 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Traditional Chinese sections
     { url: `${site.url}/zh-hk`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/zh-hk/website-cost`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/zh-hk/online-shop-guide`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/zh-hk/ai-website-builder`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
     { url: `${site.url}/zh-hk/profits-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
     { url: `${site.url}/zh-tw`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/zh-tw/website-cost`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },

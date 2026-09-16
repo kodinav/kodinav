@@ -301,6 +301,16 @@ export const hkZh: MarketContent = {
         note: "按兩級制稅率計算法團及非法團業務的利得稅。",
       },
       {
+        label: "香港開網店指南：商業登記、平台、收款",
+        href: "/zh-hk/online-shop-guide",
+        note: "開網店之前要處理的五件事，逐項說明。",
+      },
+      {
+        label: "用 AI 做網站得唔得？",
+        href: "/zh-hk/ai-website-builder",
+        note: "AI 建站做得好與會出事的地方，以及何時值得請人。",
+      },
+      {
         label: "免費網站檢測（英文介面）",
         href: "/free-website-audit",
         note: "約一分鐘檢查網站速度、手機版、SEO 及可信度。",

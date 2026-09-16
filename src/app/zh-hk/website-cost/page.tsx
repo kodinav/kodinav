@@ -126,6 +126,8 @@ const content: GuideContent = {
     title: "延伸閱讀",
     links: [
       { label: "香港網頁設計及網站開發", href: "/zh-hk" },
+      { label: "香港開網店指南", href: "/zh-hk/online-shop-guide" },
+      { label: "用 AI 做網站得唔得？", href: "/zh-hk/ai-website-builder" },
       { label: "香港利得稅計算機", href: "/zh-hk/profits-tax-calculator" },
       { label: "How Much Does a Website Cost in Hong Kong? (English)", href: "/blog/website-cost-hong-kong-2026" },
     ],

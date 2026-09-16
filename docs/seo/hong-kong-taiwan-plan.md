@@ -44,6 +44,8 @@ autocomplete. It is what drove the FPS QR generator and the 報價單 section.
 | `/hong-kong-profits-tax-calculator` | en | profits tax calculator hong kong | two-tiered profits tax rates |
 | `/zh-hk/profits-tax-calculator` | zh-HK | 利得稅計算機 | 利得稅計算, 兩級制利得稅 |
 | `/zh-hk/fps-qr-code-generator` | zh-HK | 轉數快 qr code 生成 | 轉數快 qr code 收款／付款／點用 |
+| `/zh-hk/online-shop-guide` | zh-HK | 網店 商業登記 | 開網店 準備, 網店平台, 網店 收款 |
+| `/zh-hk/ai-website-builder` | zh-HK | 用 ai 做網站 | claude／gemini 做網站, ai 建站 缺點 |
 | `/fps-qr-code-generator` | en | fps qr code generator | fps qr code format, fps qr code specification |
 | `/web-development-taiwan` | en-TW | web design taiwan | web development company taiwan, English website for Taiwanese manufacturer |
 | `/zh-tw` | zh-TW | 網站架設 | 網頁設計, 形象官網, 網站設計公司, 電商網站架設 |

@@ -208,6 +208,7 @@ export default function ZhHkFpsQrPage() {
         related={{
           title: "延伸閱讀",
           links: [
+            { label: "香港開網店指南：商業登記、平台、收款", href: "/zh-hk/online-shop-guide" },
             { label: "2026 香港網站設計收費指南", href: "/zh-hk/website-cost" },
             { label: "香港利得稅計算機", href: "/zh-hk/profits-tax-calculator" },
             { label: "香港網頁設計及網站開發", href: "/zh-hk" },

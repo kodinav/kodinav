@@ -66,17 +66,25 @@ alongside the existing HKD price bands.
 `開網店 商業登記` · `網店平台` · `開網店 lihkg`
 
 Someone searching this is starting a shop — the highest-intent visitor an
-e-commerce service can get. Not yet built; the honest version stays inside our
-competence (platform choice, payments, what a shop needs technically) and points
-to the IRD for registration itself. **Next page to write.**
+e-commerce service can get.
+
+**Built:** `/zh-hk/online-shop-guide` — business registration (scoped to an
+overview, pointing at the IRD, which is the authority), platform vs custom with
+a cost table, payments including the FPS QR tool, SF Express logistics and
+returns, and the pages a Hong Kong shop must carry under the PDPO.
 
 ### 5. AI site builders — rising, and we have a real answer
 
 `用ai 做網站` · `claude 做網站` · `gemini 做網站` · `vibe coding 做網站` ·
 `網頁設計 ai` · `網站設計 ai` · `ai生成網站`
 
-A studio that builds with AI daily can write the honest comparison — where it
-works, where it collapses, what it costs to fix. **Second page to write.**
+A studio that builds with AI daily can write the honest comparison.
+
+**Built:** `/zh-hk/ai-website-builder` — what AI genuinely does well, where it
+breaks (speed, SEO structure, real-device testing, payment security, PDPO,
+maintainability, deliverability, accountability), a cost table, when AI alone is
+the right call, and a pre-launch self-check. It says plainly that we use AI
+daily ourselves — that is what makes the limits credible.
 
 ### 6. Head terms — real, but not 30-day targets
 
@@ -97,8 +105,8 @@ pages target them and will take months plus links, not weeks.
 | `/zh-hk/profits-tax-calculator` | 利得稅計算機 | 利得稅計算方法, 利得稅稅率, 兩級制利得稅 |
 | `/zh-hk` | 網頁設計 香港 | 網站設計 香港, 網頁設計公司, 網店開發, 中英雙語網站 |
 | `/web-development-hong-kong` | web design hong kong | web development company hong kong, bilingual website hong kong |
-| *(to write)* | 網店 商業登記 | 開網店 準備, 網店平台 比較, 網店 收款 |
-| *(to write)* | 用 ai 做網站 | claude/gemini 做網站, vibe coding, ai 網站 缺點 |
+| `/zh-hk/online-shop-guide` | 網店 商業登記 | 開網店 準備, 網店平台, 網店 收款, 網店 公司註冊 |
+| `/zh-hk/ai-website-builder` | 用 ai 做網站 | claude/gemini 做網站, vibe coding 做網站, ai 建站 缺點 |
 
 ---
 

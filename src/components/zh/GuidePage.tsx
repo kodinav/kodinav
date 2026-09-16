@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Faq } from "@/components/Faq";
 import { Reveal } from "@/components/motion";
-import { ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
+import { ArrowLink, ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { cjkWords } from "@/lib/cjk";
@@ -18,7 +18,13 @@ export type GuideContent = {
   tag: string;
   meta: { updated: string; readingTime: string; author: string };
   breadcrumb: { home: { name: string; href: string }; current: string };
-  sections: { heading?: string; paragraphs: string[]; table?: { head: string[]; rows: string[][] } }[];
+  sections: {
+    heading?: string;
+    paragraphs: string[];
+    table?: { head: string[]; rows: string[][] };
+    /** Inline links under the paragraphs — the tools and pages the text refers to. */
+    links?: { label: string; href: string }[];
+  }[];
   faq: { title: string; items: { q: string; a: string }[] };
   cta: { title: string; body: string; label: string; href: string };
   related: { title: string; links: { label: string; href: string }[] };
@@ -116,6 +122,15 @@ export function GuidePage({ content: c }: { content: GuideContent }) {
                         </tbody>
                       </table>
                     </div>
+                  )}
+                  {section.links && (
+                    <p className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+                      {section.links.map((l) => (
+                        <ArrowLink key={l.href} href={l.href}>
+                          {l.label}
+                        </ArrowLink>
+                      ))}
+                    </p>
                   )}
                 </section>
               </Reveal>
