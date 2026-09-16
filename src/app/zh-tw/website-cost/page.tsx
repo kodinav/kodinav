@@ -117,7 +117,7 @@ const content: GuideContent = {
 
 export const metadata: Metadata = {
   title: "2026 網站架設費用指南｜架一個網站要多少錢？",
-  description: `台灣網站架設費用一覽：形象官網 ${both(priceBands.business)}、電商網站 ${both(priceBands.ecommerce)}。說明金流、電子發票、超商取貨與雙語網站的成本，以及比較報價的五個問題。`,
+  description: `台灣網站架設費用一覽：形象官網 ${rangeUsd(priceBands.business)}、電商網站 ${rangeUsd(priceBands.ecommerce)}。說明金流、電子發票、超商取貨與雙語網站的成本。`,
   keywords: ["網站架設費用", "架網站 費用", "網頁設計 報價", "形象官網 費用", "電商網站 費用", "購物網站架設 費用", "網站建置 價格"],
   alternates: localeAlternates("cost", path),
   openGraph: {

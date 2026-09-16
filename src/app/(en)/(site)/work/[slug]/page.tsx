@@ -9,6 +9,7 @@ import { Chip, Eyebrow, SectionHeading } from "@/components/ui";
 import { getProject, projects } from "@/data/projects";
 import { site } from "@/data/site";
 import { breadcrumbSchema } from "@/lib/schema";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -21,10 +22,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const project = getProject((await params).slug);
   if (!project) return {};
-  const title = `${project.name} — ${project.category} Case Study`;
+  const title = `${project.name} — Case Study`;
+  const description = metaDescription(project.summary);
   return {
-    title,
-    description: project.summary,
+    title: pageTitle(title),
+    description,
     keywords: [
       project.name,
       project.category,
@@ -37,14 +39,14 @@ export async function generateMetadata({
     openGraph: {
       type: "article",
       title,
-      description: project.summary,
+      description,
       url: `${site.url}/work/${project.slug}`,
       images: [{ url: project.images.cover.src, alt: project.images.cover.alt }],
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: project.summary,
+      description,
       images: [project.images.cover.src],
     },
   };

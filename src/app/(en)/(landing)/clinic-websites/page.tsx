@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { LandingPage, type LandingContent } from "@/components/LandingPage";
 import { getProject } from "@/data/projects";
 import { ogImage } from "@/lib/og";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Websites for Clinics & Doctors — Get More Patient Appointments",
+  title: pageTitle("Clinic & Doctor Websites — Get More Patient Appointments"),
   description:
     "Professional websites that help clinics and doctors get more appointments. Credible, fast, and built to rank for local healthcare searches. From ₹75,000, by Kodinav.",
   keywords: [

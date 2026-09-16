@@ -10,6 +10,7 @@ import { postsForService } from "@/data/posts";
 import { getService, services } from "@/data/services";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export function generateStaticParams() {
@@ -24,8 +25,8 @@ export async function generateMetadata({
   const service = getService((await params).slug);
   if (!service) return {};
   return {
-    title: `${service.name} — Development Services`,
-    description: service.short,
+    title: pageTitle(`${service.name} — Development Services`),
+    description: metaDescription(service.short),
     keywords: [
       service.name,
       `${service.name} Hong Kong`,

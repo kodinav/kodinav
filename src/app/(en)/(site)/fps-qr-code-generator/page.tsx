@@ -108,7 +108,7 @@ export default function FpsQrPage() {
                 EMVCo merchant-presented QR with the Hong Kong payee template. Every field below is written by this
                 generator; the checksum is CRC-16/CCITT-FALSE over the whole payload.
               </p>
-              <div className="mt-8 overflow-x-auto">
+              <div className="mt-8 overflow-x-auto" tabIndex={0} role="group" aria-label="FPS QR code fields">
                 <table className="w-full min-w-[34rem] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-line-strong">

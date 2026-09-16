@@ -8,9 +8,10 @@ import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Free QR Code Generator — WiFi, vCard, UPI, Logo — No Expiry",
+  title: pageTitle("Free QR Code Generator — WiFi, vCard, UPI, Logo — No Expiry"),
   description:
     "QR codes that never expire: links, WiFi logins, contact cards, UPI payments and more — with your logo, custom colours, print-quality SVG. Free, in-browser.",
   keywords: [

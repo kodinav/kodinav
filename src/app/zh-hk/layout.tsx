@@ -30,7 +30,7 @@ export default function ZhHKRootLayout({ children }: { children: React.ReactNode
         {children}
       </main>
       <ZhFooter locale="zh-HK" />
-      <WhatsAppFab label={t.whatsappAria} />
+      <WhatsAppFab label={t.whatsappAria} href={t.whatsappHref} />
     </RootDocument>
   );
 }

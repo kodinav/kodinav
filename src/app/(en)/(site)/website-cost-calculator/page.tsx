@@ -7,9 +7,10 @@ import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Website Cost Calculator — Estimate Your Project in 60 Seconds",
+  title: pageTitle("Website Cost Calculator — Your Project in 60 Seconds"),
   description:
     "How much does a website cost? Answer a few questions and get an honest estimate for your business website, e-commerce store or web app — in USD, AED or INR.",
   keywords: [

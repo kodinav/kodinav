@@ -5,10 +5,13 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: `About — Independent Software Studio by ${site.founder}`,
-  description: `Kodinav is an independent software studio in India founded by ${site.founder}. Every website, web app and mobile app is personally designed, architected and built by the founder. Direct communication, full ownership, no agency overhead.`,
+  title: pageTitle(`About — Independent Software Studio by ${site.founder}`),
+  description: metaDescription(
+    `Kodinav is an independent software studio founded by ${site.founder}. Every website, web app and mobile app is designed and built personally by the founder.`
+  ),
   keywords: [
     "about Kodinav",
     "Abhinav Saxena software engineer",

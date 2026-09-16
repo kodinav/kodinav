@@ -6,11 +6,14 @@ import { Eyebrow } from "@/components/ui";
 import { posts } from "@/data/posts";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Blog — Software, Web Development, SEO & Business Growth",
+  title: pageTitle("Blog — Software, Web Development, SEO & Business Growth"),
   description:
-    "Plain-language writing on software, web development, performance, SEO, AI and business growth. The advice Kodinav gives clients, from the engineer's side of the table.",
+    metaDescription(
+    "Plain-language writing on software, web development, performance, SEO, AI and business growth. The advice Kodinav gives clients, from the engineer's side of the table."
+  ),
   keywords: [
     "software development blog",
     "web development India blog",

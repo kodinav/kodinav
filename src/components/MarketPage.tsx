@@ -223,7 +223,8 @@ export function MarketPage({ content: c }: { content: MarketContent }) {
           <Reveal>
             <SectionHeading eyebrow={c.pricing.eyebrow} title={words(c.pricing.title)} lead={c.pricing.lead} />
           </Reveal>
-          <Reveal delay={0.08} className="mt-10 overflow-x-auto">
+          <Reveal delay={0.08} className="mt-10">
+            <div className="overflow-x-auto" tabIndex={0} role="group" aria-label={c.pricing.title}>
             <table className="w-full min-w-[34rem] border-collapse text-left">
               <thead>
                 <tr className="border-b border-line-strong">
@@ -246,6 +247,7 @@ export function MarketPage({ content: c }: { content: MarketContent }) {
                 ))}
               </tbody>
             </table>
+            </div>
           </Reveal>
           <Reveal className="mt-6 flex flex-col items-start gap-5">
             <p className="max-w-3xl text-sm leading-relaxed text-faint">{c.pricing.footnote}</p>

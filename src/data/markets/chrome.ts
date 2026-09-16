@@ -9,6 +9,8 @@ import { site } from "@/data/site";
 export type ZhLocale = "zh-HK" | "zh-TW";
 
 export type ZhChromeCopy = {
+  whatsappHref: string;
+  phoneLabel: string;
   home: string;
   homeAria: string;
   skip: string;
@@ -32,6 +34,8 @@ export type ZhChromeCopy = {
 
 export const zhChrome: Record<ZhLocale, ZhChromeCopy> = {
   "zh-HK": {
+    whatsappHref: site.whatsappZh.hk,
+    phoneLabel: "致電",
     home: "/zh-hk",
     homeAria: "Kodinav 香港首頁",
     skip: "跳到主要內容",
@@ -65,6 +69,8 @@ export const zhChrome: Record<ZhLocale, ZhChromeCopy> = {
     whatsappAria: `WhatsApp 查詢（${site.phone}）`,
   },
   "zh-TW": {
+    whatsappHref: site.whatsappZh.tw,
+    phoneLabel: "來電",
     home: "/zh-tw",
     homeAria: "Kodinav 台灣首頁",
     skip: "跳到主要內容",

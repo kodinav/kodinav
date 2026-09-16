@@ -4,9 +4,10 @@ import { ToolShell } from "@/components/ToolShell";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Free Invoice Generator — GST & VAT Ready, Print to PDF",
+  title: pageTitle("Free Invoice Generator — GST & VAT Ready, Print to PDF"),
   description:
     "Professional invoices in your browser: logo, GST/VAT, discounts, amount in words, a scannable UPI payment QR, and details that save on your device. Free.",
   keywords: [

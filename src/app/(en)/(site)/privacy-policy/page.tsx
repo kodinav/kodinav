@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
     description: "What this website collects, what it doesn't, and your rights.",
     url: `${site.url}/privacy-policy`,
     type: "website",
+    images: ogImage("Privacy Policy", "Privacy"),
   },
 };
 

@@ -5,10 +5,17 @@ import { site } from "@/data/site";
  * Always-visible WhatsApp button for the ad landing pages: paid traffic often
  * prefers an instant chat over a form, and every extra path to contact pays.
  */
-export function WhatsAppFab({ label = `Chat on WhatsApp (${site.phone})` }: { label?: string }) {
+export function WhatsAppFab({
+  label = `Chat on WhatsApp (${site.phone})`,
+  href = site.whatsapp,
+}: {
+  label?: string;
+  href?: string;
+}) {
   return (
+    <aside aria-label={label}>
     <a
-      href={site.whatsapp}
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
@@ -16,5 +23,6 @@ export function WhatsAppFab({ label = `Chat on WhatsApp (${site.phone})` }: { la
     >
       <MessageCircle className="size-6" aria-hidden />
     </a>
+    </aside>
   );
 }

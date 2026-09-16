@@ -70,6 +70,22 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/clinic-websites"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  For clinics &amp; doctors →
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/coaching-institute-websites"
+                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
+                >
+                  For coaching institutes →
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/web-development-usa"
                   className="u-draw text-sm text-muted transition-colors hover:text-foreground"
                 >

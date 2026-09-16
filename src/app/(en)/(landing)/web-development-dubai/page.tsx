@@ -3,11 +3,14 @@ import { LandingPage, type LandingContent } from "@/components/LandingPage";
 import { getProject } from "@/data/projects";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Web Development for Dubai & UAE Businesses — Fixed USD Quotes",
+  title: pageTitle("Web Development for Dubai & UAE — Fixed USD Quotes"),
   description:
-    "Premium website and web application development for Dubai and GCC businesses. Senior engineering, direct with the founder, fixed quotes from $2,000. Fast, SEO-ready, and delivered in your timezone.",
+    metaDescription(
+    "Premium website and web application development for Dubai and GCC businesses. Senior engineering, direct with the founder, fixed quotes from $2,000. Fast, SEO-ready, and delivered in your timezone."
+  ),
   keywords: [
     "web development company Dubai",
     "website development Dubai",

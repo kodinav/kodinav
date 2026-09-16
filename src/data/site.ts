@@ -8,6 +8,12 @@ export const site = {
   phoneRaw: "+918126661493",
   whatsapp:
     "https://wa.me/918126661493?text=Hi%20Abhinav%2C%20I%27m%20interested%20in%20discussing%20a%20software%20project.",
+  /* Chinese-page WhatsApp links. A visitor who taps "WhatsApp 查詢" should not
+     send an English sentence they did not write — the message is theirs. */
+  whatsappZh: {
+    hk: `https://wa.me/918126661493?text=${encodeURIComponent("你好 Abhinav，我想查詢網站／網店開發。")}`,
+    tw: `https://wa.me/918126661493?text=${encodeURIComponent("你好 Abhinav，我想詢問網站／電商開發。")}`,
+  },
   // Booking link. Empty = booking UI hidden and booking CTAs fall back to the
   // contact form. TODO: paste the real Calendly URL once the account exists.
   calendly: "",

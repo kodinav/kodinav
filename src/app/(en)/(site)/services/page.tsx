@@ -8,11 +8,14 @@ import { Price } from "@/components/Price";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Services — Web, App, LMS, CRM, ERP & AI Development",
+  title: pageTitle("Services — Web, App, LMS, CRM, ERP & AI Development"),
   description:
-    "Business websites, custom web applications, mobile apps, learning management systems (LMS), CRM, ERP, admin dashboards, AI integrations and e-commerce. Engineered end to end by Kodinav, from ₹75,000.",
+    metaDescription(
+    "Business websites, custom web applications, mobile apps, learning management systems (LMS), CRM, ERP, admin dashboards, AI integrations and e-commerce. Engineered end to end by Kodinav, from ₹75,000."
+  ),
   keywords: [
     "software development services India",
     "custom web application development",

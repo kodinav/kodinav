@@ -9,11 +9,14 @@ import { Price } from "@/components/Price";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Website Audit — Find What's Costing You Customers | From $49",
+  title: pageTitle("Website Audit — Find What's Costing You Customers | From $49"),
   description:
-    "A paid website audit that shows exactly why your site is slow, invisible on Google, or losing enquiries — with a prioritised fix list and a walkthrough call. Delivered in 3 business days, from $49.",
+    metaDescription(
+    "A paid website audit that shows exactly why your site is slow, invisible on Google, or losing enquiries — with a prioritised fix list and a walkthrough call. Delivered in 3 business days, from $49."
+  ),
   keywords: [
     "website audit",
     "website audit service",

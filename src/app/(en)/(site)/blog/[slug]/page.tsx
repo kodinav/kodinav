@@ -10,6 +10,7 @@ import { getService } from "@/data/services";
 import { getTool } from "@/data/tools";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 import { localeAlternates } from "@/lib/i18n";
 import { breadcrumbSchema } from "@/lib/schema";
 
@@ -25,8 +26,8 @@ export async function generateMetadata({
   const post = getPost((await params).slug);
   if (!post) return {};
   return {
-    title: post.title,
-    description: post.excerpt,
+    title: pageTitle(post.seoTitle ?? post.title),
+    description: metaDescription(post.excerpt),
     alternates: post.hreflang
       ? localeAlternates(post.hreflang, `/blog/${post.slug}`)
       : { canonical: `/blog/${post.slug}` },
@@ -155,7 +156,7 @@ export default async function BlogPostPage({
                     </p>
                   ))}
                   {section.table && (
-                    <div className="mt-2 mb-4 overflow-x-auto">
+                    <div className="mt-2 mb-4 overflow-x-auto" tabIndex={0} role="group" aria-label={section.heading ?? post.title}>
                       <table className="w-full min-w-[32rem] border-collapse text-left text-sm">
                         <thead>
                           <tr className="border-b border-line-strong">

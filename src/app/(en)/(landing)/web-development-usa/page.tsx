@@ -3,11 +3,14 @@ import { LandingPage, type LandingContent } from "@/components/LandingPage";
 import { getProject } from "@/data/projects";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription, pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Web Development for US Businesses — Fixed USD Quotes",
+  title: pageTitle("Web Development for US Businesses — Fixed USD Quotes"),
   description:
-    "Custom websites, e-commerce and web applications for US businesses. Senior engineering, direct with the founder, fixed quotes from $2,000 — built fast and built to rank.",
+    metaDescription(
+    "Custom websites, e-commerce and web applications for US businesses. Senior engineering, direct with the founder, fixed quotes from $2,000 — built fast and built to rank."
+  ),
   keywords: [
     "web development company USA",
     "affordable web development USA",

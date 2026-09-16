@@ -30,7 +30,7 @@ export default function ZhTWRootLayout({ children }: { children: React.ReactNode
         {children}
       </main>
       <ZhFooter locale="zh-TW" />
-      <WhatsAppFab label={t.whatsappAria} />
+      <WhatsAppFab label={t.whatsappAria} href={t.whatsappHref} />
     </RootDocument>
   );
 }

@@ -7,10 +7,13 @@ import { ButtonLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { Price } from "@/components/Price";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Pricing — Custom Software Projects from ₹75,000",
-  description: `Kodinav software projects start from ${site.priceFloor}, with a fixed, itemised quote after a free discovery call. No packages, no hidden costs, no mid-project surprises. You own the code.`,
+  description: metaDescription(
+    `Kodinav projects start from ${site.priceFloor}, with a fixed, itemised quote after a free discovery call. No packages, no hidden costs. You own the code.`
+  ),
   keywords: [
     "software development cost India",
     "website development price India",

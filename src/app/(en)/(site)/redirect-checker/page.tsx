@@ -4,9 +4,10 @@ import { ToolShell } from "@/components/ToolShell";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Redirect Checker — Trace a URL's Full Redirect Chain",
+  title: pageTitle("Redirect Checker — Trace a URL's Full Redirect Chain"),
   description:
     "Trace every redirect hop — status codes, 301 vs 302, total time — then check all four versions of your domain (www/bare, http/https) in one click. Free.",
   keywords: [

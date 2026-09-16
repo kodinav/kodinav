@@ -92,7 +92,7 @@ export function GuidePage({ content: c }: { content: GuideContent }) {
                     </p>
                   ))}
                   {section.table && (
-                    <div className="mt-2 mb-4 overflow-x-auto">
+                    <div className="mt-2 mb-4 overflow-x-auto" tabIndex={0} role="group" aria-label={section.heading ?? c.title}>
                       <table className="w-full min-w-[32rem] border-collapse text-left text-sm">
                         <thead>
                           <tr className="border-b border-line-strong">

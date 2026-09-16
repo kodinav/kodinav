@@ -8,9 +8,10 @@ import { ReviewLinkGenerator } from "@/components/ReviewLinkGenerator";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Free Google Review Link Generator — One-Tap Review Link & QR",
+  title: pageTitle("Free Google Review Link Generator — One-Tap Review Link & QR"),
   description:
     "A one-tap Google review link plus a printable counter sign with your QR and ready-to-send ask messages for WhatsApp, SMS and email. Free, nothing stored.",
   keywords: [

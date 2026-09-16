@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 /**
  * Metadata shared by every root layout. The site has one root layout per
@@ -42,11 +43,17 @@ export const rootMetadata: Metadata = {
     siteName: site.name,
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
+    // Explicit, because pages that set no openGraph of their own (the home
+    // page, privacy, terms) were shipping without a share card: the
+    // app/opengraph-image file convention stopped applying once the root
+    // segment lost its layout to the per-language root layouts.
+    images: ogImage(`${site.name} — ${site.tagline}`),
   },
   twitter: {
     card: "summary_large_image",
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
+    images: ogImage(`${site.name} — ${site.tagline}`).map((i) => i.url),
   },
   robots: {
     index: true,

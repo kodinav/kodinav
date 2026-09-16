@@ -8,9 +8,10 @@ import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Mobile-Friendly Test — Check Your Website on Phones, Free",
+  title: pageTitle("Mobile-Friendly Test — Check Your Website on Phones, Free"),
   description:
     "Test if your website is mobile-friendly in seconds: viewport, zoom blocking, layout stability and more — with plain-language fixes. Free, no email.",
   keywords: [

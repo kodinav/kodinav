@@ -8,9 +8,10 @@ import { site } from "@/data/site";
 import { TOOL_COUNT, toolGroups, toolsByGroup, tools } from "@/data/tools";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: `Free Website Tools — ${TOOL_COUNT} Checkers, Generators & Calculators`,
+  title: pageTitle(`Free Website Tools — ${TOOL_COUNT} Checkers & Generators`),
   description:
     "Free tools for business owners: website audit, speed test, cost calculator, QR and link generators, invoice maker and more. No signup, most run in your browser.",
   keywords: [

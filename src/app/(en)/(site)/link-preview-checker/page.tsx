@@ -8,9 +8,10 @@ import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Link Preview Checker — WhatsApp, Google & Social Cards",
+  title: pageTitle("Link Preview Checker — WhatsApp, Google & Social Cards"),
   description:
     "Preview your link on WhatsApp, LinkedIn, X and Google — each rendered the way that platform actually shows it — with the missing tags named and fixed. Free.",
   keywords: [

@@ -20,7 +20,9 @@
   --surface-raised: #ffffff; /* crisp white cards float on the paper */
   --foreground: #16171b; /* near-black ink */
   --muted: #52545b; /* secondary text — ≥7:1 on paper */
-  --faint: #6c6e77; /* small mono annotations — ≥4.9:1 on paper (WCAG AA) */
+  --faint: #63656e; /* small mono annotations — ≥4.7:1 on every light surface (WCAG AA).
+                       #6c6e77 passed on bare paper but fell to 4.1–4.4:1 on the
+                       tinted surfaces the annotations actually sit on. */
   --border: rgba(22, 23, 27, 0.11);
   --border-strong: rgba(22, 23, 27, 0.24);
   --accent: #1b3ad6; /* cobalt — the single signature hue */

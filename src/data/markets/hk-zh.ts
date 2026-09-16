@@ -17,7 +17,7 @@ export const hkZh: MarketContent = {
     title: ["香港", "網頁設計", "及網站開發，由工程師親自打造。"],
     lead: `Kodinav 是一間獨立軟件工作室。創辦人 ${site.founder} 親自為香港公司設計及開發網站、網店和網上系統：載入快速、支援中英雙語，並提供 ${floor} 起的書面固定報價。由第一次通話到網站上線，你都直接與負責開發的工程師溝通。`,
     primaryCta: "索取固定報價",
-    secondaryCta: { label: "WhatsApp 查詢", href: site.whatsapp, external: true },
+    secondaryCta: { label: "WhatsApp 查詢", href: site.whatsappZh.hk, external: true },
     notes: [`${floor} 起・固定報價`, "3 至 6 星期上線", "中英雙語網站", "程式碼屬於你"],
   },
   facts: {

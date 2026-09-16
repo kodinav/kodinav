@@ -47,8 +47,15 @@ export function ZhFooter({ locale }: { locale: ZhLocale }) {
                 </a>
               </li>
               <li>
-                <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className={link}>
+                <a href={t.whatsappHref} target="_blank" rel="noopener noreferrer" className={link}>
                   {f.whatsapp}
+                </a>
+              </li>
+              {/* Click-to-call: the site's own audit flagged its absence on the
+                  Chinese pages — a phone number that isn't a link is a dead end on mobile. */}
+              <li>
+                <a href={`tel:${site.phoneRaw}`} className={link}>
+                  {t.phoneLabel} {site.phone}
                 </a>
               </li>
               <li>

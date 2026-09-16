@@ -4,9 +4,10 @@ import { ToolShell } from "@/components/ToolShell";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema, faqSchema, toolSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Free Privacy Policy Generator — + Terms, Refund & Cookies",
+  title: pageTitle("Free Privacy Policy Generator — + Terms, Refund & Cookies"),
   description:
     "Generate all four legal pages in one minute: privacy policy, terms of service, refund policy and cookie policy — plain language, free, no signup.",
   keywords: [

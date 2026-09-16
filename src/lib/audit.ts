@@ -441,7 +441,15 @@ export async function auditSite(input: string): Promise<AuditResult> {
   }
 
   const imgs = tagsOf(html, "img");
-  const noDims = imgs.filter((t) => !hasAttr(t, "width") || !hasAttr(t, "height")).length;
+  // An image is "sized" if it reserves space by any means the browser honours:
+  // width/height attributes, an inline aspect-ratio, or a fill-style image that
+  // is absolutely positioned inside a sized box (Next.js <Image fill>). Flagging
+  // those as layout-shifting was a false finding — the page does not move.
+  const sized = (t: string) =>
+    (hasAttr(t, "width") && hasAttr(t, "height")) ||
+    /style="[^"]*aspect-ratio/i.test(t) ||
+    (/style="[^"]*position:\s*absolute/i.test(t) && /style="[^"]*height:\s*100%/i.test(t));
+  const noDims = imgs.filter((t) => !sized(t)).length;
   if (imgs.length > 0) {
     add(
       "image-dimensions",
@@ -449,9 +457,9 @@ export async function auditSite(input: string): Promise<AuditResult> {
       noDims >= 3 ? "warning" : "pass",
       "Images that shift the layout",
       noDims >= 3
-        ? `${noDims} of ${imgs.length} images have no width or height set. The page jumps around as they load, which is how visitors end up tapping the wrong thing.`
+        ? `${noDims} of ${imgs.length} images reserve no space before they load — no width and height, and no CSS aspect ratio. The page jumps around as they arrive, which is how visitors end up tapping the wrong thing.`
         : "Images reserve their space while loading.",
-      noDims >= 3 ? "Setting width and height on each image stops the jumping." : undefined
+      noDims >= 3 ? "Set width and height on each image, or give its container a fixed aspect ratio." : undefined
     );
   }
 

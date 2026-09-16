@@ -4,6 +4,8 @@ import { priceBands, rangeHkd, rangeTwd, rangeUsd, toHkd } from "@/lib/fx";
 export type Post = {
   slug: string;
   title: string;
+  /** Shorter title for search results, when the headline itself overruns. */
+  seoTitle?: string;
   excerpt: string;
   date: string; // ISO
   readingTime: string;
@@ -29,6 +31,7 @@ export type Post = {
 export const posts: Post[] = [
   {
     slug: "why-your-business-website-is-slow",
+    seoTitle: "Why Your Business Website Is Slow",
     title: "Why Your Business Website Is Slow, and What It's Costing You",
     excerpt:
       "Speed is not a technical vanity metric. It decides whether visitors stay, whether Google ranks you, and whether your ad spend converts.",
@@ -204,6 +207,7 @@ export const posts: Post[] = [
   },
   {
     slug: "how-i-scope-software-projects",
+    seoTitle: "How I Scope a Software Project",
     title: "How I Scope a Software Project (and Why Fixed Quotes Are Possible)",
     excerpt:
       "Software projects have a reputation for blown budgets and moving deadlines. That reputation comes from bad scoping, not bad luck.",
@@ -246,6 +250,7 @@ export const posts: Post[] = [
   },
   {
     slug: "seo-is-an-engineering-problem",
+    seoTitle: "SEO Is an Engineering Problem First",
     title: "SEO Is an Engineering Problem Before It's a Marketing Problem",
     excerpt:
       "Before content and backlinks matter, your website has to be technically legible to search engines. Most business sites fail at that first step.",
@@ -339,6 +344,7 @@ export const posts: Post[] = [
   },
   {
     slug: "freelance-web-developer-vs-agency",
+    seoTitle: "Freelance Web Developer vs Agency: An Honest Comparison",
     title: "Freelance Web Developer vs Agency vs Marketplace: An Honest Comparison",
     excerpt:
       "Who should actually build your website? A clear-eyed look at freelancers, agencies and marketplaces like Fiverr, from someone who competes with all three.",
@@ -391,6 +397,7 @@ export const posts: Post[] = [
   },
   {
     slug: "questions-to-ask-before-hiring-web-developer",
+    seoTitle: "Questions to Ask Before Hiring a Web Developer",
     title: "12 Questions to Ask Before Hiring a Web Developer",
     excerpt:
       "The questions that separate a professional from a liability. Ask these before you pay anyone to build your website, and the good developers will thank you for it.",
@@ -443,6 +450,7 @@ export const posts: Post[] = [
   },
   {
     slug: "custom-website-vs-wordpress-wix",
+    seoTitle: "Custom Website vs WordPress vs Wix",
     title: "Custom Website vs WordPress vs Wix: Which Fits Your Business?",
     excerpt:
       "Page builders are not evil, and custom is not always right. A practical guide to choosing between Wix, WordPress and a custom-built website for your business.",
@@ -579,6 +587,7 @@ export const posts: Post[] = [
   },
   {
     slug: "core-web-vitals-explained",
+    seoTitle: "Core Web Vitals Explained for Business Owners",
     title: "Core Web Vitals Explained for Business Owners (LCP, CLS, INP)",
     excerpt:
       "Google grades every website on three technical scores that affect your rankings. Here is what LCP, CLS and INP mean in plain English, and why they decide who ranks.",
@@ -770,6 +779,7 @@ export const posts: Post[] = [
   },
   {
     slug: "website-redesign-without-losing-seo",
+    seoTitle: "Redesign Your Website Without Losing Google Rankings",
     title: "How to Redesign Your Website Without Losing Your Google Rankings",
     excerpt:
       "The most expensive redesign mistake is invisible on launch day: destroying years of Google rankings. Here is how to redesign safely and come out ranking higher.",
@@ -907,6 +917,7 @@ export const posts: Post[] = [
   },
   {
     slug: "react-vs-full-stack-developer",
+    seoTitle: "React vs Full Stack Developer: Who Does What?",
     title: "React Developer, Full Stack Developer, Web Developer: Who Does What?",
     excerpt:
       "The job titles blur together and it makes hiring confusing. Here is what each type of developer actually does, and which one your project needs.",
@@ -997,6 +1008,7 @@ export const posts: Post[] = [
   },
   {
     slug: "local-seo-for-delhi-ncr-businesses",
+    seoTitle: "Local SEO for Delhi NCR Businesses",
     title: "Local SEO for Delhi NCR Businesses: Rank in Your Own City First",
     excerpt:
       "Before you chase national keywords, win the customers searching in your own city. A practical local SEO guide for businesses in Delhi, Noida and Gurgaon.",
@@ -1048,6 +1060,7 @@ export const posts: Post[] = [
   },
   {
     slug: "shopify-vs-custom-ecommerce-india",
+    seoTitle: "Shopify vs Custom E-Commerce in India",
     title: "Shopify vs Custom E-Commerce in India: The Real Costs Compared",
     excerpt:
       "Shopify is excellent until it is not. An honest comparison of Shopify and custom-built online stores for Indian businesses, including the costs nobody mentions.",
@@ -1094,6 +1107,7 @@ export const posts: Post[] = [
   },
   {
     slug: "how-to-measure-if-your-website-makes-money",
+    seoTitle: "Does Your Website Actually Make You Money?",
     title: "How to Measure Whether Your Website Actually Makes You Money",
     excerpt:
       "Most businesses cannot say whether their website earns its keep. Here are the few numbers that tell you the truth, and how to start tracking them.",
@@ -1140,6 +1154,7 @@ export const posts: Post[] = [
   },
   {
     slug: "website-maintenance-what-it-costs",
+    seoTitle: "Website Maintenance: What It Really Costs",
     title: "Website Maintenance: What It Costs and What Happens Without It",
     excerpt:
       "A website is not a one-time purchase. Here is what ongoing maintenance actually involves, what it costs in India, and the risk of skipping it.",
@@ -1184,6 +1199,7 @@ export const posts: Post[] = [
   },
   {
     slug: "crm-vs-spreadsheet-when-to-upgrade",
+    seoTitle: "CRM vs Spreadsheet: When to Upgrade",
     title: "CRM vs Spreadsheet: When Lead Leakage Justifies Real Software",
     excerpt:
       "A spreadsheet works until it does not. Here is how to tell when your leads are leaking through the cracks, and when a proper CRM finally pays for itself.",
@@ -1277,6 +1293,7 @@ export const posts: Post[] = [
   },
   {
     slug: "website-cost-usa-2026",
+    seoTitle: "How Much Does a Website Cost in the USA in 2026?",
     title: "How Much Does a Website Cost in the USA in 2026? What You're Really Paying For",
     excerpt:
       "US website prices range from a few hundred dollars to sixty thousand. Here is what each band actually buys, and why offshore engineering changed the maths.",
@@ -1323,6 +1340,7 @@ export const posts: Post[] = [
   },
   {
     slug: "free-tools-to-check-your-website",
+    seoTitle: "Free Tools to Check Your Website (and What They Tell You)",
     title: "The Free Tools Every Small Business Should Use to Check Their Website",
     excerpt:
       "You do not need to hire anyone to find out what is wrong with your website. A short, honest tour of the free checks that reveal what is costing you customers.",

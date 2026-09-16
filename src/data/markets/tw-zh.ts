@@ -18,7 +18,7 @@ export const twZh: MarketContent = {
     title: ["台灣企業的", "網站架設", "與網頁設計，由工程師親自打造。"],
     lead: `Kodinav 是獨立軟體工作室。創辦人 ${site.founder} 親自為台灣企業設計與開發形象官網、電商網站與網路系統，也為外銷製造業打造面向海外買家的英文網站。書面固定報價 US$2,000 起（約 ${floorTwd}），從第一次通話到上線，你都直接與負責開發的工程師溝通。`,
     primaryCta: "索取固定報價",
-    secondaryCta: { label: "WhatsApp 詢問", href: site.whatsapp, external: true },
+    secondaryCta: { label: "WhatsApp 詢問", href: site.whatsappZh.tw, external: true },
     notes: [`約 ${floorTwd} 起・固定報價`, "3 至 6 週上線", "中英雙語網站", "程式碼屬於你"],
   },
   facts: {

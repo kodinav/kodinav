@@ -174,7 +174,7 @@ export default function ZhHkFpsQrPage() {
                 內容依照金管局與香港銀行同業結算有限公司（HKICL）公布的《香港零售支付共用二維碼規格》，
                 即 EMVCo 商戶顯示二維碼加上香港收款人範本。檢查碼採用 CRC-16/CCITT-FALSE，涵蓋整段內容。
               </p>
-              <div className="mt-8 overflow-x-auto">
+              <div className="mt-8 overflow-x-auto" tabIndex={0} role="group" aria-label="轉數快 QR code 內容規格">
                 <table className="w-full min-w-[34rem] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-line-strong">

@@ -6,11 +6,14 @@ import { Eyebrow } from "@/components/ui";
 import { projects } from "@/data/projects";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Work — Case Studies of Real Software Projects",
   description:
-    "Real software built by Kodinav: Lighthouse Classes (language-learning LMS), Achiever's Hive (EdTech platform), Triplipi (travel discovery platform) and Trinket (e-commerce store). Each case study covers the problem, the build and the outcome.",
+    metaDescription(
+    "Real software built by Kodinav: Lighthouse Classes (language-learning LMS), Achiever's Hive (EdTech platform), Triplipi (travel discovery platform) and Trinket (e-commerce store). Each case study covers the problem, the build and the outcome."
+  ),
   keywords: [
     "software development case studies",
     "web development portfolio India",

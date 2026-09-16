@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { site } from "@/data/site";
+import { ogImage } from "@/lib/og";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
     description: "Plain-language terms for the website, the free tools, and our services.",
     url: `${site.url}/terms`,
     type: "website",
+    images: ogImage("Terms of Service", "Terms"),
   },
 };
 

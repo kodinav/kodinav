@@ -8,9 +8,10 @@ import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Free Website Audit Tool — Instant SEO & Speed Check",
+  title: pageTitle("Free Website Audit Tool — Instant SEO & Speed Check"),
   description:
     "Audit your website free in 60 seconds. Speed, SEO, mobile and trust checked instantly, with a plain-language fix list. No email needed to see your results.",
   keywords: [

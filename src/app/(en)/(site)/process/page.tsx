@@ -5,11 +5,14 @@ import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
+import { metaDescription } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Development Process — Discovery to Deployment",
   description:
-    "How Kodinav takes a software project from discovery to deployment and support: a nine-step process built on written scopes, fixed quotes, usable slices and honest communication. No surprises.",
+    metaDescription(
+    "How Kodinav takes a software project from discovery to deployment and support: a nine-step process built on written scopes, fixed quotes, usable slices and honest communication. No surprises."
+  ),
   keywords: [
     "software development process",
     "web development process",

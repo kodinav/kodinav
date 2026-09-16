@@ -8,9 +8,10 @@ import { WhatsAppLinkGenerator } from "@/components/WhatsAppLinkGenerator";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { breadcrumbSchema } from "@/lib/schema";
+import { pageTitle } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Free WhatsApp Link Generator — wa.me Link & QR Code",
+  title: pageTitle("Free WhatsApp Link Generator — wa.me Link & QR Code"),
   description:
     "Click-to-chat WhatsApp link with message templates, a QR code, and a copy-paste chat button for your website. Free, in-browser, nothing stored.",
   keywords: [
