@@ -13,6 +13,7 @@ import {
   Eyebrow,
   SectionHeading,
 } from "@/components/ui";
+import { featuredPosts, posts } from "@/data/posts";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
@@ -579,6 +580,38 @@ export default function Home() {
               </span>
             </Link>
           </Reveal>
+        </div>
+      </section>
+
+      {/* ---- Writing: the homepage is the strongest page on the site, so it
+           links articles directly instead of only linking /blog ---- */}
+      <section className="border-t border-line-strong">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-20">
+          <Reveal>
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <SectionHeading
+                eyebrow="Notes"
+                title="Written from the work."
+                lead="Honest guides on what software costs, how it is built and what to ask before you hire anyone."
+              />
+              <ArrowLink href="/blog" className="mb-2">
+                All {posts.length} articles
+              </ArrowLink>
+            </div>
+          </Reveal>
+          <Stagger className="mt-12 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-4">
+            {featuredPosts.map((p) => (
+              <StaggerItem key={p.slug} className="border-t border-line-strong">
+                <Link href={`/blog/${p.slug}`} className="group flex h-full flex-col gap-2 py-5">
+                  <span className="annotation">{p.tag}</span>
+                  <h3 className="font-display text-lg leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent">
+                    {p.title}
+                  </h3>
+                  <span className="mt-auto pt-2 text-xs text-faint">{p.readingTime} read</span>
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
         </div>
       </section>
 

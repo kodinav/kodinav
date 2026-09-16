@@ -6,6 +6,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { Faq } from "@/components/Faq";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { Chip, Eyebrow, SectionHeading } from "@/components/ui";
+import { postsForService } from "@/data/posts";
 import { getService, services } from "@/data/services";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
@@ -89,6 +90,10 @@ export default async function ServicePage({
   const relatedServices = relatedSlugs
     .map((s) => getService(s))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+  // Contextual links down to the blog: these service pages are indexed, the
+  // articles were not (Google had crawled none of them).
+  const reading = postsForService(service.slug, 3, `service:${service.slug}`);
 
   const crumbs = breadcrumbSchema([
     { name: "Services", path: "/services" },
@@ -222,6 +227,29 @@ export default async function ServicePage({
               </Reveal>
             ))}
           </div>
+        </section>
+      )}
+
+      {reading.length > 0 && (
+        <section className="mx-auto max-w-4xl px-6 pb-16">
+          <Reveal>
+            <p className="annotation mb-5">Worth reading on this</p>
+            <ul className="flex flex-col border-t border-line">
+              {reading.map((post) => (
+                <li key={post.slug} className="border-b border-line">
+                  <Link href={`/blog/${post.slug}`} className="group flex flex-col gap-1 py-4">
+                    <span className="flex items-baseline justify-between gap-4 text-foreground transition-colors group-hover:text-accent">
+                      {post.title}
+                      <span aria-hidden className="text-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-accent">
+                        →
+                      </span>
+                    </span>
+                    <span className="text-sm text-muted">{post.excerpt}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </section>
       )}
 

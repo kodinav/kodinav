@@ -5,6 +5,7 @@ import { CtaSection } from "@/components/CtaSection";
 import { Faq } from "@/components/Faq";
 import { Reveal } from "@/components/motion";
 import { ArrowLink, Eyebrow, SectionHeading } from "@/components/ui";
+import { postsForService } from "@/data/posts";
 import { getService } from "@/data/services";
 import { getTool } from "@/data/tools";
 
@@ -40,6 +41,9 @@ export function ToolShell({
 }) {
   const toolEntry = crumb ? getTool(crumb) : undefined;
   const service = toolEntry ? getService(toolEntry.service) : undefined;
+  // Tool pages are indexed and the blog was not — pass links down to it,
+  // rotated per tool so the archive gets covered rather than the newest three.
+  const reading = toolEntry ? postsForService(toolEntry.service, 2, `tool:${toolEntry.href}`) : [];
 
   return (
     <>
@@ -91,6 +95,29 @@ export function ToolShell({
                 See the service →
               </Link>
             </div>
+          </div>
+        </section>
+      )}
+
+      {reading.length > 0 && (
+        <section className="border-t border-line">
+          <div className="mx-auto max-w-5xl px-5 py-12 sm:px-8">
+            <p className="annotation mb-5">Read next</p>
+            <ul className="grid gap-x-10 sm:grid-cols-2">
+              {reading.map((post) => (
+                <li key={post.slug} className="border-b border-line">
+                  <Link href={`/blog/${post.slug}`} className="group flex flex-col gap-1 py-4">
+                    <span className="flex items-baseline justify-between gap-4 text-foreground transition-colors group-hover:text-accent">
+                      {post.title}
+                      <span aria-hidden className="text-faint transition-transform duration-300 group-hover:translate-x-0.5 group-hover:text-accent">
+                        →
+                      </span>
+                    </span>
+                    <span className="text-sm text-muted">{post.readingTime} read</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
       )}

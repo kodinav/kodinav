@@ -70,6 +70,7 @@ export const posts: Post[] = [
         ],
       },
     ],
+    relatedServices: ["website-performance", "business-websites"],
   },
   {
     slug: "custom-software-vs-saas",
@@ -114,6 +115,7 @@ export const posts: Post[] = [
         ],
       },
     ],
+    relatedServices: ["web-applications", "business-websites"],
   },
   {
     slug: "what-coaching-institutes-get-wrong-online",
@@ -155,6 +157,7 @@ export const posts: Post[] = [
         ],
       },
     ],
+    relatedServices: ["learning-management-systems", "business-websites"],
   },
   {
     slug: "ai-in-business-software-2026",
@@ -197,6 +200,7 @@ export const posts: Post[] = [
         ],
       },
     ],
+    relatedServices: ["ai-integrations", "web-applications"],
   },
   {
     slug: "how-i-scope-software-projects",
@@ -238,6 +242,7 @@ export const posts: Post[] = [
         ],
       },
     ],
+    relatedServices: ["web-applications", "business-websites"],
   },
   {
     slug: "seo-is-an-engineering-problem",
@@ -1521,4 +1526,44 @@ export const posts: Post[] = [
 
 export function getPost(slug: string) {
   return posts.find((p) => p.slug === slug);
+}
+
+/** Newest first. */
+export const postsByDate = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+
+/**
+ * Four articles for the homepage: newest first, but one per tag before
+ * repeating, so the row doesn't read as four versions of the same pricing post.
+ */
+export const featuredPosts: Post[] = (() => {
+  const seenTags = new Set<string>();
+  const picked = postsByDate.filter((p) => !seenTags.has(p.tag) && seenTags.add(p.tag)).slice(0, 4);
+  for (const post of postsByDate) {
+    if (picked.length >= 4) break;
+    if (!picked.includes(post)) picked.push(post);
+  }
+  return picked;
+})();
+
+/** Stable per-page offset, so pages sharing a service don't all link the same posts. */
+function offsetFor(key: string, modulo: number): number {
+  if (modulo <= 0) return 0;
+  let hash = 0;
+  for (const char of key) hash = (hash * 31 + char.charCodeAt(0)) % 100_000;
+  return hash % modulo;
+}
+
+/**
+ * Articles to link from a service or tool page.
+ *
+ * Blog posts were reachable only from /blog, and Google left all 31 of them
+ * "Discovered – currently not indexed" (never crawled). Service and tool pages
+ * are indexed, so they now pass links down to the articles — rotated by page
+ * key so the whole archive gets linked, not just the newest few.
+ */
+export function postsForService(service: string, limit = 3, pageKey = ""): Post[] {
+  const matches = postsByDate.filter((p) => p.relatedServices?.includes(service));
+  if (matches.length === 0) return [];
+  const start = offsetFor(pageKey, matches.length);
+  return Array.from({ length: Math.min(limit, matches.length) }, (_, i) => matches[(start + i) % matches.length]);
 }
