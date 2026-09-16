@@ -29,6 +29,11 @@ export const hreflangClusters = {
     "zh-HK": "/zh-hk/profits-tax-calculator",
     "x-default": "/hong-kong-profits-tax-calculator",
   },
+  fpsQr: {
+    en: "/fps-qr-code-generator",
+    "zh-HK": "/zh-hk/fps-qr-code-generator",
+    "x-default": "/fps-qr-code-generator",
+  },
   businessTax: {
     en: "/taiwan-business-tax-calculator",
     "zh-TW": "/zh-tw/business-tax-calculator",

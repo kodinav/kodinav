@@ -27,6 +27,12 @@ pages were built to double as ad landing pages, with lead forms and source track
 
 ## 2. What shipped
 
+### Keyword research
+
+Hong Kong query research (method, clusters, page→query map) lives in
+`hong-kong-keywords.md`, refreshed 2026-09-16 from Google's Hong Kong
+autocomplete. It is what drove the FPS QR generator and the 報價單 section.
+
 ### Pages and target queries
 
 | URL | Language | Primary query | Supporting queries |
@@ -37,6 +43,8 @@ pages were built to double as ad landing pages, with lead forms and source track
 | `/blog/website-cost-hong-kong-2026` | en-HK | website cost hong kong | web design price hong kong |
 | `/hong-kong-profits-tax-calculator` | en | profits tax calculator hong kong | two-tiered profits tax rates |
 | `/zh-hk/profits-tax-calculator` | zh-HK | 利得稅計算機 | 利得稅計算, 兩級制利得稅 |
+| `/zh-hk/fps-qr-code-generator` | zh-HK | 轉數快 qr code 生成 | 轉數快 qr code 收款／付款／點用 |
+| `/fps-qr-code-generator` | en | fps qr code generator | fps qr code format, fps qr code specification |
 | `/web-development-taiwan` | en-TW | web design taiwan | web development company taiwan, English website for Taiwanese manufacturer |
 | `/zh-tw` | zh-TW | 網站架設 | 網頁設計, 形象官網, 網站設計公司, 電商網站架設 |
 | `/zh-tw/website-cost` | zh-TW | 網站架設費用 | 架網站 費用, 網頁設計 報價, 形象官網 費用 |

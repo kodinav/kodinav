@@ -16,6 +16,7 @@ export function ZhToolShell({
   title,
   lead,
   tool,
+  middle,
   faqTitle,
   faqs,
   funnel,
@@ -26,6 +27,7 @@ export function ZhToolShell({
   title: ReactNode;
   lead: string;
   tool: ReactNode;
+  middle?: ReactNode;
   faqTitle: string;
   faqs: { q: string; a: string }[];
   funnel: { eyebrow: string; body: string; label: string; href: string };
@@ -52,6 +54,8 @@ export function ZhToolShell({
           <div className="mt-12">{tool}</div>
         </div>
       </section>
+
+      {middle}
 
       <section className="border-t border-line-strong">
         <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-5 px-5 py-14 sm:flex-row sm:items-center sm:px-8">

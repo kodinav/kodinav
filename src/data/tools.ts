@@ -195,6 +195,13 @@ export const tools: Tool[] = [
     service: "business-websites",
   },
   {
+    href: "/fps-qr-code-generator",
+    name: "FPS QR Code Generator (Hong Kong)",
+    blurb: "A 轉數快 payment QR for your FPS ID, mobile or email — built in your browser.",
+    group: "generate",
+    service: "ecommerce",
+  },
+  {
     href: "/hong-kong-profits-tax-calculator",
     name: "Hong Kong Profits Tax Calculator",
     blurb: "Two-tiered 8.25% / 16.5% profits tax, with your effective rate.",

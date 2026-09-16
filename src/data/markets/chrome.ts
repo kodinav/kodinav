@@ -40,6 +40,7 @@ export const zhChrome: Record<ZhLocale, ZhChromeCopy> = {
     nav: [
       { label: "服務", href: "/zh-hk#services" },
       { label: "收費", href: "/zh-hk/website-cost" },
+      { label: "轉數快 QR", href: "/zh-hk/fps-qr-code-generator" },
       { label: "利得稅計算機", href: "/zh-hk/profits-tax-calculator" },
       { label: "作品（英文）", href: "/work" },
     ],

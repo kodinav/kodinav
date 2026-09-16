@@ -287,6 +287,11 @@ export const hkEn: MarketContent = {
         note: "The 2026 guide to price bands, in HKD.",
       },
       {
+        label: "FPS QR code generator",
+        href: "/fps-qr-code-generator",
+        note: "Turn your FPS ID, mobile or email into a payment QR code.",
+      },
+      {
         label: "Hong Kong profits tax calculator",
         href: "/hong-kong-profits-tax-calculator",
         note: "Two-tiered rates for corporations and unincorporated businesses.",

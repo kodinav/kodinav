@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Bumped for the 2026-07-18 "Meridian" full-site redesign relaunch.
   const now = new Date("2026-07-18");
   // Hong Kong & Taiwan launch: new market pages, zh-HK / zh-TW sections, tools
-  const hkTwLaunch = new Date("2026-09-15");
+  const hkTwLaunch = new Date("2026-09-16");
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: site.url, lastModified: now, changeFrequency: "monthly", priority: 1 },
@@ -56,6 +56,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Hong Kong & Taiwan — English market pages and tools
     { url: `${site.url}/web-development-hong-kong`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/web-development-taiwan`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${site.url}/fps-qr-code-generator`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/zh-hk/fps-qr-code-generator`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
     { url: `${site.url}/hong-kong-profits-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
     { url: `${site.url}/taiwan-business-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
     // Traditional Chinese sections

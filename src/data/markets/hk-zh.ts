@@ -291,6 +291,11 @@ export const hkZh: MarketContent = {
         note: "以港幣列出各類網站的真實價格範圍。",
       },
       {
+        label: "轉數快 QR code 產生器",
+        href: "/zh-hk/fps-qr-code-generator",
+        note: "輸入 FPS ID、手機或電郵，即時生成收款 QR code。",
+      },
+      {
         label: "香港利得稅計算機",
         href: "/zh-hk/profits-tax-calculator",
         note: "按兩級制稅率計算法團及非法團業務的利得稅。",
