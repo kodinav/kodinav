@@ -68,7 +68,7 @@ and the profile are what matter at this stage.
 | Minimum project size | $1,000+ (real floor: $2,000) |
 | Hourly rate bucket | $25–$49 / hr (forms demand one; work is quoted fixed, not hourly — say so in the description) |
 | Website | https://kodinav.com |
-| Email | hello@kodinav.com |
+| Email | abhinav@kodinav.com |
 | Phone | +91 81266 61493 |
 | Languages | English |
 
@@ -181,7 +181,7 @@ English, exactly as the website does.
 >
 > Websites in English, Traditional Chinese, or both.
 >
-> hello@kodinav.com · https://kodinav.com
+> abhinav@kodinav.com · https://kodinav.com
 
 Add **Hong Kong** and **Taiwan** under locations served, and link the company
 page from your personal profile's Experience section — personal profiles get far

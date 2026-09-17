@@ -24,7 +24,7 @@ suffers everywhere.
 Cold email works in India for B2B, but only done like an engineer, not a
 spammer:
 
-- **From your normal mailbox** (hello@kodinav.com), one email at a time.
+- **From your normal mailbox** (abhinav@kodinav.com), one email at a time.
 - **20–30 per day maximum.** Volume is the enemy of deliverability and of
   personalisation.
 - **One true, specific observation per email** — same rule as WhatsApp

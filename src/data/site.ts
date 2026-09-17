@@ -3,7 +3,7 @@ export const site = {
   tagline: "Independent Software Studio",
   founder: "Abhinav Saxena",
   url: "https://kodinav.com",
-  email: "hello@kodinav.com",
+  email: "abhinav@kodinav.com",
   phone: "+91 81266 61493",
   phoneRaw: "+918126661493",
   whatsapp:
