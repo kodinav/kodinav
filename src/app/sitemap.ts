@@ -13,6 +13,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date("2026-07-18");
   // Hong Kong & Taiwan launch: new market pages, zh-HK / zh-TW sections, tools
   const hkTwLaunch = new Date("2026-09-16");
+  // Taiwan keyword research follow-up. A page's lastmod must not predate the page
+  // itself — a back-dated hint tells Google there is nothing new to fetch.
+  const twShopGuide = new Date("2026-09-17");
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: site.url, lastModified: now, changeFrequency: "monthly", priority: 1 },
@@ -69,7 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/zh-tw`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/zh-tw/website-cost`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
     { url: `${site.url}/zh-tw/business-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
-    { url: `${site.url}/zh-tw/online-shop-guide`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/zh-tw/online-shop-guide`, lastModified: twShopGuide, changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const projectPages: MetadataRoute.Sitemap = projects.map((p) => ({
