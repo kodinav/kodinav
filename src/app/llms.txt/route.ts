@@ -45,6 +45,7 @@ export function GET() {
     link("FPS (轉數快) QR code generator", "/fps-qr-code-generator", "Free Hong Kong payment QR from an FPS ID, mobile or email, per the HKMA/HKICL specification."),
     link("轉數快 QR code 產生器", "/zh-hk/fps-qr-code-generator", "The FPS QR generator in Traditional Chinese (Hong Kong)."),
     link("香港開網店指南", "/zh-hk/online-shop-guide", "Starting an online shop in Hong Kong: business registration, platform choice, payments, logistics, required pages."),
+    link("台灣網路開店指南", "/zh-tw/online-shop-guide", "Starting an online shop in Taiwan: tax registration thresholds, platform vs custom build, payment and delivery options, and the disclosures Taiwanese law requires on the site."),
     link("用 AI 做網站得唔得？", "/zh-hk/ai-website-builder", "What AI website builders do well, where they break, and when hiring someone is worth it."),
     "",
     "## Taiwan",

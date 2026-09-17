@@ -109,6 +109,7 @@ const content: GuideContent = {
     title: "延伸閱讀",
     links: [
       { label: "台灣網站架設與網頁設計", href: "/zh-tw" },
+      { label: "台灣網路開店指南", href: "/zh-tw/online-shop-guide" },
       { label: "營業稅計算機（含稅／未稅）", href: "/zh-tw/business-tax-calculator" },
       { label: "How Much Does a Website Cost in Taiwan? (English)", href: "/blog/website-cost-taiwan-2026" },
     ],

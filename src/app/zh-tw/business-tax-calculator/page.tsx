@@ -122,6 +122,7 @@ export default function ZhTwBusinessTaxPage() {
           links: [
             { label: "2026 台灣網站架設費用指南", href: "/zh-tw/website-cost" },
             { label: "台灣網站架設與網頁設計", href: "/zh-tw" },
+            { label: "台灣網路開店指南", href: "/zh-tw/online-shop-guide" },
             { label: "Taiwan Business Tax Calculator (English)", href: "/taiwan-business-tax-calculator" },
           ],
         }}

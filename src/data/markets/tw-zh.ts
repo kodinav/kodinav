@@ -301,6 +301,11 @@ export const twZh: MarketContent = {
         note: "5% 營業稅加稅、扣稅，一鍵算出整數金額。",
       },
       {
+        label: "台灣網路開店指南：稅籍登記、平台、金流",
+        href: "/zh-tw/online-shop-guide",
+        note: "開網路商店之前要處理的五件事，逐項說明。",
+      },
+      {
         label: "免費網站健檢（英文介面）",
         href: "/free-website-audit",
         note: "約一分鐘檢查網站速度、手機版、SEO 與可信度。",

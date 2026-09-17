@@ -69,6 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/zh-tw`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/zh-tw/website-cost`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
     { url: `${site.url}/zh-tw/business-tax-calculator`, lastModified: hkTwLaunch, changeFrequency: "yearly", priority: 0.7 },
+    { url: `${site.url}/zh-tw/online-shop-guide`, lastModified: hkTwLaunch, changeFrequency: "monthly", priority: 0.8 },
   ];
 
   const projectPages: MetadataRoute.Sitemap = projects.map((p) => ({
