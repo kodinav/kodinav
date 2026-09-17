@@ -39,9 +39,9 @@ check("static code CRC self-consistent", crc16(staticPayload.slice(0, -4)), stat
 const mobile = buildFpsPayload({ payee: { type: "mobile", value: "9123 4567" }, amount: "58.50" });
 check("mobile proxy normalised", decodeFpsPayload(decodeFpsPayload(mobile).find((f) => f.id === "26").value).find((f) => f.id === "03")?.value, "+85291234567");
 check("amount preserved", decodeFpsPayload(mobile).find((f) => f.id === "54")?.value, "58.50");
-const email = buildFpsPayload({ payee: { type: "email", value: "pay@kodinav.com", bankCode: "004" } });
+const email = buildFpsPayload({ payee: { type: "email", value: "pay@example.com", bankCode: "004" } });
 const emailAccount = decodeFpsPayload(decodeFpsPayload(email).find((f) => f.id === "26").value);
-check("email upper-cased", emailAccount.find((f) => f.id === "04")?.value, "PAY@KODINAV.COM");
+check("email upper-cased", emailAccount.find((f) => f.id === "04")?.value, "PAY@EXAMPLE.COM");
 check("clearing code kept", emailAccount.find((f) => f.id === "01")?.value, "004");
 
 // 5. Merchant name, city and bill number
