@@ -1,24 +1,52 @@
 "use client";
 
 import {
-  motion,
-  useInView,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  type Variants,
-} from "framer-motion";
-import { useEffect, useRef, type ReactNode } from "react";
-
-const easeOut = [0.22, 1, 0.36, 1] as const;
+  createElement,
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 
 /**
  * Scroll reveals are TRANSFORM-ONLY by design: content is never hidden behind
  * opacity. Fast flick-scrolling on phones can outrun IntersectionObserver and
- * leave whileInView animations un-fired — with opacity that meant permanently
- * blank sections; with transform-only the worst case is a 24px offset nobody
+ * leave reveals un-fired — with opacity that meant permanently blank
+ * sections; with transform-only the worst case is a 24px offset nobody
  * notices. (Same principle as the CSS hero reveal / LCP fix.)
+ *
+ * v5: these run on CSS transitions + IntersectionObserver instead of
+ * framer-motion. The public API is unchanged, so every page keeps working;
+ * the homepage just stops shipping a motion library to do a 28px slide.
+ * The transitions live in globals.css under "Motion".
  */
+
+function useInView<T extends HTMLElement>(margin = "-80px") {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!("IntersectionObserver" in window)) {
+      el.setAttribute("data-in", "");
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            el.setAttribute("data-in", "");
+            io.disconnect();
+          }
+        }
+      },
+      { rootMargin: margin }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [margin]);
+  return ref;
+}
+
 export function Reveal({
   children,
   delay = 0,
@@ -32,29 +60,18 @@ export function Reveal({
   className?: string;
   as?: "div" | "section" | "span" | "li";
 }) {
-  const Tag = motion[as];
-  return (
-    <Tag
-      initial={{ y }}
-      whileInView={{ y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: easeOut }}
-      className={className}
-    >
-      {children}
-    </Tag>
+  const ref = useInView<HTMLElement>();
+  return createElement(
+    as,
+    {
+      ref,
+      "data-reveal": "",
+      className,
+      style: { "--y": `${y}px`, "--delay": `${delay}s` } as CSSProperties,
+    },
+    children
   );
 }
-
-const staggerParent: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.09 } },
-};
-
-const staggerChild: Variants = {
-  hidden: { y: 24 },
-  show: { y: 0, transition: { duration: 0.65, ease: easeOut } },
-};
 
 export function Stagger({
   children,
@@ -63,16 +80,20 @@ export function Stagger({
   children: ReactNode;
   className?: string;
 }) {
+  const ref = useInView<HTMLDivElement>("-60px");
+  // Each item's delay is its index; measured from the DOM so StaggerItem
+  // needs no index prop and can sit anywhere inside the wrapper.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.querySelectorAll<HTMLElement>("[data-stagger-item]").forEach((item, i) => {
+      item.style.setProperty("--i", String(i));
+    });
+  }, [ref]);
   return (
-    <motion.div
-      variants={staggerParent}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      className={className}
-    >
+    <div ref={ref} data-stagger="" className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -84,9 +105,9 @@ export function StaggerItem({
   className?: string;
 }) {
   return (
-    <motion.div variants={staggerChild} className={className}>
+    <div data-stagger-item="" className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
@@ -101,29 +122,45 @@ export function Counter({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  const mv = useMotionValue(0);
-  const spring = useSpring(mv, { duration: 1.6, bounce: 0 });
 
   useEffect(() => {
-    // Reduced motion (or the count-up disabled): show the true value at rest,
-    // never a stuck "0".
-    if (reduce) {
-      if (ref.current) ref.current.textContent = `${value}${suffix}`;
+    const el = ref.current;
+    if (!el) return;
+    const finish = () => {
+      el.textContent = `${value}${suffix}`;
+    };
+    // Reduced motion (or no observer): show the true value at rest, never a
+    // stuck "0".
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !("IntersectionObserver" in window)
+    ) {
+      finish();
       return;
     }
-    if (inView) mv.set(value);
-  }, [reduce, inView, value, suffix, mv]);
-
-  useEffect(() => {
-    if (reduce) return;
-    return spring.on("change", (v) => {
-      if (ref.current) {
-        ref.current.textContent = `${Math.round(v)}${suffix}`;
-      }
-    });
-  }, [reduce, spring, suffix]);
+    let raf = 0;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        io.disconnect();
+        const t0 = performance.now();
+        const duration = 1400;
+        const tick = (t: number) => {
+          const p = Math.min(1, (t - t0) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = `${Math.round(value * eased)}${suffix}`;
+          if (p < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+      },
+      { rootMargin: "-40px" }
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [value, suffix]);
 
   return (
     <span ref={ref} className={className}>
@@ -133,8 +170,9 @@ export function Counter({
 }
 
 /**
- * Magnetic — a subtle pull toward the cursor for a primary CTA. Springs back
- * on leave. Disabled under reduced-motion (renders a plain inline wrapper).
+ * Magnetic — a subtle pull toward the cursor for a primary CTA. Eases back
+ * on leave via a CSS transition (see .magnetic). Disabled under
+ * reduced-motion. Renders identically on server and client.
  */
 export function Magnetic({
   children,
@@ -146,34 +184,24 @@ export function Magnetic({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 160, damping: 15, mass: 0.1 });
-  const sy = useSpring(y, { stiffness: 160, damping: 15, mass: 0.1 });
-
-  // Render identically on server and client (the wrapper is always a
-  // motion.span, values start at 0). Reduced motion only disables the pull, so
-  // there's no SSR/client structural mismatch.
   return (
-    <motion.span
+    <span
       ref={ref}
+      className={`magnetic inline-flex ${className}`}
       onMouseMove={(e) => {
-        if (reduce) return;
         const el = ref.current;
         if (!el) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const r = el.getBoundingClientRect();
-        x.set((e.clientX - (r.left + r.width / 2)) * strength);
-        y.set((e.clientY - (r.top + r.height / 2)) * strength);
+        const x = (e.clientX - (r.left + r.width / 2)) * strength;
+        const y = (e.clientY - (r.top + r.height / 2)) * strength;
+        el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
       }}
       onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
+        if (ref.current) ref.current.style.transform = "";
       }}
-      style={{ x: sx, y: sy }}
-      className={`inline-flex ${className}`}
     >
       {children}
-    </motion.span>
+    </span>
   );
 }

@@ -268,6 +268,18 @@ export function AuditScanner() {
   const [speedLoading, setSpeedLoading] = useState(false);
   const [step, setStep] = useState(0);
   const resultsRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Arriving with ?url= (the homepage's audit box, or a shared link): prefill
+  // and start the scan. Read from the location rather than useSearchParams so
+  // this static page stays static and needs no Suspense boundary.
+  useEffect(() => {
+    const url = new URLSearchParams(window.location.search).get("url")?.trim();
+    if (!url || !inputRef.current || !formRef.current) return;
+    inputRef.current.value = url;
+    formRef.current.requestSubmit();
+  }, []);
 
   // Walk the readout while the scan runs. Cosmetic, but the checks named are
   // the checks actually running, so it is not a fake progress bar.
@@ -332,11 +344,12 @@ export function AuditScanner() {
   if (status !== "done" || !result) {
     return (
       <div className="mx-auto w-full max-w-2xl">
-        <form onSubmit={onScan} className="flex flex-col gap-3 sm:flex-row">
+        <form ref={formRef} onSubmit={onScan} className="flex flex-col gap-3 sm:flex-row">
           <label htmlFor="audit-url" className="sr-only">
             Your website address
           </label>
           <input
+            ref={inputRef}
             id="audit-url"
             name="url"
             required

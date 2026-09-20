@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 /* ============================================================
-   KODINAV — "Meridian" (v4)
-   An engineering studio presented like a world-class practice.
-   Primarily light + editorial: warm architectural paper, near-black
-   ink, one confident cobalt accent, generous air, precise hairlines
-   and register marks. Dark bands punctuate for emphasis (hero rail,
-   CTA, footer). No glassmorphism, no neon, no gradient soup.
+   KODINAV — "Workbench" (v5)
+   An engineer's bench, not a brochure. Warm paper, near-black ink and
+   one cobalt used as a *signal* (live, measured, selected) rather than
+   decoration. Monospace carries structure — spec labels, readouts,
+   indices — and the display face is a sharp grotesk with no italic
+   serif flourish. Every number on the page is real and measured; the
+   design's job is to present evidence. Dark bands stay for emphasis
+   (CTA, footer). No glassmorphism, no neon, no gradient soup.
 
    Token and utility class NAMES are stable across redesigns — every
    page styles itself from these values, so the identity can change
@@ -77,13 +79,15 @@
   --color-violet: var(--violet);
   --color-accent-contrast: var(--accent-contrast);
   --color-brass: var(--brass);
-  /* Font var names are stable (see layout.tsx). The typefaces behind them
-     changed with v4: display = Bricolage Grotesque, body/sans = Geist,
-     mono = Geist Mono, and serif = Instrument Serif (the editorial accent). */
+  /* Font var names are stable (see lib/fonts.ts). The typefaces behind them
+     changed with v5: display = Schibsted Grotesk, body/sans = Geist,
+     mono = JetBrains Mono. There is no serif any more; `font-serif` on
+     older pages resolves to the display face so nothing falls back to
+     Georgia by accident. */
   --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-space-mono), ui-monospace, monospace;
   --font-display: var(--font-anton), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-editorial), ui-serif, Georgia, serif;
+  --font-serif: var(--font-anton), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -171,6 +175,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  font-synthesis: none;
   font-feature-settings: "cv01", "ss03";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -191,15 +196,15 @@ body {
   color: var(--accent-contrast);
 }
 
-/* ---------- Display type: Bricolage Grotesque, sentence case ---------- */
+/* ---------- Display type: Schibsted Grotesk, sentence case ---------- */
 
 h1,
 h2 {
   font-family: var(--font-display);
   font-weight: 600;
   font-synthesis: none;
-  letter-spacing: -0.022em;
-  line-height: 1.03;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
   text-wrap: balance;
 }
 
@@ -209,18 +214,18 @@ h4 {
   letter-spacing: -0.012em;
 }
 
-/* Accent word inside a heading: a flash of editorial serif italic in cobalt.
-   The one deliberate flourish in an otherwise grotesk/mono system.
+/* Accent word inside a heading: the same face, upright, in cobalt. v4's
+   serif italic is gone — on a bench the accent is a signal, not a flourish.
    (Class names kept across redesigns so every page inherits the device.) */
 .text-gradient,
 .text-accent-gradient {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0;
+  font-family: inherit;
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
   color: var(--accent);
-  font-size: 1.08em;
-  line-height: 0.9;
+  font-size: 1em;
+  line-height: inherit;
 }
 
 /* ---------- Cards: crisp white on paper, hairline, small radius ---------- */
@@ -272,8 +277,8 @@ h4 {
   background-image:
     linear-gradient(to right, var(--border) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 56px 56px;
-  opacity: 0.7;
+  background-size: 32px 32px;
+  opacity: 0.55;
 }
 
 /* A finer plotting dot-grid, for panels that want more texture */
@@ -350,7 +355,138 @@ h4 {
   transform: translateX(-50%);
 }
 
+/* ---------- Workbench primitives ---------- */
+
+/* Spec label — the mono caption that names a row, a figure, a section.
+   `.annotation` (older pages) is the same thing under its v4 name. */
+.spec {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+}
+
+/* Readout — a measured value: mono, tabular, never proportional */
+.readout {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: 0;
+}
+
+/* The layout's 12-column grid, made visible as hairlines (hero bench top) */
+.bg-columns {
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
+  background-size: calc(100% / 12) 100%;
+  background-position: -1px 0;
+}
+
+/* Plate — a flat frame for a real screenshot; no browser-chrome costume */
+.plate {
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  background: var(--surface-raised);
+}
+
 /* ---------- Motion ---------- */
+
+/* Scroll reveal (components/motion.tsx) — transform-only, CSS-driven.
+   A reveal that never fires leaves a 28px offset, never a blank section. */
+[data-reveal] {
+  transform: translateY(var(--y, 28px));
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s);
+}
+[data-reveal][data-in] {
+  transform: none;
+}
+[data-stagger] [data-stagger-item] {
+  transform: translateY(24px);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i, 0) * 90ms);
+}
+[data-stagger][data-in] [data-stagger-item] {
+  transform: none;
+}
+
+/* Magnetic CTA: the pull is set inline by JS; the spring-back is this */
+.magnetic {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Desktop mega-menus: always mounted (links stay in the HTML), shown by class */
+.mega {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 10px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.18s;
+}
+.mega.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Mobile overlay menu: fade the sheet, then rise each item in turn */
+.menu-overlay {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+.menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+.menu-overlay .menu-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(60ms + var(--i, 0) * 50ms);
+}
+.menu-overlay.is-open .menu-item {
+  opacity: 1;
+  transform: none;
+}
+.menu-overlay .menu-foot {
+  opacity: 0;
+  transition: opacity 0.3s ease 0.4s;
+}
+.menu-overlay.is-open .menu-foot {
+  opacity: 1;
+}
+
+/* Floating UI (sticky CTA, back-to-top): fade + rise, out of the tab order
+   while hidden via `inert` */
+.float-ui {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.3s;
+}
+.float-ui.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.float-ui:not(.is-visible) {
+  transform: translate(var(--float-x, 0), 12px);
+}
+
 
 @keyframes marquee {
   from {

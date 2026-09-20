@@ -1,16 +1,12 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { ButtonLink, PulseDot } from "./ui";
 import { Magnetic } from "./motion";
-import { HeroVisual } from "./HeroVisual";
-
-const ease = [0.22, 1, 0.36, 1] as const;
+import { Instrument } from "./home/Instrument";
+import { buildInfo } from "@/lib/buildInfo";
 
 /**
  * CSS-driven line reveal: the headline is visible at first paint even before
- * JS hydrates — it carries the LCP, so it must not depend on framer-motion.
+ * JS hydrates — it carries the LCP, so it must not depend on a script.
  */
 function RevealLine({
   children,
@@ -26,123 +22,142 @@ function RevealLine({
   );
 }
 
-/* Quiet, verifiable numbers — every one of them literally true. */
-const figures = [
-  { value: "07", label: "Products shipped and live" },
-  { value: "03", label: "Markets served, one desk" },
-  { value: "<1s", label: "Load time we build to" },
-  { value: "100%", label: "Code ownership, yours" },
+const markets = [
+  { href: "/web-development-hong-kong", label: "Hong Kong", lang: "en" },
+  { href: "/zh-hk", label: "香港（繁中）", lang: "zh-HK" },
+  { href: "/web-development-taiwan", label: "Taiwan", lang: "en" },
+  { href: "/zh-tw", label: "台灣（繁中）", lang: "zh-TW" },
 ];
 
-export function Hero() {
+export function Hero({
+  pageCount,
+  toolCount,
+  productCount,
+}: {
+  pageCount: number;
+  toolCount: number;
+  productCount: number;
+}) {
+  const facts = [
+    buildInfo.commit && `build ${buildInfo.commit}`,
+    buildInfo.date,
+    buildInfo.next && `Next.js ${buildInfo.next}`,
+    `${pageCount} pages`,
+    `${toolCount} free tools`,
+    `${productCount} shipped products`,
+  ].filter(Boolean) as string[];
+
   return (
-    <section className="relative flex min-h-[94svh] flex-col justify-between overflow-hidden pt-[calc(7rem+env(safe-area-inset-top))] sm:pt-40">
-      <div
-        aria-hidden
-        className="bg-grid absolute inset-0"
-        style={{
-          maskImage:
-            "radial-gradient(120% 90% at 50% 0%, black 30%, transparent 78%)",
-          WebkitMaskImage:
-            "radial-gradient(120% 90% at 50% 0%, black 30%, transparent 78%)",
-        }}
-      />
+    <section className="relative overflow-hidden pt-[calc(6.5rem+env(safe-area-inset-top))] sm:pt-36">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-8">
+        {/* the layout's own 12-column grid, made visible: the bench top */}
+        <div aria-hidden className="bg-columns pointer-events-none absolute inset-x-5 inset-y-0 hidden opacity-70 sm:inset-x-8 lg:block" />
 
-      <div className="relative mx-auto grid w-full max-w-7xl flex-1 grid-cols-1 items-center gap-12 px-5 pb-14 sm:px-8 lg:grid-cols-[1.06fr_0.94fr] lg:gap-10">
-        {/* headline column */}
-        <div>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="flex flex-wrap items-center gap-x-4 gap-y-1.5"
-          >
-            <span className="annotation flex items-center gap-2 text-foreground/70">
-              <PulseDot />
-              Taking new projects
-            </span>
-            <span aria-hidden className="hidden h-3 w-px bg-line-strong sm:block" />
-            <span className="annotation hidden sm:inline">
-              Independent software studio · Est. 2024
-            </span>
-          </motion.div>
-
-          <h1 className="mt-7 text-[clamp(2.7rem,6.4vw,5.6rem)]">
-            <RevealLine delay={0.05}>We build software</RevealLine>
-            <RevealLine delay={0.15}>that helps businesses</RevealLine>
-            <RevealLine delay={0.25}>
-              <span className="text-gradient">grow</span>.
-            </RevealLine>
-          </h1>
-
-          <div
-            className="rise-soft mt-8 flex max-w-xl flex-col items-start gap-8"
-            style={{ animationDelay: "0.35s" }}
-          >
-            <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
-              Websites, web applications and mobile apps, engineered for speed,
-              search and the next five years. Every project is designed, built
-              and supported personally by the founder.
+        <div className="relative grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-8">
+          {/* headline column */}
+          <div className="lg:col-span-7">
+            <p className="spec flex flex-wrap items-center gap-x-4 gap-y-1.5 text-foreground/70">
+              <span className="flex items-center gap-2">
+                <PulseDot />
+                Taking new projects
+              </span>
+              <span aria-hidden className="hidden h-3 w-px bg-line-strong sm:block" />
+              <span className="hidden sm:inline">Independent software studio · Est. 2024</span>
             </p>
-            <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
-              <Magnetic>
-                <ButtonLink href="/contact" size="lg" className="w-full sm:w-auto">
-                  Book discovery call
+
+            <h1 className="mt-7 text-[clamp(2.6rem,6.2vw,5.4rem)]">
+              <RevealLine delay={0.05}>We build software</RevealLine>
+              <RevealLine delay={0.15}>that helps businesses</RevealLine>
+              <RevealLine delay={0.25}>
+                <span className="text-accent">grow</span>.
+              </RevealLine>
+            </h1>
+
+            <div
+              className="rise-soft mt-8 flex max-w-xl flex-col items-start gap-7"
+              style={{ animationDelay: "0.35s" }}
+            >
+              <p className="text-pretty text-base leading-relaxed text-muted sm:text-lg">
+                Websites, web applications and mobile apps, engineered for speed,
+                search and the next five years — designed, built and supported
+                personally by the founder.{" "}
+                <span className="text-foreground">
+                  This page measures itself while you read it; the numbers beside
+                  it are live.
+                </span>
+              </p>
+
+              <div className="flex w-full flex-col items-stretch gap-3 sm:w-auto sm:flex-row sm:items-center sm:gap-4">
+                <Magnetic>
+                  <ButtonLink href="/contact" size="lg" className="w-full sm:w-auto">
+                    Book discovery call
+                  </ButtonLink>
+                </Magnetic>
+                <ButtonLink href="/work" variant="outline" size="lg" className="w-full sm:w-auto">
+                  See the work
                 </ButtonLink>
-              </Magnetic>
-              <ButtonLink
-                href="/work"
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto"
-              >
-                Explore work
-              </ButtonLink>
+              </div>
+
+              {/* A working instrument, not a promise: submits to the real audit
+                  tool, which reads ?url= and starts the scan. Plain GET form —
+                  works before hydration and without JavaScript. */}
+              <form action="/free-website-audit" method="get" className="w-full max-w-xl">
+                <label htmlFor="hero-audit-url" className="spec mb-2 block">
+                  Or paste your website — free 60-second audit, no email needed
+                </label>
+                <div className="flex rounded-[2px] border border-line-strong bg-surface-raised focus-within:border-accent">
+                  <input
+                    id="hero-audit-url"
+                    name="url"
+                    type="text"
+                    inputMode="url"
+                    autoComplete="url"
+                    spellCheck={false}
+                    required
+                    placeholder="yourwebsite.com"
+                    className="min-h-12 w-full min-w-0 bg-transparent px-4 font-mono text-sm text-foreground placeholder:text-faint outline-none"
+                  />
+                  <button
+                    type="submit"
+                    className="flex shrink-0 items-center gap-2 border-l border-line-strong px-4 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-foreground transition-colors hover:bg-foreground hover:text-background"
+                  >
+                    Audit <span aria-hidden>→</span>
+                  </button>
+                </div>
+              </form>
             </div>
-            <p className="annotation">
-              Not ready to talk?{" "}
-              <Link href="/free-website-audit" className="u-draw text-accent">
-                Run the free 60-second audit →
-              </Link>
-            </p>
+          </div>
+
+          {/* instrument column */}
+          <div
+            className="rise-soft lg:col-span-5 lg:pt-2"
+            style={{ animationDelay: "0.45s" }}
+          >
+            <Instrument />
           </div>
         </div>
-
-        {/* signature visual */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.35, ease }}
-          className="mx-auto w-full max-w-lg lg:mx-0 lg:pl-6"
-        >
-          <HeroVisual />
-        </motion.div>
       </div>
 
-      {/* index / metrics strip */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.9, delay: 0.8, ease }}
-        className="relative border-t border-line-strong bg-background/40"
-      >
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 px-5 sm:px-8 lg:grid-cols-4">
-          {figures.map((f, i) => (
-            <div
-              key={f.label}
-              className={`flex flex-col gap-1.5 py-6 sm:py-7 ${
-                i > 0 ? "lg:border-l lg:border-line lg:pl-8" : ""
-              }`}
-            >
-              <span className="tabular font-display text-3xl leading-none text-foreground sm:text-4xl">
-                {f.value}
-                <span className="text-accent">.</span>
-              </span>
-              <span className="annotation">{f.label}</span>
-            </div>
-          ))}
+      {/* index strip: markets + build facts */}
+      <div className="mt-14 border-y border-line-strong bg-background/60 sm:mt-20">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8">
+          <p className="spec flex flex-wrap items-center gap-x-5 gap-y-1.5 border-b border-line py-3">
+            <span className="text-foreground/70">Now serving Hong Kong &amp; Taiwan</span>
+            {markets.map((m) => (
+              <Link
+                key={m.href}
+                href={m.href}
+                hrefLang={m.lang}
+                lang={m.lang}
+                className="u-draw text-foreground transition-colors hover:text-accent"
+              >
+                {m.label}
+              </Link>
+            ))}
+          </p>
+          <p className="spec tabular py-3 text-faint">{facts.join(" · ")}</p>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

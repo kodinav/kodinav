@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState, type CSSProperties } from "react";
 import { nav } from "@/data/site";
 import { featuredTools } from "@/data/tools";
 import { ServicesMenu } from "./ServicesMenu";
@@ -84,7 +83,7 @@ export function Navbar() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className={`u-draw font-mono text-[0.7rem] uppercase tracking-[0.15em] transition-colors ${
+                    className={`u-draw font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-colors ${
                       active
                         ? "text-accent"
                         : "text-foreground/75 hover:text-foreground"
@@ -111,7 +110,7 @@ export function Navbar() {
 
           <Link
             href="/contact"
-            className="hidden shrink-0 items-center gap-2 rounded-[3px] border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-background transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast lg:inline-flex"
+            className="hidden shrink-0 items-center gap-2 rounded-[2px] border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-background transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast lg:inline-flex"
           >
             Book a call
             <span aria-hidden>→</span>
@@ -121,8 +120,9 @@ export function Navbar() {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             aria-label={open ? "Close menu" : "Open menu"}
-            className={`relative z-50 -m-3 ml-auto min-h-11 min-w-11 p-3 font-mono text-[0.7rem] uppercase tracking-[0.15em] active:opacity-60 lg:hidden ${
+            className={`relative z-50 -m-3 ml-auto min-h-11 min-w-11 p-3 font-mono text-[0.7rem] uppercase tracking-[0.14em] active:opacity-60 lg:hidden ${
               open ? "text-accent-contrast" : "text-foreground"
             }`}
           >
@@ -131,85 +131,77 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Full-screen ink overlay menu (mobile) */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="ink bg-noise fixed inset-0 z-40 flex h-dvh touch-pan-y flex-col justify-between overflow-y-auto overscroll-contain px-6 pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] lg:hidden"
-          >
-            <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
-            <ul className="relative flex flex-col">
-              {nav.map((item, i) => (
-                <motion.li
-                  key={item.href}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="border-b border-line"
-                >
-                  <Link
-                    href={item.href}
-                    className="group flex items-baseline gap-4 py-4 active:opacity-70"
-                  >
-                    <span className="font-mono text-xs text-faint">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="font-display text-[clamp(2.2rem,9vw,2.9rem)] leading-none tracking-tight transition-colors group-hover:text-accent group-active:text-accent">
-                      {item.label}
-                    </span>
-                    <span aria-hidden className="ml-auto font-mono text-lg text-faint">
-                      →
-                    </span>
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="relative flex flex-col gap-4 pt-6"
+      {/* Full-screen ink overlay menu (mobile). Always mounted; `inert` keeps
+          its links out of the tab order while closed and CSS handles the
+          fade — no motion library needed for a menu. */}
+      <div
+        id="mobile-menu"
+        inert={!open}
+        aria-hidden={!open}
+        className={`menu-overlay ink bg-noise fixed inset-0 z-40 flex h-dvh touch-pan-y flex-col justify-between overflow-y-auto overscroll-contain px-6 pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] lg:hidden ${
+          open ? "is-open" : ""
+        }`}
+      >
+        <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
+        <ul className="relative flex flex-col">
+          {nav.map((item, i) => (
+            <li
+              key={item.href}
+              style={{ "--i": i } as CSSProperties}
+              className="menu-item border-b border-line"
             >
-              <div>
-                <p className="annotation mb-2.5">Popular free tools</p>
-                <div className="flex flex-wrap gap-2">
-                  {featuredTools.map((t) => (
-                    <Link
-                      key={t.href}
-                      href={t.href}
-                      className="rounded-[3px] border border-line px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted active:border-accent active:text-accent"
-                    >
-                      {t.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
               <Link
-                href="/contact"
-                className="flex min-h-13 items-center justify-center gap-3 rounded-[3px] bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.15em] text-accent-contrast active:scale-[0.98]"
+                href={item.href}
+                className="group flex items-baseline gap-4 py-4 active:opacity-70"
               >
-                Book discovery call →
+                <span className="font-mono text-xs text-faint">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span className="font-display text-[clamp(2.2rem,9vw,2.9rem)] leading-none tracking-tight transition-colors group-hover:text-accent group-active:text-accent">
+                  {item.label}
+                </span>
+                <span aria-hidden className="ml-auto font-mono text-lg text-faint">
+                  →
+                </span>
               </Link>
-              <div className="flex gap-5 text-sm text-muted">
-                <Link href="/zh-hk" hrefLang="zh-HK" lang="zh-HK" className="active:text-accent">
-                  香港（繁中）
+            </li>
+          ))}
+        </ul>
+        <div className="menu-foot relative flex flex-col gap-4 pt-6">
+          <div>
+            <p className="spec mb-2.5">Popular free tools</p>
+            <div className="flex flex-wrap gap-2">
+              {featuredTools.map((t) => (
+                <Link
+                  key={t.href}
+                  href={t.href}
+                  className="rounded-[2px] border border-line px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted active:border-accent active:text-accent"
+                >
+                  {t.name}
                 </Link>
-                <Link href="/zh-tw" hrefLang="zh-TW" lang="zh-TW" className="active:text-accent">
-                  台灣（繁中）
-                </Link>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="annotation">Independent software studio</p>
-                <p className="annotation">Est. 2024</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              ))}
+            </div>
+          </div>
+          <Link
+            href="/contact"
+            className="flex min-h-13 items-center justify-center gap-3 rounded-[2px] bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.14em] text-accent-contrast active:scale-[0.98]"
+          >
+            Book discovery call →
+          </Link>
+          <div className="flex gap-5 text-sm text-muted">
+            <Link href="/zh-hk" hrefLang="zh-HK" lang="zh-HK" className="active:text-accent">
+              香港（繁中）
+            </Link>
+            <Link href="/zh-tw" hrefLang="zh-TW" lang="zh-TW" className="active:text-accent">
+              台灣（繁中）
+            </Link>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="spec">Independent software studio</p>
+            <p className="spec">Est. 2024</p>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

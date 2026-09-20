@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 /* ------------------------------------------------------------------ *
- * Buttons — crisp editorial rectangles with a mono label. The primary
- * is a solid ink fill that flips to cobalt on hover; on .ink sections
- * the tokens invert it to a light button automatically.
+ * Buttons — square-cornered instrument controls with a mono label. The
+ * primary is a solid ink fill that flips to cobalt on hover; on .ink
+ * sections the tokens invert it to a light button automatically.
  * ------------------------------------------------------------------ */
 
 export function ButtonLink({
@@ -23,10 +23,10 @@ export function ButtonLink({
   external?: boolean;
 }) {
   const base =
-    "group relative inline-flex items-center justify-center gap-2.5 rounded-[3px] font-mono text-[0.7rem] uppercase tracking-[0.15em] transition-[background-color,border-color,color,transform] duration-300 whitespace-nowrap border active:scale-[0.98]";
+    "group relative inline-flex items-center justify-center gap-2.5 rounded-[2px] font-mono text-[0.7rem] uppercase tracking-[0.14em] transition-[background-color,border-color,color,transform] duration-300 whitespace-nowrap border active:scale-[0.98]";
   const sizes = {
     md: "px-6 py-3.5",
-    lg: "px-7 py-4 sm:px-8 sm:py-[1.15rem]",
+    lg: "px-7 py-4 sm:px-8 sm:py-[1.1rem]",
   };
   const variants = {
     primary:
@@ -74,7 +74,7 @@ export function ArrowLink({
   className?: string;
   external?: boolean;
 }) {
-  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-foreground ${className}`;
+  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-foreground ${className}`;
   const arrow = (
     <span
       aria-hidden
@@ -99,7 +99,8 @@ export function ArrowLink({
   );
 }
 
-/* Eyebrow — a register mark + a mono label. Opens most sections. */
+/* Eyebrow — a short cobalt rule + a mono spec label. Opens most sections.
+   ("01 — Work", "Fig. 02", ...) */
 export function Eyebrow({
   children,
   className = "",
@@ -108,8 +109,8 @@ export function Eyebrow({
   className?: string;
 }) {
   return (
-    <p className={`annotation flex items-center gap-3 text-foreground/70 ${className}`}>
-      <span className="crosshair" aria-hidden />
+    <p className={`spec flex items-center gap-3 text-foreground/70 ${className}`}>
+      <span aria-hidden className="h-px w-5 flex-none bg-accent" />
       {children}
     </p>
   );
@@ -133,7 +134,7 @@ export function SectionHeading({
   return (
     <div className={`flex flex-col gap-5 ${alignCls} ${className}`}>
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-      <h2 className="text-balance text-[clamp(2rem,5vw,3.4rem)] leading-[1.04] text-foreground">
+      <h2 className="text-balance text-[clamp(1.9rem,4.4vw,3rem)] leading-[1.02] text-foreground">
         {title}
       </h2>
       {lead && (
@@ -159,7 +160,7 @@ export function Chip({
 }) {
   return (
     <span
-      className={`inline-flex items-center rounded-[3px] border border-line px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted ${className}`}
+      className={`inline-flex items-center rounded-[2px] border border-line px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted ${className}`}
     >
       {children}
     </span>
@@ -182,19 +183,37 @@ export function Badge({
   };
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] ${tones[tone]} ${className}`}
+      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[0.625rem] uppercase tracking-[0.12em] ${tones[tone]} ${className}`}
     >
       {children}
     </span>
   );
 }
 
-/* Live pulse dot — the "available" signal, reused across hero/nav. */
+/* Live pulse dot — the "available" / "live" signal, reused across hero/nav. */
 export function PulseDot({ className = "" }: { className?: string }) {
   return (
     <span className={`relative flex size-1.5 ${className}`}>
       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
       <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
     </span>
+  );
+}
+
+/* Spec row — "label · value" in mono, the workbench's basic unit. */
+export function SpecRow({
+  label,
+  children,
+  className = "",
+}: {
+  label: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`flex items-baseline justify-between gap-4 ${className}`}>
+      <dt className="spec">{label}</dt>
+      <dd className="readout text-right text-foreground">{children}</dd>
+    </div>
   );
 }

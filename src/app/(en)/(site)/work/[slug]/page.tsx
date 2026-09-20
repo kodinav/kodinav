@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { CtaSection } from "@/components/CtaSection";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion";
 import { PhoneShot, ProjectShot } from "@/components/ProjectVisual";
-import { Chip, Eyebrow, SectionHeading } from "@/components/ui";
+import { ButtonLink, Chip, Eyebrow, SectionHeading } from "@/components/ui";
 import { getProject, projects } from "@/data/projects";
 import { site } from "@/data/site";
 import { breadcrumbSchema } from "@/lib/schema";
@@ -52,6 +52,9 @@ export async function generateMetadata({
   };
 }
 
+/** "https://www.example.com/" → "example.com", for display only. */
+const displayUrl = (u: string) => u.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+
 const narrativeSections = [
   { key: "problem", label: "The Problem" },
   { key: "research", label: "Research" },
@@ -82,6 +85,10 @@ export default async function CaseStudyPage({
     // Reference the sitewide Person/Organization nodes instead of re-declaring them
     author: { "@id": `${site.url}/#founder` },
     publisher: { "@id": `${site.url}/#studio` },
+    // The running product itself, when its address is public
+    ...(project.url
+      ? { mentions: { "@type": "WebSite", name: project.name, url: project.url } }
+      : {}),
   };
 
   const crumbs = breadcrumbSchema([
@@ -130,6 +137,13 @@ export default async function CaseStudyPage({
                 <Chip key={t}>{t}</Chip>
               ))}
             </div>
+            {project.url && (
+              <div>
+                <ButtonLink href={project.url} variant="outline" external>
+                  Visit the live site
+                </ButtonLink>
+              </div>
+            )}
           </Reveal>
         </div>
       </section>
@@ -139,7 +153,7 @@ export default async function CaseStudyPage({
         <Reveal>
           <ProjectShot
             image={project.images.cover}
-            caption={project.url ?? project.name}
+            caption={project.url ? displayUrl(project.url) : project.name}
             priority
             sizes="(max-width: 1024px) 100vw, 960px"
           />
