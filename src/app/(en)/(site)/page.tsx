@@ -18,6 +18,7 @@ import { projects } from "@/data/projects";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
 import { featuredTools, TOOL_COUNT } from "@/data/tools";
+import { numberWord } from "@/lib/words";
 
 const byslug = Object.fromEntries(services.map((s) => [s.slug, s]));
 
@@ -76,7 +77,7 @@ const advantages = [
 ];
 
 const metrics = [
-  { value: 7, suffix: "", label: "Products designed, built and shipped" },
+  { value: projects.length, suffix: "", label: "Products designed, built and shipped" },
   { value: 120, suffix: "+", label: "Countries reached — Flaming Logistiks" },
   { value: 450, suffix: "", label: "Destinations shipped — Triplipi" },
   { value: 100, suffix: "%", label: "Code and IP ownership, always yours" },
@@ -111,7 +112,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
+      <Hero productCount={projects.length} />
 
       {/* ---- Clients marquee: honest, real, shipped ---- */}
       <section className="border-y border-line-strong bg-surface/40 py-6">
@@ -467,7 +468,7 @@ export default function Home() {
               <div className="flex flex-col items-start gap-7">
                 <Eyebrow>No. 06 · A note from the studio</Eyebrow>
                 <blockquote className="font-serif text-[clamp(1.6rem,3.4vw,2.4rem)] leading-[1.25] text-foreground italic">
-                  &ldquo;I would rather show you seven projects I actually built
+                  &ldquo;I would rather show you {numberWord(projects.length)} projects I actually built
                   than claim a hundred I did not. Every screen on this site links
                   to real, running software.&rdquo;
                 </blockquote>

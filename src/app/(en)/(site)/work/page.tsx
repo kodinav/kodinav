@@ -4,6 +4,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui";
 import { projects } from "@/data/projects";
+import { capitalize, numberWord } from "@/lib/words";
 import { site } from "@/data/site";
 import { ogImage } from "@/lib/og";
 import { metaDescription } from "@/lib/seo";
@@ -63,9 +64,11 @@ export default function WorkPage() {
               Real, running <span className="text-gradient">software</span>.
             </h1>
             <p className="max-w-2xl text-pretty text-lg leading-relaxed text-muted">
-              Seven projects you can actually open: two learning platforms, a
-              travel product, an online store, a dental clinic, an enterprise
-              logistics platform and a consumer web app. Every case study follows
+              {capitalize(numberWord(projects.length))} projects you can actually
+              open: a publishing house with its own bookstore and research
+              platform, two learning platforms, a travel product, an online
+              store, a dental clinic, an enterprise logistics platform and a
+              consumer web app. Every case study follows
               the same honest structure: the business problem, what was built,
               and what changed.
             </p>

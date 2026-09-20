@@ -34,7 +34,11 @@ const figures = [
   { value: "100%", label: "Code ownership, yours" },
 ];
 
-export function Hero() {
+export function Hero({ productCount = 7 }: { productCount?: number }) {
+  // The first figure is counted from the portfolio, never typed
+  const shown = figures.map((f, i) =>
+    i === 0 ? { ...f, value: String(productCount).padStart(2, "0") } : f
+  );
   return (
     <section className="relative flex min-h-[94svh] flex-col justify-between overflow-hidden pt-[calc(7rem+env(safe-area-inset-top))] sm:pt-40">
       <div
@@ -127,7 +131,7 @@ export function Hero() {
         className="relative border-t border-line-strong bg-background/40"
       >
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-8 px-5 sm:px-8 lg:grid-cols-4">
-          {figures.map((f, i) => (
+          {shown.map((f, i) => (
             <div
               key={f.label}
               className={`flex flex-col gap-1.5 py-6 sm:py-7 ${

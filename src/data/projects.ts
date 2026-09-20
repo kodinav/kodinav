@@ -33,6 +33,95 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: "lighthouse-publication",
+    name: "Lighthouse Publication",
+    industry: "Publishing · Bookstore & Research Platform",
+    category: "E-Commerce & Publishing Platform",
+    year: "2026",
+    url: "https://lighthousepublication.com",
+    summary:
+      "The complete digital home of an independent publishing house: an online bookstore with live payments and stock, a peer-reviewed research platform, a publishing division with an author pipeline, and the single admin that runs all of it.",
+    challenge:
+      "An independent publisher working across trade books, academic research and author services had no system of its own. Books sold through marketplaces that kept the margin and the customer, submissions and peer review ran over email, and an author waiting on a book had nobody to ask but the editor.",
+    solution:
+      "One platform with four front doors: the house site, a bookstore readers buy from directly, a research platform where papers are submitted, reviewed and published, and a publishing division where authors follow their book stage by stage. Each has its own masthead and tone; all of them share one catalogue, one login and one admin.",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Prisma", "MySQL", "Cashfree"],
+    impact: [
+      "Readers buy direct, so the publisher keeps the margin and the customer relationship",
+      "Submissions, peer review and author progress live in one system instead of inboxes",
+      "One admin runs the catalogue, orders, payments, journals and the publishing pipeline",
+    ],
+    accent: "#c8102e",
+    images: {
+      cover: {
+        src: "/projects/lighthouse-publication-home.jpg",
+        alt: "Lighthouse Publication homepage: the headline 'Your story. Our craft.' beside three book jackets, above figures for titles, authors, countries and peer-reviewed journals",
+      },
+      desktop: [
+        {
+          src: "/projects/lighthouse-publication-bookstore.jpg",
+          alt: "Lighthouse Book Store: a New Releases shelf of Urdu and Hindi titles with rupee prices, discounts and add-to-cart buttons, above a 'Books at ₹10' collection",
+        },
+        {
+          src: "/projects/lighthouse-publication-academic.jpg",
+          alt: "Lighthouse Academic research platform: 'Research that can be found, read and cited', with search across journals, books and articles in 25 disciplines and a 'Submit your research' button",
+        },
+        {
+          src: "/projects/lighthouse-publication-publishing.jpg",
+          alt: "Lighthouse Publishing division homepage: 'Where every book finds its readers', with an author testimonial, publishing figures and the Lighthouse Prize 2026 banner",
+        },
+      ],
+      mobile: [
+        {
+          src: "/projects/lighthouse-publication-mobile.jpg",
+          alt: "Lighthouse Publication homepage on a mobile phone, with 'Publish your book' and 'Explore our catalogue' buttons above a carousel of book jackets",
+        },
+      ],
+    },
+    caseStudy: {
+      overview:
+        "Lighthouse Publication is an independent publishing house working across trade books, academic research and author services. The engagement delivered its whole digital operation as one platform: the house site, a bookstore with live payments, a peer-reviewed research platform with its own submission and review workflow, a publishing division where authors track a book from manuscript to market, reader and author dashboards, and the admin panel the team runs all of it from.",
+      problem:
+        "A publisher is really several businesses sharing a name. It sells books to readers, publishes research for academics and produces books for authors, and each audience expects a different experience. Before this build those lived in different places: books sold through marketplaces that kept both the margin and the customer's details, submissions and peer review ran through email threads, and an author waiting on their book had nobody to ask but the editor. None of it shared a catalogue, an account or a record.",
+      research:
+        "I started from the audiences rather than from a feature list. A reader wants to find a book and check out in a minute, in the language they read in. A researcher wants to know a journal is credible, how to submit, and where their paper stands. An author wants to see their book moving. Mapping those journeys made the architecture clear: sections that look and behave differently on the surface, sharing one catalogue, one account system and one admin underneath.",
+      planning:
+        "The build was sliced so each piece went live and earned its keep before the next began: the house site and catalogue first, then the bookstore with real checkout, then the research platform, then the publishing division and its author dashboard. Payments were treated as the riskiest part and designed on paper before any code: an order is only ever written once the money has actually landed, never when a shopper merely reaches the payment page.",
+      design:
+        "Each front has its own masthead and tone. The bookstore is warm and lets the jackets do the talking, with Urdu, Hindi and English titles browsable by language. The research platform is sober and citation-first, with search, review timelines and citation export on the page. The publishing division is bold and service-led. Underneath, they share one typographic and spacing system, so four mastheads still read as one house.",
+      development:
+        "Built with Next.js and TypeScript on Prisma and MySQL, and deployed from GitHub to the publisher's own hosting. The storefront is cached and shared across visitors, then expired the moment an editor changes a price or an order takes the last copy, so pages are fast without ever showing stale stock. Checkout prices the basket on the server, hands off to the payment gateway, and confirms the amount with the gateway itself before writing the order, decrementing stock and emailing both the customer and the shop. The payment layer is gateway-agnostic, so a second provider plugs in without touching the checkout.",
+      challenges: [
+        {
+          challenge:
+            "Online payments fail in untidy ways: shoppers close the tab, confirmations arrive twice, a browser says 'paid' when the bank disagrees. Treating a started checkout as an order would fill the admin with sales that never happened.",
+          solution:
+            "A checkout in flight is its own record, not an order. The order is created in exactly one place, only after the gateway itself confirms the payment and the amount matches the quote, whether that confirmation arrives by the shopper's return, the gateway's webhook or a later reconciliation sweep.",
+        },
+        {
+          challenge:
+            "Four audiences with different needs could easily have become four separate websites to maintain, each with its own logins and its own copy of the catalogue.",
+          solution:
+            "One codebase, one database and one account system, with each front given its own theme, navigation and dashboard on top. A title, an author or a user exists once, and every section reads from the same record.",
+        },
+        {
+          challenge:
+            "A fast storefront usually means a cached one, and a cached bookstore shows yesterday's price and sells stock that is already gone.",
+          solution:
+            "Catalogue reads are cached and shared, then expired outright the moment an editor saves a change or an order takes a copy off the shelf, so the very next reader sees the truth.",
+        },
+      ],
+      results: [
+        { metric: "4 in 1", label: "house site, bookstore, research platform and publishing division on one platform" },
+        { metric: "120+", label: "pages and screens shipped, from storefront to admin" },
+        { metric: "Live", label: "online payments, stock control and order emails, end to end" },
+        { metric: "1 admin", label: "for catalogue, orders, journals and the author pipeline" },
+      ],
+      outcome:
+        "Lighthouse Publication now runs on its own platform rather than on marketplaces and inboxes. Readers buy direct, researchers submit and are reviewed in one place, authors watch their book move through the house, and the team runs catalogue, orders, payments and publishing from a single admin. It is one of the largest platforms the studio has shipped, and it went live front by front, without a single big-bang launch.",
+    },
+  },
+  {
     slug: "lighthouse-classes",
     name: "Lighthouse Classes",
     industry: "Education · Language Learning Platform",
