@@ -56,6 +56,8 @@ type World = {
   swim: number;
   /** The other fish: unlit in the deep, left behind in the shallows. */
   others: number;
+  /** Dots shed into a wake behind a swimmer or a flyer. */
+  trail: number;
   /** Dawn light on the horizon. */
   dawn: number;
   /** Camera orbit, radians. */
@@ -88,30 +90,30 @@ function track<T>(first: T, rows: [number, Partial<T>][]): Keyed<T>[] {
 }
 
 const WORLD = track<World>(
-  { paper: 0, night: 0, cloud: 0, cr: 1, stage: 0, div: 0, surf: 9, depth: 0.9, bank: 0, perch: 0, glow: 0, speed: 0, swim: 1, others: 0, dawn: 0, yaw: 0, pitch: 0 },
+  { paper: 0, night: 0, cloud: 0, cr: 1, stage: 0, div: 0, surf: 9, depth: 0.9, bank: 0, perch: 0, glow: 0, speed: 0, swim: 1, others: 0, trail: 0, dawn: 0, yaw: -0.1, pitch: 0.08 },
   [
     [0, {}],
-    [0.052, {}],
-    [0.1, { div: 3 }], //                                     one cell has become eight
+    [0.052, { yaw: 0.1 }],
+    [0.1, { div: 3, yaw: 0.3, pitch: 0 }], //                                     one cell has become eight
     [0.104, {}],
-    [0.128, { paper: 1, stage: 1, swim: 0.2, yaw: 0.2, depth: 0.6 }], // the notebook: a fish, pinned
-    [0.172, {}],
-    [0.196, { paper: 0, night: 1, depth: 1, glow: 1, others: 1, swim: 0.8, yaw: 0.5 }], // the deep
-    [0.238, {}],
-    [0.262, { night: 0, glow: 0, depth: 0.18, speed: 1, swim: 1, yaw: 0.42 }], // the shallows
-    [0.303, {}],
-    [0.332, { stage: 2, surf: -0.2, bank: 1, speed: 0, others: 0, cloud: 0.8, depth: 0.08, yaw: 0.32 }], // the shore
-    [0.372, {}],
+    [0.128, { paper: 1, stage: 1, swim: 0.2, yaw: 0.26, depth: 0.6 }], // the notebook: a fish, pinned
+    [0.172, { yaw: 0.12 }],
+    [0.196, { paper: 0, night: 1, depth: 1, glow: 1, others: 1, swim: 0.8, yaw: 0.42, trail: 0.3 }], // the deep
+    [0.238, { yaw: 0.66 }],
+    [0.262, { night: 0, glow: 0, depth: 0.18, speed: 1, swim: 1, yaw: 0.5, trail: 1 }], // the shallows
+    [0.303, { yaw: 0.28 }],
+    [0.332, { stage: 2, surf: -0.2, bank: 1, speed: 0, others: 0, cloud: 0.8, depth: 0.08, yaw: 0.38, trail: 0 }], // the shore
+    [0.372, { yaw: 0.2 }],
     [0.398, { paper: 1 }], //                                  the cabinet
     [0.64, { bank: 0, surf: -9 }],
     [0.7, { stage: 3, cloud: 0.25 }],
     [0.716, {}],
-    [0.742, { paper: 0, night: 1, perch: 1, yaw: 0.3 }], //    the night
-    [0.852, {}],
+    [0.742, { paper: 0, night: 1, perch: 1, yaw: 0.22 }], //   the night
+    [0.852, { yaw: 0.46 }],
     [0.872, { stage: 4, yaw: 0.1 }], //                        the egg
     [0.93, { dawn: 0.35 }],
-    [0.955, { stage: 5, night: 0, dawn: 1, perch: 0, cloud: 1, yaw: 0.34, pitch: 0.9 }], // first flight, seen from above
-    [1, { dawn: 0.7 }],
+    [0.955, { stage: 5, night: 0, dawn: 1, perch: 0, cloud: 1, yaw: 0.44, pitch: 0.9, trail: 0.8 }], // first flight, seen from above
+    [1, { dawn: 0.7, yaw: 0.2, pitch: 0.78 }],
   ],
 );
 
@@ -333,13 +335,27 @@ void main(){
     water=mix(water, mix(vec3(.004,.008,.03),vec3(.02,.035,.10),uv.y), uNight);
     water*=1.+.10*(fbm(p*1.3+3.)-.5);
 
-    // shafts of light, stippled
-    vec2 sp=vec2(p.x+p.y*.38,p.y);
-    float sh=smoothstep(.22,.95,vnoise(vec2(sp.x*1.1+uTime*.025,2.)))*(.55+.45*vnoise(vec2(sp.x*4.-uTime*.05,9.)));
-    sh*=smoothstep(-1.2,.9,p.y)*(1.-uNight)*(1.-.35*uDepth);
-    float shq=step(bayer8(frag/(2.*px)),sh*.70);
-    water+=vec3(.20,.32,.44)*shq*.5+vec3(.06,.10,.15)*sh;
+    // light from above: a pool of it, and rays that fan out from one point and drift
+    vec2 lp=p-vec2(.22*asp,1.75);
+    float ll=length(lp), an=atan(lp.x,-lp.y);
+    float pool=exp(-ll*ll*.42);
+    float rays=smoothstep(.30,.85,vnoise(vec2(an*8.+uTime*.035,1.)))*(.45+.55*vnoise(vec2(an*21.-uTime*.06,4.)));
+    float sh=rays*exp(-ll*.62)*2.4*(1.-uNight)*(1.-.30*uDepth);
+    float shq=step(bayer8(frag/(2.*px)),sh*.62);
+    water+=vec3(.16,.30,.46)*shq*.42+vec3(.07,.13,.21)*sh+vec3(.035,.10,.20)*pool*(1.-uNight);
     water+=vec3(.10,.16,.20)*smoothstep(.55,0.,uSurf-p.y)*(1.-uNight);
+
+    // out-of-focus motes close to the lens: they give the water its depth
+    for(int i=0;i<9;i++){
+      float fi=float(i);
+      float h1=hash(vec2(fi,21.)), h2=hash(vec2(fi,22.)), h3=hash(vec2(fi,23.));
+      float r=.025+.06*h3*h3;
+      vec2 c=vec2((fract(h1-uTime*(.004+.012*h3)*(1.+uSpeed*5.))*2.8-1.4)*asp,(fract(h2+uTime*.005*(h3-.4))-.5)*2.5);
+      c+=uPtr*vec2(.07,.05)*(.4+h3);
+      float d=length(p-c);
+      float a=smoothstep(r,r*.72,d)*(.55+.45*smoothstep(r*.45,r*.95,d));
+      water+=mix(vec3(.30,.50,.78),vec3(.20,.55,.75),uNight)*a*(.035+.06*h3)*(1.-.5*uNight);
+    }
 
     // the others — unlit in the deep, left behind in the shallows — through the same dot screen
     float oth=0.;
@@ -434,6 +450,9 @@ void main(){
     col=mix(col,spark,edge*step(.55,rnd)*.85);
   }
 
+  // a lens: the corners fall away (hardly at all on paper)
+  float vg=length((uv-.5)*vec2(1.08,1.));
+  col*=1.-mix(.62,.10,uPaper)*smoothstep(.35,.95,vg)*vg;
   col+=(hash(frag+fract(uTime)*91.7)-.5)*.04;
   gl_FragColor=vec4(col,1.);
 }`;
@@ -443,8 +462,8 @@ precision highp float;
 attribute vec4 aA; attribute vec3 aNA; attribute vec4 aB; attribute vec3 aNB; attribute float aSeed;
 uniform vec2 uRes; uniform float uTime;
 uniform vec3 uObj; uniform vec2 uPtr;
-uniform float uSA,uF,uDiv,uSwim,uPh,uYaw,uPitch,uHatch,uGlow,uPaper,uObjA,uDot,uRepel;
-varying float vShade; varying float vAlpha; varying float vKind;
+uniform float uSA,uF,uDiv,uSwim,uPh,uYaw,uPitch,uHatch,uGlow,uPaper,uObjA,uDot,uRepel,uIntro,uTrail,uNight;
+varying float vShade; varying float vAlpha; varying float vKind; varying float vTint;
 vec2 r2(vec2 v, float a){ float c=cos(a), s=sin(a); return vec2(c*v.x-s*v.y, s*v.x+c*v.y); }
 float hash1(float n){ return fract(sin(n*91.345)*47453.5453); }
 
@@ -517,7 +536,9 @@ void main(){
   vec3 PA,NA,PB,NB;
   pose(uSA,aA,aNA,PA,NA);
   pose(uSA+1.,aB,aNB,PB,NB);
-  float f=clamp(uF*1.45-aSeed*.45,0.,1.); f=f*f*(3.-2.*f);
+  // a change of form sweeps the body from nose to tail, rather than happening everywhere at once
+  float along=clamp((aA.x+1.1)/2.2,0.,1.);
+  float f=clamp(uF*1.62-(1.-along)*.5-aSeed*.12,0.,1.); f=f*f*(3.-2.*f);
   vec3 P=mix(PA,PB,f);
   vec3 N=normalize(mix(NA,NB,f)+1e-5);
   vec3 R=mix(aA.xyz,aB.xyz,f);
@@ -526,12 +547,31 @@ void main(){
   float wCell=clamp(1.-sNow,0.,1.), wFish=clamp(1.-abs(sNow-1.),0.,1.);
   float wEgg=clamp(1.-abs(sNow-4.),0.,1.), wFly=clamp(sNow-4.,0.,1.);
 
-  // between forms the dots let go, swirl, and settle
+  // between forms the dots let go: wound round the body's axis, carried back by the current, then settled
   float m=sin(f*3.14159);
   vec3 tq=P*4.+aSeed*37.;
-  P+=m*.30*vec3(sin(tq.y+uTime*1.1),sin(tq.z+uTime*1.3),sin(tq.x+uTime*.9));
-  P*=1.+m*.10;
+  P.yz=r2(P.yz,m*(1.3+2.4*(aSeed-.5)))*(1.+m*.6);
+  P.x-=m*.42;
+  P+=m*.09*vec3(sin(tq.y+uTime*1.1),sin(tq.z+uTime*1.3),sin(tq.x+uTime*.9));
   P+=.0035*vec3(sin(uTime*2.+aSeed*90.),cos(uTime*1.7+aSeed*70.),0.);
+
+  // a tenth of the dots are loose: shed from the skin into a wake, fading as they fall behind
+  float lamp=step(4.5,part)*step(part,8.5)*(1.-step(5.5,part)*step(part,7.5));   // stalk and bulb
+  float loose=step(.9,aSeed)*uTrail*(1.-m)*(1.-lamp);
+  float life=fract(aSeed*53.+uTime*(.22+.25*hash1(aSeed*3.)));
+  vec3 wk=P+vec3(-life*(1.0+1.5*uTrail),.12*sin(life*9.+aSeed*40.)+life*.3*(hash1(aSeed*5.)-.35),.14*cos(life*7.+aSeed*20.));
+  P=mix(P,wk,loose);
+
+  // what swims or flies is never still: it rides a slow swell and rolls with it
+  float afloat=smoothstep(1.9,1.5,sNow)+smoothstep(4.4,4.8,sNow);
+  P.y+=afloat*.03*sin(uTime*.7);
+  P.yz=r2(P.yz,afloat*.06*sin(uTime*.5)); N.yz=r2(N.yz,afloat*.06*sin(uTime*.5));
+
+  // on arrival the first cell gathers itself out of the water
+  float iv=(1.-uIntro)*(1.-uIntro);
+  vec3 rdir=normalize(vec3(hash1(aSeed*7.)-.5,hash1(aSeed*13.)-.5,hash1(aSeed*29.)-.5)+1e-4);
+  P+=rdir*iv*(1.6+2.6*aSeed);
+  P.xy=r2(P.xy,iv*2.2*(aSeed-.3));
 
   // the only light in the deep is the one it carries (measured before the camera turns)
   vec3 lv=vec3(1.02,.47,0.)-P; float ld=length(lv);
@@ -567,20 +607,23 @@ void main(){
   shade=clamp(shade+uHatch*wEgg*(.22+.18*sin(uTime*5.)),0.,1.);
 
   float vis=mix(smoothstep(-.14,.12,facing), mix(.42,1.,smoothstep(-.1,.1,facing)), wCell*(1.-nuc));
+  vis=mix(vis,(1.-life)*(.5+.6*hash1(aSeed*11.)),loose);
   float mul=1.; vKind=0.;
   if(part>5.5 && part<6.5) vis=0.;                         // the pupil: no dots at all
   if(part>6.5 && part<7.5){ shade=1.; mul=1.35; }          // and a bright ring round it
   if((part>4.5 && part<5.5) || (part>7.5 && part<8.5)){ vis*=smoothstep(.05,.6,uGlow); }
-  if(part>7.5 && part<8.5){ shade=1.; mul=1.9; vKind=1.; }
+  if(part>7.5 && part<8.5){ shade=1.; mul=1.15; vKind=1.; }
   vis*=1.-m*.35;
 
   // on paper the dots are ink, and gather where the shadow is
   float ink=clamp(1.02-shade*.92+rim*.45,0.,1.);
   float S=mix(shade,ink,step(.5,uPaper));
   float size=uDot*mix(dotOf(uSA),dotOf(uSA+1.),f)*uRes.y*uObj.z*w*(.26+1.2*S)*mul*vis;
+  size*=(1.+.85*uNight*(1.-step(.5,uPaper)))*mix(.35,1.,uIntro);   // in the dark each dot carries a little glow
   gl_PointSize=max(size,1.);
-  vAlpha=uObjA*clamp(size,0.,1.)*step(.001,vis);
+  vAlpha=uObjA*clamp(size,0.,1.)*step(.001,vis)*smoothstep(0.,.5,uIntro);
   vShade=shade;
+  vTint=.5+.5*sin(R.x*3.1+R.y*5.3+uTime*.35);
 }`;
 
 const PT_FRAG = `
@@ -588,7 +631,7 @@ precision highp float;
 uniform vec2 uRes; uniform float uTime;
 uniform vec3 uObj; uniform vec2 uPtr;
 uniform float uPaper,uNight,uDawn,uSurf,uDepth,uPerch,uStage;
-varying float vShade; varying float vAlpha; varying float vKind;
+varying float vShade; varying float vAlpha; varying float vKind; varying float vTint;
 ${NOISE}
 void main(){
   vec2 c=gl_PointCoord-.5; float r=length(c);
@@ -608,11 +651,14 @@ void main(){
   lite=mix(lite,vec3(.72,.82,.98),uNight);
   lite=mix(lite,vec3(1.,.93,.80),uDawn*(1.-uNight)*.8);
   lite=mix(lite,vec3(.62,.95,1.)*1.15,vKind);
+  lite*=mix(vec3(1.),vec3(.80,.95,1.10),vTint*(.30+.30*below)*(1.-uDawn*.6));   // a cool sheen that travels over the skin
   lite*=.80+.20*vShade;
   vec3 inkc=vec3(.115,.11,.10);
   float onPaper=uPaper<.001?0.:uPaper>.999?1.:step(wipeField(uv,frag,p,px),uPaper*1.16-.06);
   vec3 col=mix(lite,inkc,onPaper);
-  float a=vAlpha*smoothstep(.5,.40,r)*mix(1.,.94,onPaper)*(1.-.42*below*step(uSurf,1.5));
+  float soft=uNight*(1.-onPaper);                          // hard print dots by day, soft lights by night
+  float a=vAlpha*mix(smoothstep(.5,.40,r),exp(-r*r*15.)*1.15,soft)*mix(1.,.94,onPaper)*(1.-.42*below*step(uSurf,1.5));
+  if(a<.06) discard;
   gl_FragColor=vec4(col,a);
 }`;
 
@@ -622,7 +668,7 @@ const BG_UNIFORMS = [
 ] as const;
 const PT_UNIFORMS = [
   "uRes", "uTime", "uObj", "uPtr", "uSA", "uF", "uDiv", "uSwim", "uPh", "uYaw", "uPitch", "uHatch", "uGlow", "uPaper",
-  "uObjA", "uDot", "uRepel", "uNight", "uDawn", "uSurf", "uDepth", "uPerch", "uStage",
+  "uObjA", "uDot", "uRepel", "uNight", "uDawn", "uSurf", "uDepth", "uPerch", "uStage", "uIntro", "uTrail",
 ] as const;
 const STAGES = 6;
 
@@ -649,6 +695,9 @@ export class Film {
   private lastTime = 0;
   private hatchTo = 0;
   private hatch = 0;
+  private born = -1;
+  /** Skip the opening gather (reduced motion, or a deep link). */
+  instant = false;
 
   constructor(private canvas: HTMLCanvasElement, narrow: boolean) {
     this.count = narrow ? 15000 : 26000;
@@ -773,6 +822,9 @@ export class Film {
     this.ph = (this.ph + dt * pace) % (Math.PI * 200);
     this.hatch += (this.hatchTo - this.hatch) * Math.min(1, dt * 1.6);
     this.repel += (this.repelTo - this.repel) * Math.min(1, dt * 3);
+    if (this.born < 0) this.born = time;
+    const it = this.instant ? 1 : Math.min(1, (time - this.born) / 2.6);
+    const intro = 1 - Math.pow(1 - it, 3);
     const W = this.canvas.width, H = this.canvas.height;
 
     // ---- the world ----
@@ -862,6 +914,8 @@ export class Film {
     gl.uniform1f(u.uDepth, s.depth);
     gl.uniform1f(u.uPerch, s.perch);
     gl.uniform1f(u.uStage, s.stage);
+    gl.uniform1f(u.uIntro, intro);
+    gl.uniform1f(u.uTrail, s.trail);
     gl.drawArrays(gl.POINTS, 0, this.count);
     for (const l of [this.loc.aA, this.loc.aNA, this.loc.aB, this.loc.aNB, this.loc.aSeed]) {
       if (l >= 0) gl.disableVertexAttribArray(l);

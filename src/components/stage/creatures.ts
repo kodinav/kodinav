@@ -71,16 +71,16 @@ function add(d: number, id: number, k: number) {
 
 function fish(x: number, y: number, z: number) {
   begin();
-  add(ell(x - 0.1, y, z, 0.8, 0.27, 0.155), PART.body, 0);
-  add(cone(x, y, z, -0.4, 0, 0, -0.86, 0, 0, 0.105, 0.042), PART.body, 0.1);
+  add(ell(x - 0.1, y, z, 0.82, 0.235, 0.14), PART.body, 0); //        a sleek body…
+  add(cone(x, y, z, -0.4, 0, 0, -0.88, 0, 0, 0.095, 0.036), PART.body, 0.12); // …a narrow wrist to the tail
   // a deeply forked tail
   const tx = x + 0.84;
   for (const s of [1, -1]) {
     const ux = rx(tx, y, s * 0.78), uy = ry(tx, y, s * 0.78);
-    add(ell(ux + 0.25, uy, z, 0.31, 0.092, 0.022), PART.body, 0.05);
+    add(ell(ux + 0.29, uy, z, 0.37, 0.085, 0.02), PART.body, 0.05);
   }
   // dorsal, swept back
-  add(ell(x - 0.02 + (y - 0.24) * 0.85, y - 0.24, z, 0.3, 0.2, 0.02), PART.body, 0.04);
+  add(ell(x - 0.04 + (y - 0.22) * 1.0, y - 0.22, z, 0.32, 0.23, 0.018), PART.body, 0.04);
   add(ell(x + 0.5 + (y - 0.13) * 0.8, y - 0.13, z, 0.1, 0.06, 0.016), PART.body, 0.03);
   // anal and pelvic fins
   add(ell(x + 0.3 - (y + 0.2) * 0.75, y + 0.2, z, 0.16, 0.11, 0.02), PART.body, 0.035);

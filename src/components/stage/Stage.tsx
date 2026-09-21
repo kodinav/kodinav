@@ -170,6 +170,7 @@ export function Stage({ content }: { content: StageContent }) {
     let portrait = window.innerHeight > window.innerWidth;
     const film = new Film(canvas, window.innerWidth <= 900);
     filmRef.current = film;
+    film.instant = reduce || window.scrollY > 40; // the opening gather is for arrivals at the top
     let worker: Worker | null = null;
     if (film.ok) {
       pin.classList.add("has-film");
@@ -230,6 +231,7 @@ export function Stage({ content }: { content: StageContent }) {
     let near = false;
     let eraText = "";
     let framing = "";
+    let progress = "";
     let raf = 0;
     let frames = 0;
     let slow = 0;
@@ -276,6 +278,11 @@ export function Stage({ content }: { content: StageContent }) {
         pin.style.setProperty("--oy", state.oy.toFixed(4));
         pin.style.setProperty("--os", state.os.toFixed(4));
         framing = fr;
+      }
+      const pr = p.toFixed(4);
+      if (pr !== progress) {
+        pin.style.setProperty("--p", pr);
+        progress = pr;
       }
       // the clock in the top band
       const era = eraAt(p);
@@ -458,6 +465,12 @@ export function Stage({ content }: { content: StageContent }) {
           <span ref={eraLabelRef}>{eras[0].label}</span>
           <span ref={eraValueRef}>{yearsAgo(eras[0].years ?? 0)}</span>
         </p>
+
+        <p className="cue" aria-hidden>
+          <i />
+          Scroll to evolve
+        </p>
+        <i className="progress" aria-hidden />
 
         {/* ---------------- hero ---------------- */}
         <div className="beat b-hero" data-in={hero.range[0] - 0.01} data-out={hero.range[1]} data-fi="0.0001">
