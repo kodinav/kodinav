@@ -13,7 +13,7 @@ import { StageButton } from "./StageButton";
  * of chapters over a dimmed page. There is no link bar; the menu is the
  * navigation, and it is always in the HTML so crawlers see every link in it.
  *
- * On the homepage the chapters scroll the stage; elsewhere they link to it.
+ * On the story page the chapters scroll the stage; elsewhere they link to it.
  */
 
 const pages = [
@@ -23,6 +23,7 @@ const pages = [
   { label: "Pricing", href: "/pricing" },
   { label: "Process", href: "/process" },
   { label: "About", href: "/about" },
+  { label: "The story", href: "/story" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
   { label: "Free website audit", href: "/free-website-audit" },
@@ -105,7 +106,7 @@ export function Chrome({ stage = false }: { stage?: boolean }) {
           {chapters.map((c, i) => (
             <Link
               key={c.id}
-              href={`/#${c.id}`}
+              href={`/story#${c.id}`}
               className="menu-ch"
               style={{ "--i": i } as CSSProperties}
               onClick={goChapter(c.at)}

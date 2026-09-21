@@ -1,22 +1,21 @@
 import { Stage } from "@/components/stage/Stage";
 import { stageContent } from "@/components/stage/content";
-import { faqSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "The Story",
+  description:
+    "Becoming human took six million years; a good website takes weeks. Kodinav's long-form story, told in seven public-domain paintings.",
+  alternates: { canonical: "/story" },
+};
 
 /**
- * Home. One pinned stage; the copy, the choreography and the film all live in
- * components/stage. Title, description, canonical and Open Graph come from the
- * root metadata, and the organisation / founder / website JSON-LD from
- * RootDocument, exactly as before — this page adds the FAQ it now answers.
+ * The long version: one pinned stage; the copy, the choreography and the film
+ * all live in components/stage. The homepage is the short version, for buyers.
  */
-export default function Home() {
+export default function Story() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqSchema(stageContent.questions.items.map((x) => ({ q: x.q, a: x.a })))),
-        }}
-      />
       {/* Without JavaScript nothing can be choreographed, so un-pin the stage
           into a plain readable column instead of leaving the copy off stage. */}
       <noscript>

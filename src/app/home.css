@@ -1,0 +1,285 @@
+/* ==========================================================================
+   Home, for buyers: the stage's system (frame lines, serif statements, mono
+   labels, paper and cobalt) laid out as a plain, fast page. No WebGL here:
+   the sky, the halftone clouds and the procession are CSS.
+   ========================================================================== */
+.home {
+  --hx: clamp(20px, 7.5vw, 120px);
+  color: var(--ink, #1d1c19);
+}
+.home h1,
+.home h2,
+.home h3 {
+  font-family: var(--font-display);
+  font-weight: 320;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.h-label,
+.h-eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+.h-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  margin: 18px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.h-links a {
+  color: inherit;
+  text-decoration: none;
+  padding-bottom: 3px;
+  border-bottom: 1px solid currentColor;
+}
+
+/* -- hero -- */
+.h-hero {
+  position: relative;
+  overflow: clip;
+  min-height: min(100svh - 76px, 860px);
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background: linear-gradient(#0a2f8c, #1d5fc4);
+}
+.h-sky {
+  position: absolute;
+  inset: 0;
+}
+.h-cloud {
+  position: absolute;
+  background-image: radial-gradient(circle, rgba(250, 244, 222, 0.92) 36%, transparent 40%);
+  background-size: 7px 7px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 60%, #000 28%, transparent 68%);
+  mask-image: radial-gradient(ellipse at 50% 60%, #000 28%, transparent 68%);
+  animation: h-drift 60s linear infinite alternate;
+}
+.h-cloud.c1 { left: 46%; top: 12%; width: 24vw; height: 8vw; }
+.h-cloud.c2 { left: 70%; top: 11%; width: 26vw; height: 7vw; animation-duration: 80s; }
+.h-cloud.c3 { right: 6%; bottom: 8%; width: 22vw; height: 7vw; animation-duration: 70s; }
+@keyframes h-drift {
+  to { transform: translateX(3vw); }
+}
+/* Huxley's procession, 1863, in cream: inverted so only its ink shows, then screened onto the sky */
+.h-march {
+  position: absolute;
+  right: -2vw;
+  bottom: 9%;
+  width: min(86vw, 1500px);
+  aspect-ratio: 3149 / 1330;
+  background: url("/film/lineup-d.webp") center / contain no-repeat;
+  filter: invert(1) grayscale(1) contrast(1.35) brightness(1.05) sepia(0.18);
+  mix-blend-mode: screen;
+  opacity: 0.9;
+  -webkit-mask-image: linear-gradient(to right, transparent 34%, #000 62%), linear-gradient(to top, transparent 9%, #000 14%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to right, transparent 34%, #000 62%), linear-gradient(to top, transparent 9%, #000 14%);
+  mask-composite: intersect;
+}
+.h-wrap {
+  position: relative;
+  width: 100%;
+  padding: 96px var(--hx) 64px;
+}
+.h-hero h1 {
+  max-width: 17ch;
+  margin-top: 20px;
+  font-size: clamp(2.2rem, 4.5vw, 5rem);
+  line-height: 0.98;
+}
+.h-hero h1 em {
+  font-style: italic;
+  opacity: 0.86;
+}
+.h-lead {
+  max-width: 46ch;
+  margin: 22px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.5vw, 1.5rem);
+  line-height: 1.22;
+}
+.h-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.h-hero .h-cta a:last-child {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.h-facts {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  max-width: 880px;
+  margin: 48px 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.32);
+}
+.h-facts li {
+  padding: 14px 16px 0 0;
+}
+.h-facts b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.35vw, 1.3rem);
+}
+.h-facts li > span {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* -- sections -- */
+.h-sec {
+  padding: clamp(56px, 8vw, 120px) var(--hx);
+  border-top: 1px solid rgba(29, 28, 25, 0.16);
+}
+.h-head {
+  max-width: 62ch;
+  margin-bottom: clamp(28px, 4vw, 56px);
+}
+.h-head h2,
+.h-founder h2,
+.h-price h2 {
+  margin-top: 14px;
+  font-size: clamp(1.9rem, 3.6vw, 3.6rem);
+  line-height: 1.02;
+}
+.h-head p:not(.h-label):not(.h-links),
+.h-founder p:not(.h-label):not(.h-links),
+.h-price p:not(.h-label):not(.h-links) {
+  margin: 16px 0 0;
+  max-width: 58ch;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  opacity: 0.82;
+}
+
+.h-work {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(36px, 5vw, 72px) clamp(24px, 4vw, 56px);
+}
+.h-shot {
+  display: block;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(29, 28, 25, 0.2);
+  background: #e9e7e0;
+}
+.h-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.7s var(--ease, cubic-bezier(0.22, 1, 0.36, 1));
+}
+.h-work h3 {
+  margin-top: 8px;
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+}
+.h-work li > p:not(.h-label):not(.h-links) {
+  margin: 8px 0 0;
+  max-width: 52ch;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+@media (hover: hover) {
+  .h-shot:hover img { transform: scale(1.03); }
+}
+
+.h-founder {
+  display: grid;
+  grid-template-columns: minmax(180px, 300px) 1fr;
+  gap: clamp(24px, 5vw, 72px);
+  align-items: center;
+}
+.h-founder img {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(29, 28, 25, 0.2);
+  filter: grayscale(0.15);
+}
+
+.h-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(29, 28, 25, 0.3);
+}
+.h-steps li {
+  padding: 20px 28px 0 0;
+}
+.h-steps h3 {
+  margin-top: 12px;
+  font-size: clamp(1.25rem, 1.8vw, 1.7rem);
+}
+.h-steps p {
+  margin: 10px 0 0;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.h-price {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.h-price aside {
+  padding: 28px;
+  border: 1px solid rgba(29, 28, 25, 0.3);
+}
+.h-price aside h3 {
+  margin-top: 12px;
+  font-size: 1.5rem;
+}
+.h-price aside p:not(.h-label) {
+  margin: 10px 0 18px;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+.h-form {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(28px, 5vw, 80px);
+  align-items: start;
+}
+.h-form .h-head { margin-bottom: 0; }
+
+@media (width <= 760px) {
+  .h-hero { min-height: 0; align-items: flex-start; }
+  .h-wrap { padding-top: 44vw; }
+  .h-march { right: -6vw; top: 3vw; bottom: auto; width: 150vw; background-image: url("/film/lineup-m.webp"); -webkit-mask-image: linear-gradient(to right, transparent 8%, #000 40%); mask-image: linear-gradient(to right, transparent 8%, #000 40%); }
+  .h-cloud.c1 { left: 2%; width: 56vw; height: 16vw; top: 30vw; }
+  .h-cloud.c2 { display: none; }
+  .h-cloud.c3 { width: 50vw; height: 14vw; }
+  .h-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 8px; }
+  .h-cta a { flex: 1 1 100%; justify-content: center; }
+  .h-work, .h-steps, .h-price, .h-form, .h-founder { grid-template-columns: 1fr; }
+  .h-founder img { max-width: 220px; }
+  .h-steps li { padding-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .h-cloud { animation: none; }
+}
