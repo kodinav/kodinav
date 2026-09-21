@@ -10,7 +10,7 @@ export function Footer() {
       <div className="border-b border-line px-5 pt-16 sm:px-8">
         <p
           aria-hidden
-          className="font-display mb-[-0.4vw] text-center text-[17.5vw] leading-[0.85] tracking-[-0.02em] text-foreground/95 select-none"
+          className="mb-[-0.4vw] text-center font-sans text-[17vw] font-bold leading-[0.85] tracking-[-0.055em] text-foreground/95 select-none"
         >
           Kodinav<span className="text-brass">.</span>
         </p>

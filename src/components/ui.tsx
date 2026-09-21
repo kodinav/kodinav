@@ -23,16 +23,15 @@ export function ButtonLink({
   external?: boolean;
 }) {
   const base =
-    "group relative inline-flex items-center justify-center gap-2.5 rounded-[3px] font-mono text-[0.7rem] uppercase tracking-[0.15em] transition-[background-color,border-color,color,transform] duration-300 whitespace-nowrap border active:scale-[0.98]";
+    "group relative inline-flex items-center justify-center gap-4 rounded-[3px] font-mono text-[0.625rem] uppercase tracking-[0.2em] transition-[background-color,border-color,color,transform] duration-300 whitespace-nowrap border active:scale-[0.98]";
   const sizes = {
-    md: "px-6 py-3.5",
-    lg: "px-7 py-4 sm:px-8 sm:py-[1.15rem]",
+    md: "h-11 pl-5 pr-2.5",
+    lg: "h-12 pl-6 pr-3",
   };
   const variants = {
-    primary:
-      "bg-foreground text-background border-foreground hover:bg-accent hover:border-accent hover:text-accent-contrast",
+    primary: "bg-black text-[#f2f1ed] border-black hover:bg-[#1d1c19]",
     outline:
-      "border-line-strong text-foreground hover:border-accent hover:text-accent bg-transparent",
+      "border-line-strong text-foreground hover:border-foreground bg-transparent",
     ghost:
       "border-transparent text-muted hover:text-foreground hover:border-line",
   };
@@ -40,9 +39,13 @@ export function ButtonLink({
   const arrow = (
     <span
       aria-hidden
-      className="transition-transform duration-300 group-hover:translate-x-1"
+      className={`grid size-6 place-items-center overflow-hidden rounded-[3px] border ${
+        variant === "primary" ? "border-white/40" : "border-current/40"
+      }`}
     >
-      →
+      <span className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0.5">
+        →
+      </span>
     </span>
   );
 
@@ -74,7 +77,7 @@ export function ArrowLink({
   className?: string;
   external?: boolean;
 }) {
-  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-foreground ${className}`;
+  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.625rem] uppercase tracking-[0.2em] text-foreground ${className}`;
   const arrow = (
     <span
       aria-hidden
@@ -159,7 +162,7 @@ export function Chip({
 }) {
   return (
     <span
-      className={`inline-flex items-center rounded-[3px] border border-line px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-muted ${className}`}
+      className={`inline-flex items-center rounded-[2px] bg-foreground/[0.07] px-2 py-1.5 font-mono text-[0.5625rem] leading-none uppercase tracking-[0.2em] text-foreground/80 ${className}`}
     >
       {children}
     </span>

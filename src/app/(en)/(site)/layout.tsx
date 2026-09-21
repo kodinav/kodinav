@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/Navbar";
+import { Chrome } from "@/components/stage/Chrome";
 import { Footer } from "@/components/Footer";
 import { StickyCta } from "@/components/StickyCta";
 import { BackToTop } from "@/components/BackToTop";
@@ -10,7 +10,7 @@ export default function SiteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="page-scope">
       <SmoothScroll />
       <a
         href="#main-content"
@@ -18,13 +18,13 @@ export default function SiteLayout({
       >
         Skip to content
       </a>
-      <Navbar />
+      <Chrome />
       <main id="main-content" className="flex-1">
         {children}
       </main>
       <Footer />
       <StickyCta />
       <BackToTop />
-    </>
+    </div>
   );
 }

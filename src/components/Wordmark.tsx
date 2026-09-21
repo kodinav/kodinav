@@ -7,10 +7,10 @@ export function Wordmark({
 }) {
   return (
     <span
-      className={`inline-flex items-baseline font-display leading-none tracking-[-0.03em] ${
+      className={`inline-flex items-baseline font-sans leading-none tracking-[-0.05em] ${
         size === "lg" ? "text-3xl" : "text-[1.4rem]"
       } ${className}`}
-      style={{ fontWeight: 620 }}
+      style={{ fontWeight: 700 }}
     >
       Kodinav
       <span aria-hidden className="text-accent">

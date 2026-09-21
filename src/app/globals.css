@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./stage.css";
 
 /* ============================================================
    KODINAV — "Meridian" (v4)
@@ -15,23 +16,23 @@
    ============================================================ */
 
 :root {
-  --background: #f4f3ee; /* warm architectural paper */
-  --surface: #eae8e0; /* recessed warm grey */
-  --surface-raised: #ffffff; /* crisp white cards float on the paper */
-  --foreground: #16171b; /* near-black ink */
-  --muted: #52545b; /* secondary text — ≥7:1 on paper */
-  --faint: #63656e; /* small mono annotations — ≥4.7:1 on every light surface (WCAG AA).
+  --background: #f2f1ed; /* paper */
+  --surface: #e9e7e0; /* recessed paper */
+  --surface-raised: #faf9f6; /* a lighter sheet, never pure white */
+  --foreground: #1d1c19; /* ink */
+  --muted: #55534d; /* secondary text — ≥7:1 on paper */
+  --faint: #65635c; /* small mono annotations — ≥4.7:1 on every light surface (WCAG AA).
                        #6c6e77 passed on bare paper but fell to 4.1–4.4:1 on the
                        tinted surfaces the annotations actually sit on. */
-  --border: rgba(22, 23, 27, 0.11);
-  --border-strong: rgba(22, 23, 27, 0.24);
+  --border: rgba(29, 28, 25, 0.13);
+  --border-strong: rgba(29, 28, 25, 0.3);
   --accent: #1b3ad6; /* cobalt — the single signature hue */
   --accent-strong: #1630ae;
   --accent-soft: #1b3ad6;
   --violet: #1b3ad6;
   --accent-contrast: #ffffff; /* text/marks on an accent fill */
   --brass: #1b3ad6; /* decorative marks + the "." — remapped to cobalt */
-  --card-bg: #ffffff;
+  --card-bg: #faf9f6;
   --shadow-card: 0 1px 2px rgba(22, 23, 27, 0.04);
   --shadow-lift:
     0 1px 1px rgba(22, 23, 27, 0.03), 0 10px 30px -14px rgba(22, 23, 27, 0.22),
@@ -41,10 +42,10 @@
 /* Ink band — invert a whole section by remapping the tokens.
    A deep, cool-neutral near-black (not pure #000): premium, not harsh. */
 .ink {
-  --background: #14151a;
-  --surface: #1c1e25;
-  --surface-raised: #22242c;
-  --foreground: #f2f1ea;
+  --background: #0b0a09;
+  --surface: #161513;
+  --surface-raised: #1d1c19;
+  --foreground: #f2f1ed;
   --muted: #a9abb4;
   --faint: #83868f; /* ≥4.5:1 on ink */
   --border: rgba(242, 241, 234, 0.13);
@@ -80,10 +81,10 @@
   /* Font var names are stable (see layout.tsx). The typefaces behind them
      changed with v4: display = Bricolage Grotesque, body/sans = Geist,
      mono = Geist Mono, and serif = Instrument Serif (the editorial accent). */
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-space-mono), ui-monospace, monospace;
-  --font-display: var(--font-anton), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-editorial), ui-serif, Georgia, serif;
+  --font-sans: "Rupee", var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Rupee", var(--font-space-mono), ui-monospace, monospace;
+  --font-display: "Rupee", var(--font-anton), "Iowan Old Style", Georgia, serif;
+  --font-serif: "Rupee", var(--font-anton), ui-serif, Georgia, serif;
 }
 
 html {
@@ -91,6 +92,18 @@ html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+/* ₹ (U+20B9) lives in the latin-ext range, so set in a webfont it makes the
+   browser fetch that family's whole extended file (80–100 kB) for one glyph.
+   This one-glyph face answers it from a font already on the device; it is
+   first in every stack, and if no local font resolves the webfont still
+   covers it, so nothing can go missing. */
+@font-face {
+  font-family: "Rupee";
+  src: local("Helvetica Neue"), local("Segoe UI"), local("Roboto"), local("Noto Sans"),
+    local("Arial");
+  unicode-range: U+20B9;
 }
 
 /* ---------- Geo-aware pricing (see Price.tsx + the inline script) ---------- */
@@ -171,7 +184,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-feature-settings: "cv01", "ss03";
+  font-synthesis: none;
+  font-feature-settings: "cv11", "ss01";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
@@ -196,10 +210,10 @@ body {
 h1,
 h2 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 320;
   font-synthesis: none;
-  letter-spacing: -0.022em;
-  line-height: 1.03;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
   text-wrap: balance;
 }
 
@@ -214,13 +228,14 @@ h4 {
    (Class names kept across redesigns so every page inherits the device.) */
 .text-gradient,
 .text-accent-gradient {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0;
-  color: var(--accent);
-  font-size: 1.08em;
-  line-height: 0.9;
+  /* v6 is monochrome: the accent word is simply the same light serif */
+  font-family: inherit;
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  font-size: 1em;
+  line-height: inherit;
 }
 
 /* ---------- Cards: crisp white on paper, hairline, small radius ---------- */
@@ -303,9 +318,9 @@ h4 {
 /* Mono annotation label: "No. 01 · Services" */
 .annotation {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.625rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.2em;
   color: var(--faint);
 }
 
