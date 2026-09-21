@@ -20,13 +20,17 @@
 type SceneId = "ape" | "lineup" | "hands" | "trek" | "hunt" | "cave" | "measure" | "paper" | "navy";
 
 /** kind: 0 a painting on a dark wall · 1 a drawing multiplied onto paper · 2 bare paper · 3 deep blue */
-const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, number, number]; flicker?: number }> = {
-  ape: { aspect: 900 / 1232, kind: 0, tint: [0.035, 0.03, 0.028] },
+type Near = [number, number, number, number];
+const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, number, number]; flicker?: number; near?: Near[]; floor?: number }> = {
+  /* `near` marks what stands in front — soft regions (u, v, radius, strength) — and `floor` how far the ground
+     comes forward. From them the shader makes a depth field, and slides near things further than far things as
+     the camera moves: a flat canvas reads as a space. Soft on purpose, so nothing tears. */
+  ape: { aspect: 900 / 1232, kind: 0, tint: [0.035, 0.03, 0.028], floor: 0.3, near: [[0.3, 0.24, 0.17, 0.9], [0.63, 0.34, 0.17, 0.8], [0.62, 0.62, 0.24, 0.6]] },
   lineup: { aspect: 3149 / 1330, kind: 1, tint: [0.955, 0.93, 0.85] },
-  hands: { aspect: 3840 / 2413, kind: 0, tint: [0.03, 0.035, 0.05] },
-  trek: { aspect: 1920 / 1648, kind: 0, tint: [0.05, 0.04, 0.035] },
-  hunt: { aspect: 3840 / 1402, kind: 0, tint: [0.03, 0.03, 0.04] },
-  cave: { aspect: 1600 / 1071, kind: 0, tint: [0.01, 0.012, 0.02], flicker: 1 },
+  hands: { aspect: 3840 / 2413, kind: 0, tint: [0.03, 0.035, 0.05], floor: 0.4, near: [[0.37, 0.5, 0.13, 0.7], [0.55, 0.45, 0.2, 0.9], [0.2, 0.72, 0.18, 0.8], [0.8, 0.7, 0.2, 0.6]] },
+  trek: { aspect: 1920 / 1648, kind: 0, tint: [0.05, 0.04, 0.035], floor: 0.5, near: [[0.78, 0.55, 0.2, 0.9], [0.38, 0.55, 0.22, 0.7]] },
+  hunt: { aspect: 3840 / 1402, kind: 0, tint: [0.03, 0.03, 0.04], floor: 0.3, near: [[0.68, 0.5, 0.2, 0.9], [0.36, 0.5, 0.2, 0.7], [0.55, 0.35, 0.16, 0.5]] },
+  cave: { aspect: 1600 / 1071, kind: 0, tint: [0.01, 0.012, 0.02], flicker: 1, floor: 0.35, near: [[0.57, 0.5, 0.2, 0.9], [0.3, 0.7, 0.17, 0.8], [0.75, 0.72, 0.17, 0.8], [0.12, 0.5, 0.14, 0.6]] },
   measure: { aspect: 1876 / 605, kind: 1, tint: [0.93, 0.80, 0.63] },
   paper: { aspect: 1, kind: 2, tint: [1, 1, 1] },
   navy: { aspect: 1, kind: 3, tint: [0, 0, 0] },
@@ -39,30 +43,35 @@ const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, num
  * centre sits (ox as a fraction of half-width, oy of half-height).
  */
 type Cam = { cx: number; cy: number; vh: number; ox?: number; oy?: number };
-type Shot = { scene: SceneId; from: number; to: number; a: Cam; b: Cam; na?: Cam; nb?: Cam; pan?: number; dim?: number };
+/** wipe: how this shot arrives — 0 a field of pixels from the middle · 1 an iris opening from a point · 2 a curtain drawn across */
+type Shot = { scene: SceneId; from: number; to: number; a: Cam; b: Cam; na?: Cam; nb?: Cam; pan?: number; hold?: number; dim?: number; wipe?: [number, number, number] };
 
 const still: Cam = { cx: 0.5, cy: 0.5, vh: 1 };
 const SHOTS: Shot[] = [
   // the question: a monkey regards what it will become
-  { scene: "ape", from: 0, to: 0.052, a: { cx: 0.5, cy: 0.5, vh: 1.3, ox: 0.6 }, b: { cx: 0.5, cy: 0.48, vh: 1.16, ox: 0.6 },
-    na: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.5 }, nb: { cx: 0.5, cy: 0.47, vh: 2.25, oy: 0.5 } },
+  // …it hangs on a lit wall while the headline is read, and then the camera goes into it
+  { scene: "ape", from: 0, to: 0.056, hold: 0.42, a: { cx: 0.5, cy: 0.5, vh: 1.3, ox: 0.6 }, b: { cx: 0.47, cy: 0.3, vh: 0.5, ox: 0.12 },
+    na: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.5 }, nb: { cx: 0.47, cy: 0.3, vh: 0.72, oy: 0.1 } },
   // the answer, 1863: the camera walks the line from gibbon to man
-  { scene: "lineup", from: 0.064, to: 0.122, pan: 0.5, a: { cx: 0.08, cy: 0.47, vh: 1.02, ox: -0.3 }, b: { cx: 0.772, cy: 0.47, vh: 1.2, ox: -0.46 },
+  { scene: "lineup", from: 0.064, to: 0.122, pan: 0.5, wipe: [2, 0, 0], a: { cx: 0.08, cy: 0.47, vh: 1.02, ox: -0.3 }, b: { cx: 0.772, cy: 0.47, vh: 1.2, ox: -0.46 },
     na: { cx: 0.08, cy: 0.47, vh: 2.5, oy: 0.44 }, nb: { cx: 0.77, cy: 0.46, vh: 2.6, oy: 0.44 } },
-  { scene: "hands", from: 0.13, to: 0.182, a: { cx: 0.31, cy: 0.64, vh: 0.6 }, b: { cx: 0.42, cy: 0.5, vh: 1.0 },
+  { scene: "hands", from: 0.13, to: 0.182, wipe: [1, 0.1, -0.1], a: { cx: 0.31, cy: 0.64, vh: 0.6 }, b: { cx: 0.42, cy: 0.5, vh: 1.0 },
     na: { cx: 0.27, cy: 0.64, vh: 0.78 }, nb: { cx: 0.36, cy: 0.52, vh: 0.95 } },
-  { scene: "trek", from: 0.192, to: 0.244, a: { cx: 0.42, cy: 0.52, vh: 0.78 }, b: { cx: 0.6, cy: 0.5, vh: 0.92 },
+  { scene: "trek", from: 0.192, to: 0.244, a: { cx: 0.44, cy: 0.4, vh: 0.6 }, b: { cx: 0.56, cy: 0.58, vh: 0.66 },
     na: { cx: 0.3, cy: 0.5, vh: 0.9 }, nb: { cx: 0.72, cy: 0.48, vh: 0.98 } },
-  { scene: "hunt", from: 0.256, to: 0.308, a: { cx: 0.56, cy: 0.52, vh: 0.98 }, b: { cx: 0.74, cy: 0.45, vh: 0.8 },
+  { scene: "hunt", from: 0.256, to: 0.308, wipe: [2, 0, 0], a: { cx: 0.56, cy: 0.52, vh: 0.98 }, b: { cx: 0.74, cy: 0.45, vh: 0.8 },
     na: { cx: 0.5, cy: 0.5, vh: 0.98 }, nb: { cx: 0.76, cy: 0.46, vh: 0.9 } },
-  { scene: "cave", from: 0.322, to: 0.376, a: { cx: 0.3, cy: 0.52, vh: 0.74 }, b: { cx: 0.62, cy: 0.45, vh: 0.92 },
+  { scene: "cave", from: 0.322, to: 0.376, wipe: [1, 0.25, -0.05], //  the dark opens from the lamp
+    a: { cx: 0.3, cy: 0.52, vh: 0.74 }, b: { cx: 0.62, cy: 0.45, vh: 0.92 },
     na: { cx: 0.22, cy: 0.5, vh: 0.9 }, nb: { cx: 0.62, cy: 0.45, vh: 0.98 } },
-  { scene: "paper", from: 0.396, to: 0.718, a: still, b: still },
+  // the paper chapters keep a ghost of the line-up drifting behind them
+  { scene: "lineup", from: 0.396, to: 0.718, dim: 0.9, a: { cx: 0.2, cy: 0.5, vh: 0.74 }, b: { cx: 0.78, cy: 0.46, vh: 0.74 },
+    na: { cx: 0.1, cy: 0.5, vh: 1.0 }, nb: { cx: 0.8, cy: 0.5, vh: 1.0 } },
   // by lamplight: the questions, and the brief
-  { scene: "cave", from: 0.742, to: 0.936, dim: 0.66, a: { cx: 0.62, cy: 0.45, vh: 0.92 }, b: { cx: 0.46, cy: 0.5, vh: 1.0 },
+  { scene: "cave", from: 0.742, to: 0.936, dim: 0.66, wipe: [1, 0.2, 0], a: { cx: 0.62, cy: 0.45, vh: 0.92 }, b: { cx: 0.46, cy: 0.5, vh: 1.0 },
     na: { cx: 0.62, cy: 0.45, vh: 0.98 }, nb: { cx: 0.4, cy: 0.5, vh: 1.0 } },
   // the measure of man: the span of the arms, as a frieze above the type
-  { scene: "measure", from: 0.948, to: 0.978, a: { cx: 0.5, cy: 0.5, vh: 2.7, oy: 0.34 }, b: { cx: 0.5, cy: 0.5, vh: 2.3, oy: 0.34 },
+  { scene: "measure", from: 0.948, to: 0.978, wipe: [2, 0, 0], a: { cx: 0.5, cy: 0.5, vh: 2.7, oy: 0.34 }, b: { cx: 0.5, cy: 0.5, vh: 2.3, oy: 0.34 },
     na: { cx: 0.5, cy: 0.5, vh: 2.9, oy: 0.44 }, nb: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.44 } },
   { scene: "navy", from: 0.986, to: 1.01, a: still, b: still },
 ];
@@ -79,11 +88,31 @@ const lerpCam = (a: Cam, b: Cam, t: number): Required<Cam> => ({
   ox: (a.ox ?? 0) + ((b.ox ?? 0) - (a.ox ?? 0)) * t,
   oy: (a.oy ?? 0) + ((b.oy ?? 0) - (a.oy ?? 0)) * t,
 });
-function camOf(shot: Shot, p: number, narrow: boolean) {
+function camOf(shot: Shot, p: number, narrow: boolean, asp = 1.6) {
   const a = narrow ? (shot.na ?? shot.a) : shot.a;
   const b = narrow ? (shot.nb ?? shot.b) : shot.b;
-  const t = clamp01((p - shot.from) / ((shot.to - shot.from) * (shot.pan ?? 1)));
-  return lerpCam(a, b, smooth(t));
+  const t = shotT(shot, p);
+  return cover(lerpCam(a, b, smooth(t)), shot, asp);
+}
+/**
+ * A painting meant to fill the screen must fill ANY screen: tighten the zoom until it does (with room for the
+ * push-through at a cut, which backs the camera out by PUSH), then keep the centre far enough from every edge.
+ */
+const PUSH = 1.14;
+function cover(c: Required<Cam>, shot: Shot, asp: number): Required<Cam> {
+  const sc = SCENES[shot.scene];
+  if (sc.kind !== 0 || c.ox !== 0 || c.oy !== 0 || c.vh > 1.05) return c; // a plate on a wall, or a drawing on paper
+  const vh = Math.min(c.vh, 1 / PUSH, sc.aspect / asp / PUSH);
+  const hw = (asp * vh * PUSH * 0.5) / sc.aspect;
+  const hh = vh * PUSH * 0.5;
+  return { ...c, vh, cx: Math.min(1 - hw, Math.max(hw, c.cx)), cy: Math.min(1 - hh, Math.max(hh, c.cy)) };
+}
+/** How far through its move a shot's camera is: it may hold first (`hold`), or finish early (`pan`). */
+function shotT(shot: Shot, p: number) {
+  const raw = (p - shot.from) / (shot.to - shot.from);
+  const start = shot.hold ?? 0;
+  const end = shot.pan ?? 1;
+  return clamp01((raw - start) / Math.max(1e-6, end - start));
 }
 
 const VERT = `attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}`;
@@ -95,7 +124,10 @@ uniform vec4 camA, camB;     // cx, cy, vh, picture aspect
 uniform vec4 parA, parB;     // ox, oy, kind, dim
 uniform vec4 extA, extB;     // tint.rgb, flicker
 uniform vec2 uHas;           // is each picture loaded yet
-uniform float uMix, uFlare, uNarrow;
+uniform float uMix, uFlare, uNarrow, uVel;
+uniform vec4 nearA[4]; uniform vec4 nearB[4];   // u, v, radius, strength
+uniform vec4 movA, movB;     // the camera's travel (x, y), the floor's depth, how far through the shot
+uniform vec3 uWipe;          // style, and the point an iris opens from
 
 float hash(vec2 p){ p=fract(p*vec2(123.34,456.21)); p+=dot(p,p+45.32); return fract(p.x*p.y); }
 float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
@@ -118,7 +150,7 @@ vec3 motes(vec2 p, float asp){
   return s;
 }
 
-vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, float has, vec2 p, float asp, out float dark){
+vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, vec4 near[4], vec4 mov, float has, vec2 p, float asp, out float dark){
   float kind=par.z;
   vec3 paper=vec3(.949,.945,.929)*(1.+.035*(fbm(p*2.2+40.)-.5));
   dark=0.;
@@ -132,14 +164,23 @@ vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, float has, vec2 p, float as
   vec2 q=p-vec2(par.x*asp,par.y)-uPtr*vec2(.014,.010);
   q+=.0045*cam.z*vec2(fbm(p*1.6+vec2(uTime*.05,0.))-.5,fbm(p*1.6+vec2(9.,-uTime*.045))-.5);
   vec2 uv=vec2(cam.x+q.x*cam.z*.5/cam.w, cam.y-q.y*cam.z*.5);
-  vec3 img=texture2D(t,clamp(uv,0.,1.)).rgb;
   vec2 e=min(uv,1.-uv);
+  // depth: what is near slides further than what is far — with the camera's travel, the pointer, the scroll itself
+  float dep=mov.z*smoothstep(.25,1.,uv.y);
+  for(int i=0;i<4;i++){ vec2 dd=(uv-near[i].xy)*vec2(cam.w,1.); dep+=near[i].w*exp(-dot(dd,dd)/max(near[i].z*near[i].z,1e-4)); }
+  dep=clamp(dep,0.,1.)-.35;
+  vec2 slide=mov.xy*(mov.w-.5)*.085+uPtr*vec2(-.006,.004)+vec2(0.,uVel*.010);
+  uv+=dep*slide*vec2(1./cam.w,1.)*step(kind,.5);
+  // the faster the scroll, the more the colours part
+  float ab=clamp(abs(uVel),0.,1.)*.0042;
+  vec2 cuv=clamp(uv,0.,1.);
+  vec3 img=vec3(texture2D(t,clamp(cuv+vec2(0.,ab),0.,1.)).r, texture2D(t,cuv).g, texture2D(t,clamp(cuv-vec2(0.,ab),0.,1.)).b);
   if(kind>.5){
     // a drawing: divide its own old paper away, then lay the ink on ours, fading at the sheet's edge
     vec3 ink=clamp(img/ext.rgb,0.,1.);
     ink=mix(vec3(1.),ink,1.12);
     float edge=smoothstep(0.,.05,e.x)*smoothstep(0.,.06,e.y);
-    return paper*mix(vec3(1.),clamp(ink,0.,1.),edge*has);
+    return paper*mix(vec3(1.),clamp(ink,0.,1.),edge*has*(1.-par.w));       // par.w fades it to a ghost
   }
   dark=1.;
   // a painting: graded toward the studio's palette — cool in the shadows, warm in the lights
@@ -147,6 +188,9 @@ vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, float has, vec2 p, float as
   img=mix(img,img*vec3(.84,.93,1.14),.42*(1.-lum));
   img=mix(img,img*vec3(1.06,1.0,.92),.35*lum);
   img=pow(img,vec3(1.05))*1.04;
+  // a band of light crosses the canvas as the shot is scrolled, like a lamp carried past it
+  float sw=exp(-pow((uv.x*.85+uv.y*.35-mix(-.35,1.45,mov.w))*2.6,2.));
+  img=img*(1.+.26*sw)+vec3(.05,.04,.02)*sw*lum;
   // lamplight
   float fl=ext.a*(.55+.45*vnoise(vec2(uTime*5.,3.)))*(.8+.2*vnoise(vec2(uTime*13.,7.)))+uFlare;
   img+=vec3(.16,.09,.03)*lum*lum*fl;
@@ -156,6 +200,8 @@ vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, float has, vec2 p, float as
   float inside=step(0.,e.x)*step(0.,e.y);
   float dist=max(-e.x*cam.w,-e.y)/(cam.z*.5);          // distance outside the canvas, in screen units
   vec3 wall=ext.rgb*(1.+.5*(fbm(p*1.4)-.5))+vec3(.015,.02,.035)*smoothstep(1.4,0.,length(p-vec2(par.x*asp,par.y)));
+  vec2 sp=(p-vec2(par.x*asp,par.y+.35))*vec2(.75,.5);                 // a picture light above the frame
+  wall+=vec3(.16,.125,.08)*exp(-dot(sp,sp)*1.5)*(.85+.15*vnoise(vec2(uTime*.7,2.)));
   wall*=.55+.45*smoothstep(0.,.10,dist);
   wall+=vec3(.55,.5,.42)*smoothstep(.006,.003,abs(dist-.012))*.35;
   vec3 col=mix(wall,img*has+ext.rgb*(1.-has),inside);
@@ -168,12 +214,18 @@ void main(){
   vec2 p=(frag-.5*uRes)/(.5*uRes.y);
   float px=uRes.y/900.;
   float dA, dB;
-  vec3 col=shot(tA,camA,parA,extA,uHas.x,p,asp,dA);
+  // every cut is a push: the shot leaving is driven into, the shot arriving is backed out of
+  vec4 cA=camA; cA.z*=1.-.13*uMix;
+  vec4 cB=camB; cB.z*=1.+.13*(1.-uMix);
+  vec3 col=shot(tA,cA,parA,extA,nearA,movA,uHas.x,p,asp,dA);
   float dk=dA;
   if(uMix>.001){
-    vec3 cb=shot(tB,camB,parB,extB,uHas.y,p,asp,dB);
-    // the wipe between scenes: a field of pixels that opens from the middle
-    float field=(abs(uv.x-.5)*1.5+abs(uv.y-.5)*.35)*.62+bayer8(floor(frag/(3.*px)))*.16+fbm(p*3.4+7.)*.30;
+    vec3 cb=shot(tB,cB,parB,extB,nearB,movB,uHas.y,p,asp,dB);
+    // three ways in: a field of pixels from the middle, an iris from a point, a curtain drawn across
+    float grain2=bayer8(floor(frag/(3.*px)))*.16+fbm(p*3.4+7.)*.30;
+    float field=(abs(uv.x-.5)*1.5+abs(uv.y-.5)*.35)*.62+grain2;
+    if(uWipe.x>.5 && uWipe.x<1.5) field=length((p-uWipe.yz*vec2(asp,1.))/vec2(max(asp,1.),1.))*.62+grain2*.8;
+    if(uWipe.x>1.5) field=uv.x*.70+grain2*.8+.06*sin(uv.y*9.+uTime);
     float k=uMix*1.16-.06, m=step(field,k);
     col=mix(col,cb,m); dk=mix(dA,dB,m);
     float edge=smoothstep(.05,0.,abs(field-k));
@@ -189,7 +241,7 @@ void main(){
   gl_FragColor=vec4(col,1.);
 }`;
 
-const UNIFORMS = ["uRes", "uTime", "uPtr", "tA", "tB", "camA", "camB", "parA", "parB", "extA", "extB", "uHas", "uMix", "uFlare", "uNarrow"] as const;
+const UNIFORMS = ["uRes", "uTime", "uPtr", "tA", "tB", "camA", "camB", "parA", "parB", "extA", "extB", "uHas", "uMix", "uFlare", "uNarrow", "uVel", "nearA", "nearB", "movA", "movB", "uWipe"] as const;
 
 export type Frame = {
   /** The chrome should read dark-on-light. */
@@ -326,7 +378,7 @@ export class Film {
     return { cur, next, mix: smooth(mix) };
   }
 
-  frame(p: number, time: number, narrow: boolean): Frame {
+  frame(p: number, time: number, narrow: boolean, velocity = 0): Frame {
     const { cur, next, mix } = Film.at(p);
     const lead = mix > 0.5 && next ? next : cur;
     const asp = this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight);
@@ -334,7 +386,7 @@ export class Film {
     const lineup = [cur, next].find((s) => s?.scene === "lineup");
     let ax = 0, ay = 0, au = 0.5;
     if (lineup) {
-      const c = camOf(lineup, p, narrow);
+      const c = camOf(lineup, p, narrow, asp);
       const sc = SCENES.lineup;
       ax = c.ox + (MAN.u - c.cx) / ((c.vh * 0.5) / sc.aspect) / asp;
       ay = c.oy - (MAN.v - c.cy) / (c.vh * 0.5);
@@ -358,9 +410,15 @@ export class Film {
     this.flareNow += (this.flareTo - this.flareNow) * Math.min(1, dt * 2);
 
     const u = this.u;
-    const set = (shot: Shot, cam: string, par: string, ext: string, unit: number, tex: string) => {
+    const set = (shot: Shot, cam: string, par: string, ext: string, unit: number, tex: string, near: string, mov: string) => {
       const sc = SCENES[shot.scene];
-      const c = camOf(shot, p, narrow);
+      const c = camOf(shot, p, narrow, asp);
+      const a0 = narrow ? (shot.na ?? shot.a) : shot.a;
+      const b0 = narrow ? (shot.nb ?? shot.b) : shot.b;
+      const flat = new Float32Array(16);
+      (sc.near ?? []).slice(0, 4).forEach((n, i) => flat.set(n, i * 4));
+      gl.uniform4fv(u[near], flat);
+      gl.uniform4f(u[mov], Math.sign(b0.cx - a0.cx) || 0.4, Math.sign(a0.cy - b0.cy) * 0.5, sc.floor ?? 0, shotT(shot, p));
       gl.uniform4f(u[cam], c.cx, c.cy, c.vh, sc.aspect);
       gl.uniform4f(u[par], c.ox, c.oy, sc.kind, shot.dim ?? 0);
       gl.uniform4f(u[ext], sc.tint[0], sc.tint[1], sc.tint[2], sc.flicker ?? 0);
@@ -370,8 +428,11 @@ export class Film {
       gl.uniform1i(u[tex], unit);
       return e?.ready ? 1 : 0;
     };
-    const hasA = set(cur, "camA", "parA", "extA", 0, "tA");
-    const hasB = set(next ?? cur, "camB", "parB", "extB", 1, "tB");
+    const hasA = set(cur, "camA", "parA", "extA", 0, "tA", "nearA", "movA");
+    const hasB = set(next ?? cur, "camB", "parB", "extB", 1, "tB", "nearB", "movB");
+    const wipe = next?.wipe ?? [0, 0, 0];
+    gl.uniform3f(u.uWipe, wipe[0], wipe[1], wipe[2]);
+    gl.uniform1f(u.uVel, Math.max(-1, Math.min(1, velocity)));
     gl.uniform2f(u.uHas, hasA, hasB);
     gl.uniform2f(u.uRes, this.canvas.width, this.canvas.height);
     gl.uniform1f(u.uTime, time);

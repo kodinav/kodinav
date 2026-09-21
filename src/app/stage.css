@@ -625,6 +625,14 @@
 .b-say h2 span.ln {
   display: block;
 }
+/* the caption rides a little slower than the picture behind it: type in front, paint behind */
+.b-say h2 {
+  transform: translate3d(0, calc((0.5 - var(--t, 0.5)) * 46px), 0);
+}
+.b-lower[data-t] p,
+.b-lower[data-t] .chip {
+  transform: translate3d(0, calc((0.5 - var(--t, 0.5)) * 18px), 0);
+}
 
 /* -- the clock in the top band: where in deep time the scroll is -- */
 .era {

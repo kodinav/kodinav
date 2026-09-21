@@ -212,6 +212,7 @@ export function Stage({ content }: { content: StageContent }) {
     let eraText = "";
     let framing = "";
     let progress = "";
+    let speed = 0; // how fast the scroll is moving, smoothed: the film leans into it
     let raf = 0;
     let frames = 0;
     let slow = 0;
@@ -249,7 +250,7 @@ export function Stage({ content }: { content: StageContent }) {
       }
 
       // film + tone of the chrome
-      const shot = film.frame(p, reduce ? 0 : time, narrow || portrait);
+      const shot = film.frame(p, reduce ? 0 : time, narrow || portrait, reduce ? 0 : speed);
       // what is pinned to the picture (the labels on Huxley's last skeleton) follows the camera
       const fr = `${shot.ax.toFixed(4)},${shot.ay.toFixed(4)},${shot.au.toFixed(4)}`;
       if (fr !== framing) {
@@ -323,11 +324,13 @@ export function Stage({ content }: { content: StageContent }) {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       target = clamp((window.scrollY - root.offsetTop) / max);
+      const before = cur;
       if (reduce) cur = target;
       else {
         cur += (target - cur) * (1 - Math.exp(-dt * 7.5));
         if (Math.abs(target - cur) < 0.00004) cur = target;
       }
+      speed += (((cur - before) / Math.max(dt, 0.001)) * 9 - speed) * 0.18;
       // Quality governor: a GPU that cannot hold the film steps it down rather
       // than dropping frames (checked over the first few seconds only).
       frames++;
@@ -477,7 +480,7 @@ export function Stage({ content }: { content: StageContent }) {
         {/* ---------------- the statements: one caption per scene ---------------- */}
         {statements.map((bt) => (
           <div key={bt.key} id={bt.id}>
-            <div className="beat b-say" data-in={bt.range[0]} data-out={bt.range[1]} data-fi="0.011">
+            <div className="beat b-say" data-in={bt.range[0]} data-out={bt.range[1]} data-fi="0.011" data-t>
               <h2 className="t-display" style={{ "--n": count(bt.lines.join(" ")) } as CSSProperties}>
                 {bt.lines.map((ln, k) => (
                   <span className="ln" key={ln}>
@@ -486,7 +489,7 @@ export function Stage({ content }: { content: StageContent }) {
                 ))}
               </h2>
             </div>
-            <div className="beat b-lower" data-in={bt.range[0] + 0.003} data-out={bt.range[1]} data-fi="0.011">
+            <div className="beat b-lower" data-in={bt.range[0] + 0.003} data-out={bt.range[1]} data-fi="0.011" data-t>
               <span className="chip rise">{bt.chip}</span>
               <p className="t-body" style={{ "--n": count(bt.body) } as CSSProperties}>
                 <Words text={bt.body} />
