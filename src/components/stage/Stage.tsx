@@ -407,7 +407,7 @@ export function Stage({ content }: { content: StageContent }) {
       if (!res.ok) throw new Error(String(res.status));
       trackLead("home-stage");
       setForm("done");
-      filmRef.current?.flare(); // the lamps in the cave flare
+      filmRef.current?.flare(); // the sky brightens
     } catch {
       setForm("error");
     }

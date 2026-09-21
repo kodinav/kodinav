@@ -309,7 +309,7 @@
   height: 100svh;
   overflow: clip;
   /* shown until (and unless) the film takes over */
-  background: radial-gradient(120% 90% at 70% 40%, #1b1a1c, #08080a 70%);
+  background: linear-gradient(#0a2f8c, #1d5fc4);
   color: var(--fg);
   transition: color 0.5s ease;
 }
@@ -674,6 +674,12 @@
 }
 .menu-open .stage .era {
   opacity: 0 !important;
+}
+
+/* type laid straight on a painting, as the reference does: no dark panel, only the faintest lift off the paint */
+.stage-scope[data-tone="dark"] .b-say,
+.stage-scope[data-tone="dark"] .b-lower p {
+  text-shadow: 0 1px 22px rgba(0, 0, 0, 0.42), 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 /* -- the plates, credited -- */

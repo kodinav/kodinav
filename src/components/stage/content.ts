@@ -40,7 +40,7 @@ export const eras: { at: number; label: string; years: number | null; note?: str
   { at: 0.318, label: "The cave", years: 17_000 },
   { at: 0.39, label: "The work", years: null, note: `${projects.length} projects` },
   { at: 0.648, label: "The lineage", years: null, note: `${services.length} branches` },
-  { at: 0.73, label: "By lamplight", years: null, note: "Fair questions" },
+  { at: 0.73, label: "Open sky", years: null, note: "Fair questions" },
   { at: 0.862, label: "The next step", years: null, note: "Yours" },
   { at: 0.944, label: "The measure of man", years: 535 },
   { at: 0.984, label: "Today", years: 0 },
@@ -233,7 +233,6 @@ export const signoff = {
 
 /** Every picture in the film, credited. All are in the public domain except where a licence is named. */
 export const plates = [
-  "Gabriel von Max, Monkey before a Skeleton, c. 1900",
   "T. H. Huxley, frontispiece to Man’s Place in Nature, 1863 (Wellcome Collection, CC BY 4.0)",
   "Viktor Vasnetsov, The Stone Age, 1882–85",
   "Fernand Cormon, Cain, 1880",

@@ -1,7 +1,6 @@
 /**
  * The film: the evolution of a human being, told in paintings and scrubbed by
- * the scroll. Each scene is a real work of art in the public domain — a monkey
- * regarding a skeleton, Huxley's line of skeletons from gibbon to man, stone-age
+ * the scroll. Each scene is a real work of art in the public domain — Huxley's line of skeletons from gibbon to man, stone-age
  * toolmakers, a migration, a mammoth hunt, painters in a lamp-lit cave,
  * Leonardo's measured man — and the camera moves through it as the page moves:
  * a push, a pan along the line-up, a drift across a canvas.
@@ -17,15 +16,19 @@
  * Credits for every plate are printed in the sign-off (see `content.ts`).
  */
 
-type SceneId = "ape" | "lineup" | "hands" | "trek" | "hunt" | "cave" | "measure" | "paper" | "navy";
+type SceneId = "march" | "lineup" | "hands" | "trek" | "hunt" | "cave" | "measure" | "paper" | "sky";
 
-/** kind: 0 a painting on a dark wall · 1 a drawing multiplied onto paper · 2 bare paper · 3 deep blue */
+/**
+ * Three worlds, in rotation: open sky, white paper, and a painting that fills the frame.
+ * kind: 0 a painting · 1 a drawing multiplied onto paper · 2 bare paper · 3 cobalt sky with halftone clouds ·
+ *       4 a drawing in cream on that sky.  `src` lets two scenes share one picture.
+ */
 type Near = [number, number, number, number];
-const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, number, number]; flicker?: number; near?: Near[]; floor?: number }> = {
+const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, number, number]; flicker?: number; near?: Near[]; floor?: number; src?: SceneId }> = {
   /* `near` marks what stands in front — soft regions (u, v, radius, strength) — and `floor` how far the ground
      comes forward. From them the shader makes a depth field, and slides near things further than far things as
      the camera moves: a flat canvas reads as a space. Soft on purpose, so nothing tears. */
-  ape: { aspect: 900 / 1232, kind: 0, tint: [0.035, 0.03, 0.028], floor: 0.3, near: [[0.3, 0.24, 0.17, 0.9], [0.63, 0.34, 0.17, 0.8], [0.62, 0.62, 0.24, 0.6]] },
+  march: { aspect: 3149 / 1330, kind: 4, tint: [0.955, 0.93, 0.85], src: "lineup" },
   lineup: { aspect: 3149 / 1330, kind: 1, tint: [0.955, 0.93, 0.85] },
   hands: { aspect: 3840 / 2413, kind: 0, tint: [0.03, 0.035, 0.05], floor: 0.4, near: [[0.37, 0.5, 0.13, 0.7], [0.55, 0.45, 0.2, 0.9], [0.2, 0.72, 0.18, 0.8], [0.8, 0.7, 0.2, 0.6]] },
   trek: { aspect: 1920 / 1648, kind: 0, tint: [0.05, 0.04, 0.035], floor: 0.5, near: [[0.78, 0.55, 0.2, 0.9], [0.38, 0.55, 0.22, 0.7]] },
@@ -33,7 +36,7 @@ const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, num
   cave: { aspect: 1600 / 1071, kind: 0, tint: [0.01, 0.012, 0.02], flicker: 1, floor: 0.35, near: [[0.57, 0.5, 0.2, 0.9], [0.3, 0.7, 0.17, 0.8], [0.75, 0.72, 0.17, 0.8], [0.12, 0.5, 0.14, 0.6]] },
   measure: { aspect: 1876 / 605, kind: 1, tint: [0.93, 0.80, 0.63] },
   paper: { aspect: 1, kind: 2, tint: [1, 1, 1] },
-  navy: { aspect: 1, kind: 3, tint: [0, 0, 0] },
+  sky: { aspect: 1, kind: 3, tint: [0, 0, 0] },
 };
 
 /**
@@ -48,14 +51,13 @@ type Shot = { scene: SceneId; from: number; to: number; a: Cam; b: Cam; na?: Cam
 
 const still: Cam = { cx: 0.5, cy: 0.5, vh: 1 };
 const SHOTS: Shot[] = [
-  // the question: a monkey regards what it will become
-  // …it hangs on a lit wall while the headline is read, and then the camera goes into it
-  { scene: "ape", from: 0, to: 0.056, hold: 0.42, a: { cx: 0.5, cy: 0.5, vh: 1.3, ox: 0.6 }, b: { cx: 0.47, cy: 0.3, vh: 0.5, ox: 0.12 },
-    na: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.5 }, nb: { cx: 0.47, cy: 0.3, vh: 0.72, oy: 0.1 } },
+  // the procession from gibbon to man, in cream on an open sky, standing on the lower rule beside the headline
+  { scene: "march", from: 0, to: 0.056, a: { cx: 0.5, cy: 0.5, vh: 1.95, ox: 0.24, oy: 0.105 }, b: { cx: 0.5, cy: 0.5, vh: 1.75, ox: 0.2, oy: 0.151 },
+    na: { cx: 0.3, cy: 0.5, vh: 2.9, oy: 0.52 }, nb: { cx: 0.72, cy: 0.5, vh: 2.7, oy: 0.52 } },
   // the answer, 1863: the camera walks the line from gibbon to man
   { scene: "lineup", from: 0.064, to: 0.122, pan: 0.5, wipe: [2, 0, 0], a: { cx: 0.08, cy: 0.47, vh: 1.02, ox: -0.3 }, b: { cx: 0.772, cy: 0.47, vh: 1.2, ox: -0.46 },
     na: { cx: 0.08, cy: 0.47, vh: 2.5, oy: 0.44 }, nb: { cx: 0.77, cy: 0.46, vh: 2.6, oy: 0.44 } },
-  { scene: "hands", from: 0.13, to: 0.182, wipe: [1, 0.1, -0.1], a: { cx: 0.31, cy: 0.64, vh: 0.6 }, b: { cx: 0.42, cy: 0.5, vh: 1.0 },
+  { scene: "hands", from: 0.13, to: 0.182, wipe: [1, 0.1, -0.1], a: { cx: 0.36, cy: 0.6, vh: 0.7 }, b: { cx: 0.44, cy: 0.5, vh: 0.86 },
     na: { cx: 0.27, cy: 0.64, vh: 0.78 }, nb: { cx: 0.36, cy: 0.52, vh: 0.95 } },
   { scene: "trek", from: 0.192, to: 0.244, a: { cx: 0.44, cy: 0.4, vh: 0.6 }, b: { cx: 0.56, cy: 0.58, vh: 0.66 },
     na: { cx: 0.3, cy: 0.5, vh: 0.9 }, nb: { cx: 0.72, cy: 0.48, vh: 0.98 } },
@@ -67,13 +69,12 @@ const SHOTS: Shot[] = [
   // the paper chapters keep a ghost of the line-up drifting behind them
   { scene: "lineup", from: 0.396, to: 0.718, dim: 0.9, a: { cx: 0.2, cy: 0.5, vh: 0.74 }, b: { cx: 0.78, cy: 0.46, vh: 0.74 },
     na: { cx: 0.1, cy: 0.5, vh: 1.0 }, nb: { cx: 0.8, cy: 0.5, vh: 1.0 } },
-  // by lamplight: the questions, and the brief
-  { scene: "cave", from: 0.742, to: 0.936, dim: 0.66, wipe: [1, 0.2, 0], a: { cx: 0.62, cy: 0.45, vh: 0.92 }, b: { cx: 0.46, cy: 0.5, vh: 1.0 },
-    na: { cx: 0.62, cy: 0.45, vh: 0.98 }, nb: { cx: 0.4, cy: 0.5, vh: 1.0 } },
+  // under an open sky: the questions, and the brief
+  { scene: "sky", from: 0.742, to: 0.936, a: still, b: still },
   // the measure of man: the span of the arms, as a frieze above the type
   { scene: "measure", from: 0.948, to: 0.978, wipe: [2, 0, 0], a: { cx: 0.5, cy: 0.5, vh: 2.7, oy: 0.34 }, b: { cx: 0.5, cy: 0.5, vh: 2.3, oy: 0.34 },
     na: { cx: 0.5, cy: 0.5, vh: 2.9, oy: 0.44 }, nb: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.44 } },
-  { scene: "navy", from: 0.986, to: 1.01, a: still, b: still },
+  { scene: "sky", from: 0.986, to: 1.01, a: still, b: still },
 ];
 
 /** Where the skeleton of Man stands in the line-up plate: the specimen's labels are pinned to it. */
@@ -150,15 +151,49 @@ vec3 motes(vec2 p, float asp){
   return s;
 }
 
+// an open cobalt sky, and a handful of compact clouds read through a dot screen
+vec3 skyOf(vec2 p, float asp){
+  vec2 frag=gl_FragCoord.xy; vec2 uv=frag/uRes; float px=uRes.y/900.;
+  vec3 sky=mix(vec3(.10,.37,.78),vec3(.035,.165,.52),smoothstep(0.,1.,uv.y));
+  sky*=1.+.10*(fbm(p*1.3+3.)-.5);
+  float cell=6.5*px; vec2 cc=(floor(frag/cell)+.5)*cell; vec2 cp=(cc-.5*uRes)/(.5*uRes.y);
+  float dens=0., lit=0.;
+  for(int i=0;i<5;i++){
+    float fi=float(i); vec2 c=vec2(0.); float s=.3;
+    if(i==0){ c=vec2(.10*asp,.80); s=.30; }
+    if(i==1){ c=vec2(.80*asp,.46); s=.24; }
+    if(i==2){ c=vec2(-.66*asp,.70); s=.27; }
+    if(i==3){ c=vec2(-.06*asp,-.84); s=.26; }
+    if(i==4){ c=vec2(.62*asp,-.70); s=.22; }
+    s*=clamp(asp/1.6,.42,1.);
+    c.x+=sin(uTime*.013+fi*2.1)*.05+uTime*.0016*(fi-2.)+uPtr.x*.02*(fi-2.);
+    vec2 d=(cp-c)/vec2(s*1.75,s*.66);
+    float bump=fbm(cp*5.2+fi*7.3)*.62;
+    float dn=smoothstep(0.,.30,1.-length(d)+bump-.34)*smoothstep(-.34,.02,d.y);
+    lit=max(lit,dn*smoothstep(-.5,.7,d.y+bump*.5)); dens=max(dens,dn);
+  }
+  float rad=sqrt(clamp(dens,0.,1.))*.52*cell;
+  float dotm=smoothstep(rad,rad-1.1*px,length(frag-cc))*step(.03,dens);
+  vec3 cloud=mix(vec3(.60,.64,.76),vec3(.98,.95,.87),clamp(lit/max(dens,.001),0.,1.));
+  return mix(sky,cloud,dotm*.96)+uFlare*.05;
+}
+
 vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, vec4 near[4], vec4 mov, float has, vec2 p, float asp, out float dark){
   float kind=par.z;
   vec3 paper=vec3(.949,.945,.929)*(1.+.035*(fbm(p*2.2+40.)-.5));
   dark=0.;
   if(kind>1.5 && kind<2.5) return paper;
-  if(kind>2.5){
-    dark=1.;
-    vec3 navy=mix(vec3(.030,.090,.30),vec3(.012,.030,.12),smoothstep(-1.,1.,-p.y+.3*length(p)));
-    return navy*(1.+.10*(fbm(p*1.3+3.)-.5))+motes(p,asp)*.6;
+  if(kind>2.5 && kind<3.5) return skyOf(p,asp);
+  if(kind>3.5){
+    // a drawing in cream on the sky: the figures come out of the haze on the side where the type is
+    vec2 q4=p-vec2(par.x*asp,par.y)-uPtr*vec2(.010,.006);
+    vec2 u4=vec2(cam.x+q4.x*cam.z*.5/cam.w, cam.y-q4.y*cam.z*.5);
+    vec2 e4=min(u4,1.-u4);
+    vec3 i4=clamp(texture2D(t,clamp(u4,0.,1.)).rgb/ext.rgb,0.,1.);
+    float ink4=clamp((1.-dot(i4,vec3(.333)))*1.35,0.,1.)*smoothstep(0.,.05,e4.x)*smoothstep(0.,.06,e4.y)*has;
+    ink4*=mix(smoothstep(.0,.30,p.x/asp),1.,uNarrow);
+    ink4*=smoothstep(.955,.915,u4.y);                        // the plate's own caption stays off the sky
+    return mix(skyOf(p,asp),vec3(.985,.96,.885),ink4);
   }
   // the lens drifts with the pointer, and the paint is never quite still
   vec2 q=p-vec2(par.x*asp,par.y)-uPtr*vec2(.014,.010);
@@ -185,9 +220,9 @@ vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, vec4 near[4], vec4 mov, flo
   dark=1.;
   // a painting: graded toward the studio's palette — cool in the shadows, warm in the lights
   float lum=dot(img,vec3(.30,.59,.11));
-  img=mix(img,img*vec3(.84,.93,1.14),.42*(1.-lum));
-  img=mix(img,img*vec3(1.06,1.0,.92),.35*lum);
-  img=pow(img,vec3(1.05))*1.04;
+  img=mix(vec3(lum),img,1.14);                                   // a touch more colour,
+  img=pow(clamp(img,0.,1.),vec3(.90))*1.06;                      // lifted so the paint glows, as varnished canvas does
+  img=mix(img,img*vec3(1.05,1.0,.93),.30*lum);
   // a band of light crosses the canvas as the shot is scrolled, like a lamp carried past it
   float sw=exp(-pow((uv.x*.85+uv.y*.35-mix(-.35,1.45,mov.w))*2.6,2.));
   img=img*(1.+.26*sw)+vec3(.05,.04,.02)*sw*lum;
@@ -233,10 +268,10 @@ void main(){
     col=mix(col,.5+.5*cos(6.2831*(rnd+vec3(0.,.33,.67))),edge*step(.55,rnd)*.85);
   }
   // a scrim where the type sits: the left on a wide screen, the foot on a phone
-  float sc=uNarrow>.5 ? smoothstep(.55,-.55,p.y)*.84 : max(smoothstep(.30,-1.25,p.x/asp)*.86,smoothstep(-.30,-1.05,p.y)*.66);
+  float sc=uNarrow>.5 ? smoothstep(.45,-.65,p.y)*.62 : max(smoothstep(.10,-1.25,p.x/asp)*.62,smoothstep(-.35,-1.05,p.y)*.46);
   col*=1.-sc*dk;
   float vg=length((uv-.5)*vec2(1.08,1.));
-  col*=1.-mix(.10,.60,dk)*smoothstep(.35,.95,vg)*vg;
+  col*=1.-mix(.08,.26,dk)*smoothstep(.35,.95,vg)*vg;
   col+=(hash(frag+fract(uTime)*91.7)-.5)*.045;
   gl_FragColor=vec4(col,1.);
 }`;
@@ -309,7 +344,10 @@ export class Film {
   /** Fetch a painting as the scroll nears it; forget it once it is far behind. */
   private want(id: SceneId) {
     const gl = this.gl;
-    if (!gl || SCENES[id].kind > 1.5 || this.tex.has(id)) return;
+    const kind = SCENES[id].kind;
+    if (!gl || kind === 2 || kind === 3) return;
+    id = SCENES[id].src ?? id;
+    if (this.tex.has(id)) return;
     const entry = { t: null as WebGLTexture | null, ready: false };
     this.tex.set(id, entry);
     const img = new Image();
@@ -399,7 +437,7 @@ export class Film {
     // keep this painting, the next and the one after within reach; let the rest go
     const idx = SHOTS.indexOf(cur);
     const keep = new Set<SceneId>();
-    for (let k = Math.max(0, idx - 1); k <= Math.min(SHOTS.length - 1, idx + 2); k++) keep.add(SHOTS[k].scene);
+    for (let k = Math.max(0, idx - 1); k <= Math.min(SHOTS.length - 1, idx + 2); k++) keep.add(SCENES[SHOTS[k].scene].src ?? SHOTS[k].scene);
     // fetch the next painting at once, and the one after it only when this shot is half gone
     const ahead = p > (cur.from + cur.to) / 2 ? 2 : 1;
     for (let k = idx; k <= Math.min(SHOTS.length - 1, idx + ahead); k++) this.want(SHOTS[k].scene);
@@ -422,7 +460,7 @@ export class Film {
       gl.uniform4f(u[cam], c.cx, c.cy, c.vh, sc.aspect);
       gl.uniform4f(u[par], c.ox, c.oy, sc.kind, shot.dim ?? 0);
       gl.uniform4f(u[ext], sc.tint[0], sc.tint[1], sc.tint[2], sc.flicker ?? 0);
-      const e = this.tex.get(shot.scene);
+      const e = this.tex.get(sc.src ?? shot.scene);
       gl.activeTexture(gl.TEXTURE0 + unit);
       gl.bindTexture(gl.TEXTURE_2D, e?.ready ? e.t : this.blank);
       gl.uniform1i(u[tex], unit);
