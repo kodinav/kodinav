@@ -6,7 +6,8 @@ import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from 
 import { Price } from "@/components/Price";
 import { getAttribution } from "@/lib/attribution";
 import { trackLead } from "@/lib/fbq";
-import { chapters, SCREENS, type StageContent } from "./content";
+import { chapters, eras, SCREENS, type StageContent } from "./content";
+import { sampleStage, STAGE } from "./creatures";
 import { Film, filmAt } from "./film";
 import { StageButton, StageSubmit } from "./StageButton";
 
@@ -15,6 +16,10 @@ import { StageButton, StageSubmit } from "./StageButton";
  * position becomes a single smoothed number, 0 → 1, and that number drives
  * everything: the film behind the type, which "beats" of copy are on stage,
  * the travelling work column, the rail, the tone of the chrome.
+ *
+ * The film tells one story — a cell becomes a fish, a tetrapod, a bird — and
+ * the copy captions it. The creatures' dots are built in a worker so the page
+ * never waits on them.
  *
  * Every beat is ordinary server-rendered HTML — headings, paragraphs, links,
  * a form — so crawlers and screen readers get the whole page in order. Only
@@ -43,14 +48,90 @@ function Words({ text, from = 0 }: { text: string; from?: number }) {
 }
 const count = (s: string) => s.split(" ").length;
 
-/* Where each answer lands on a wide screen — scattered, not stacked. */
+/* Where each answer lands on a wide screen — scattered, not stacked, and clear of the perch. */
 const QA_SPOTS = [
-  { x: "44vw", y: "53%" },
-  { x: "63vw", y: "58%" },
-  { x: "24vw", y: "57%" },
-  { x: "52vw", y: "50%" },
-  { x: "35vw", y: "55%" },
+  { x: "38vw", y: "53%" },
+  { x: "50vw", y: "57%" },
+  { x: "20vw", y: "57%" },
+  { x: "44vw", y: "50%" },
+  { x: "29vw", y: "55%" },
 ];
+
+/** Deep time, to three significant figures. */
+function yearsAgo(y: number) {
+  if (y < 1000) return "Today";
+  const mag = Math.pow(10, Math.floor(Math.log10(y)) - 2);
+  return `${(Math.round(y / mag) * mag).toLocaleString("en-US")} years ago`;
+}
+function eraAt(p: number) {
+  let i = 0;
+  eras.forEach((e, k) => {
+    if (p >= e.at) i = k;
+  });
+  const e = eras[i];
+  const next = eras[i + 1];
+  if (e.years === null) return { label: e.label, value: e.note ?? "" };
+  if (!next || next.years === null) return { label: e.label, value: yearsAgo(e.years) };
+  const t = clamp((p - e.at) / (next.at - e.at));
+  return { label: e.label, value: yearsAgo(e.years + (next.years - e.years) * t) };
+}
+
+/**
+ * The lineage, drawn as a naturalist would: one root, a few clades, and every
+ * service the studio offers as a tip. It inks itself in as the beat is scrolled.
+ */
+function Tree({ lineage }: { lineage: StageContent["lineage"] }) {
+  const tips = lineage.clades.flatMap((c) => c.tips);
+  const rows = tips.length;
+  const y = (row: number) => (row + 0.5) * 10;
+  const pct = (units: number) => `${(units / (rows * 10)) * 100}%`;
+  const clades = lineage.clades.map((c, i) => {
+    const first = lineage.clades.slice(0, i).reduce((n, x) => n + x.tips.length, 0);
+    const last = first + c.tips.length - 1;
+    return { ...c, first, last, mid: (y(first) + y(last)) / 2 };
+  });
+  const top = clades[0].mid;
+  const bottom = clades[clades.length - 1].mid;
+  return (
+    <div className="beat b-tree" data-in={lineage.range[0] + 0.004} data-out={lineage.range[1]} data-fi="0.012" data-t>
+      {/* Plain 1px rules, each growing from where it branches: crisper than SVG at any size. */}
+      <div className="rules" aria-hidden>
+        <i className="h" style={{ left: "1%", top: pct((top + bottom) / 2), width: "11%", "--d": 0 } as CSSProperties} />
+        <i className="v" style={{ left: "12%", top: pct(top), height: pct(bottom - top), "--d": 0.5 } as CSSProperties} />
+        {clades.map((c, i) => (
+          <span key={c.label}>
+            <i className="h" style={{ left: "12%", top: pct(c.mid), width: "15%", "--d": 1 + i * 0.15 } as CSSProperties} />
+            <i
+              className="v"
+              style={{ left: "27%", top: pct(y(c.first)), height: pct(y(c.last) - y(c.first)), "--d": 1.5 + i * 0.15 } as CSSProperties}
+            />
+            {c.tips.map((t, k) => (
+              <i
+                key={t.slug}
+                className="h"
+                style={{ left: "27%", top: pct(y(c.first + k)), width: "14%", "--d": 2 + (c.first + k) * 0.09 } as CSSProperties}
+              />
+            ))}
+          </span>
+        ))}
+      </div>
+      {clades.map((c, i) => (
+        <span key={c.label} className="clade" style={{ top: pct(c.mid), "--d": 1.2 + i * 0.15 } as CSSProperties}>
+          {c.label}
+        </span>
+      ))}
+      <ul>
+        {tips.map((t, k) => (
+          <li key={t.slug} style={{ top: pct(y(k)), "--d": 2.5 + k * 0.09 } as CSSProperties}>
+            <Link href={`/services/${t.slug}`} prefetch={false}>
+              {t.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function Stage({ content }: { content: StageContent }) {
   const rootRef = useRef<HTMLElement>(null);
@@ -60,12 +141,15 @@ export function Stage({ content }: { content: StageContent }) {
   const trackRef = useRef<HTMLOListElement>(null);
   const pctRef = useRef<HTMLParagraphElement>(null);
   const railRef = useRef<HTMLElement>(null);
+  const eraLabelRef = useRef<HTMLSpanElement>(null);
+  const eraValueRef = useRef<HTMLSpanElement>(null);
+  const filmRef = useRef<Film | null>(null);
 
   const [active, setActive] = useState(0);
   const [workNear, setWorkNear] = useState(false);
   const [form, setForm] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  const { hero, studioBeats, work, terms, questions, brief, signoff } = content;
+  const { hero, statements, notebook, work, lineage, questions, brief, signoff } = content;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -85,12 +169,24 @@ export function Stage({ content }: { content: StageContent }) {
     let tall = tallMq.matches;
     let portrait = window.innerHeight > window.innerWidth;
     const film = new Film(canvas, window.innerWidth <= 900);
-    if (film.ok) pin.classList.add("has-film");
+    filmRef.current = film;
+    let worker: Worker | null = null;
+    if (film.ok) {
+      pin.classList.add("has-film");
+      // The first cell is cheap, so it is on screen at once; the rest of the
+      // lineage is built off the main thread, in the order the story needs it.
+      const cells = sampleStage(STAGE.cells, film.count);
+      film.load(STAGE.cells, cells.pos, cells.nrm);
+      worker = new Worker(new URL("./sampler.worker.ts", import.meta.url), { type: "module" });
+      worker.onmessage = (e: MessageEvent<{ stage: number; pos: Float32Array; nrm: Float32Array }>) =>
+        film.load(e.data.stage, e.data.pos, e.data.nrm);
+      worker.postMessage({ count: film.count, stages: [STAGE.fish, STAGE.tetrapod, STAGE.firstBird, STAGE.egg, STAGE.bird] });
+    }
     // No WebGL (or a driver that rejects the shader): step aside and let the
-    // CSS sky behind the canvas carry the stage.
+    // CSS water behind the canvas carry the stage.
     else canvas.style.display = "none";
 
-    type Beat = { el: HTMLElement; a: number; b: number; fi: number; fo: number; on: boolean | null; v: number; o: number };
+    type Beat = { el: HTMLElement; a: number; b: number; fi: number; fo: number; on: boolean | null; v: number; o: number; t: number };
     const beats: Beat[] = [...pin.querySelectorAll<HTMLElement>("[data-in]")].map((el) => ({
       el,
       a: Number(el.dataset.in),
@@ -100,6 +196,7 @@ export function Stage({ content }: { content: StageContent }) {
       on: null,
       v: -1,
       o: -1,
+      t: el.hasAttribute("data-t") ? -1 : -2, // −2: this beat does not track its own progress
     }));
     const railLinks = [...(railRef.current?.querySelectorAll<HTMLAnchorElement>("a") ?? [])];
 
@@ -131,6 +228,8 @@ export function Stage({ content }: { content: StageContent }) {
     let chapter = -2;
     let activeItem = -1;
     let near = false;
+    let eraText = "";
+    let framing = "";
     let raf = 0;
     let frames = 0;
     let slow = 0;
@@ -153,6 +252,13 @@ export function Stage({ content }: { content: StageContent }) {
           bt.el.style.setProperty("--o", String(o));
           bt.o = o;
         }
+        if (bt.t > -2) {
+          const t = inside ? Math.round(clamp((p - bt.a) / (bt.b - bt.a)) * 1000) / 1000 : 0;
+          if (t !== bt.t) {
+            bt.el.style.setProperty("--t", String(t));
+            bt.t = t;
+          }
+        }
         const on = o > 0.5;
         if (on !== bt.on) {
           bt.el.classList.toggle("is-on", on);
@@ -161,8 +267,24 @@ export function Stage({ content }: { content: StageContent }) {
       }
 
       // film + tone of the chrome
-      const state = filmAt(p, narrow ? "narrow" : tall ? "tablet" : "wide", reduce ? 0 : time, portrait);
+      const state = filmAt(p, narrow ? "narrow" : tall ? "tablet" : "wide", portrait);
       film.render(state, reduce ? 0 : time);
+      // what is pinned to the creature (the specimen's labels) follows it
+      const fr = `${state.ox.toFixed(4)},${state.oy.toFixed(4)},${state.os.toFixed(4)}`;
+      if (fr !== framing) {
+        pin.style.setProperty("--ox", state.ox.toFixed(4));
+        pin.style.setProperty("--oy", state.oy.toFixed(4));
+        pin.style.setProperty("--os", state.os.toFixed(4));
+        framing = fr;
+      }
+      // the clock in the top band
+      const era = eraAt(p);
+      const et = `${era.label}|${era.value}`;
+      if (et !== eraText && eraLabelRef.current && eraValueRef.current) {
+        eraLabelRef.current.textContent = era.label;
+        eraValueRef.current.textContent = era.value;
+        eraText = et;
+      }
       const nextTone = state.paper > 0.52 ? "light" : "dark";
       if (nextTone !== tone && scope) {
         scope.dataset.tone = nextTone;
@@ -204,7 +326,7 @@ export function Stage({ content }: { content: StageContent }) {
       chapters.forEach((c, i) => {
         if (p >= c.at - 0.012) ch = i;
       });
-      if (p > 0.806) ch = -1;
+      if (p > questions.range[1] + 0.006) ch = -1;
       if (ch !== chapter) {
         railLinks.forEach((a, i) => a.classList.toggle("is-active", i === ch));
         chapter = ch;
@@ -244,6 +366,7 @@ export function Stage({ content }: { content: StageContent }) {
       const c = chapters.find((x) => `#${x.id}` === window.location.hash);
       if (c) goTo(c.at + 0.01);
       else if (window.location.hash === "#brief") goTo(brief.range[0] + 0.02);
+      else if (window.location.hash === "#studio") goTo(chapters[0].at + 0.01); // the old name of chapter one
     };
     // Tabbing into a beat that is off stage brings the stage to it.
     const onFocus = (e: FocusEvent) => {
@@ -253,7 +376,7 @@ export function Stage({ content }: { content: StageContent }) {
       if (bt && bt.o < 0.5) goTo(bt.a + Math.min(bt.fi * 2, (bt.b - bt.a) / 2));
     };
     const onPointer = (e: PointerEvent) => {
-      film.pointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1));
+      film.pointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1), e.pointerType === "mouse");
     };
 
     measure();
@@ -276,9 +399,11 @@ export function Stage({ content }: { content: StageContent }) {
       window.removeEventListener("hashchange", onHash);
       pin.removeEventListener("focusin", onFocus);
       window.removeEventListener("pointermove", onPointer);
+      worker?.terminate();
+      filmRef.current = null;
       film.destroy();
     };
-  }, [work.range, brief.range]);
+  }, [work.range, brief.range, questions.range]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -294,6 +419,7 @@ export function Stage({ content }: { content: StageContent }) {
       if (!res.ok) throw new Error(String(res.status));
       trackLead("home-stage");
       setForm("done");
+      filmRef.current?.hatchEgg(); // the egg lights up
     } catch {
       setForm("error");
     }
@@ -328,11 +454,21 @@ export function Stage({ content }: { content: StageContent }) {
           ))}
         </nav>
 
+        <p className="era" aria-hidden>
+          <span ref={eraLabelRef}>{eras[0].label}</span>
+          <span ref={eraValueRef}>{yearsAgo(eras[0].years ?? 0)}</span>
+        </p>
+
         {/* ---------------- hero ---------------- */}
         <div className="beat b-hero" data-in={hero.range[0] - 0.01} data-out={hero.range[1]} data-fi="0.0001">
           <h1 className="t-display" style={{ "--n": count(hero.title) } as CSSProperties}>
-            <Words text={hero.title} />
+            {hero.lines.map((ln, k) => (
+              <span className="ln" key={ln}>
+                <Words text={ln} from={hero.lines.slice(0, k).join(" ").split(" ").filter(Boolean).length} />
+              </span>
+            ))}
           </h1>
+          <p className="kicker t-display">{hero.kicker}</p>
           <p className="sub t-serif">
             {hero.sub.map((l) => (
               <span key={l}>{l}</span>
@@ -347,9 +483,9 @@ export function Stage({ content }: { content: StageContent }) {
           <p className="t-body">{hero.body}</p>
         </div>
 
-        {/* ---------------- 1 · the studio ---------------- */}
-        {studioBeats.map((bt, i) => (
-          <div key={bt.chip} id={i === 0 ? "studio" : undefined}>
+        {/* ---------------- the statements: one caption per scene ---------------- */}
+        {statements.map((bt) => (
+          <div key={bt.key} id={bt.id}>
             <div className="beat b-say" data-in={bt.range[0]} data-out={bt.range[1]} data-fi="0.011">
               <h2 className="t-display" style={{ "--n": count(bt.lines.join(" ")) } as CSSProperties}>
                 {bt.lines.map((ln, k) => (
@@ -368,7 +504,59 @@ export function Stage({ content }: { content: StageContent }) {
           </div>
         ))}
 
-        {/* ---------------- 2 · the work ---------------- */}
+        {/* ---------------- the notebook: the specimen, every part named ---------------- */}
+        <div className="beat b-specimen" data-in={notebook.range[0] + 0.006} data-out={notebook.range[1]} data-fi="0.02" aria-hidden>
+          <div className="specimen">
+            <svg viewBox="-2 -1.5 4 3" preserveAspectRatio="none">
+              {notebook.parts.map((pt, i) => (
+                <g key={pt.n} style={{ "--i": i } as CSSProperties}>
+                  <line
+                    x1={pt.ax}
+                    y1={-pt.ay}
+                    x2={pt.ax + (pt.lx - pt.ax) * 0.86}
+                    y2={-(pt.ay + (pt.ly - pt.ay) * 0.86)}
+                    pathLength={1}
+                  />
+                  <circle cx={pt.ax} cy={-pt.ay} r={0.014} />
+                </g>
+              ))}
+            </svg>
+            {notebook.parts.map((pt, i) => (
+              <span key={pt.n} className="part" style={{ "--lx": pt.lx, "--ly": pt.ly, "--i": i } as CSSProperties}>
+                <b>{pt.n}</b>
+                {pt.label}
+              </span>
+            ))}
+            <span className="fig">{notebook.fig}</span>
+          </div>
+        </div>
+        <div className="beat b-terms is-right is-notebook" data-in={notebook.range[0]} data-out={notebook.range[1]} data-fi="0.014">
+          <h2 className="t-display" style={{ "--n": count(notebook.lines.join(" ")) } as CSSProperties}>
+            {notebook.lines.map((ln, k) => (
+              <span className="ln" key={ln}>
+                <Words text={ln} from={notebook.lines.slice(0, k).join(" ").split(" ").filter(Boolean).length} />
+              </span>
+            ))}
+          </h2>
+          <p className="lead t-serif rise">
+            {notebook.lead} <Price inr={notebook.price.inr} usd={notebook.price.usd} />.
+          </p>
+          <div className="fine rise">
+            <span className="label">{notebook.label}</span>
+            <div>
+              <p className="t-body">{notebook.body}</p>
+              <div className="links">
+                {notebook.links.map((l) => (
+                  <Link key={l.href} href={l.href} className="work-link">
+                    {l.label} <span aria-hidden>→</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ---------------- the cabinet: the real work, catalogued ---------------- */}
         <div
           ref={workRef}
           id="work"
@@ -396,7 +584,7 @@ export function Stage({ content }: { content: StageContent }) {
             </div>
             <figcaption className="plate-cap">
               <span>
-                {String(active + 1).padStart(2, "0")} / {String(work.items.length).padStart(2, "0")}
+                Fig. {String(active + 1).padStart(2, "0")} / {String(work.items.length).padStart(2, "0")}
               </span>
               <span>{current.title}</span>
             </figcaption>
@@ -428,49 +616,33 @@ export function Stage({ content }: { content: StageContent }) {
           </div>
         </div>
 
-        {/* ---------------- 3 · the terms ---------------- */}
-        {terms.map((g, gi) => (
-          <div
-            key={g.label}
-            id={gi === 0 ? "terms" : undefined}
-            className={`beat b-terms ${g.side === "right" ? "is-right" : "is-left"}`}
-            data-in={g.range[0]}
-            data-out={g.range[1]}
-            data-fi="0.014"
-          >
-            <h2 className="t-display" style={{ "--n": count(g.lines.join(" ")) } as CSSProperties}>
-              {g.lines.map((ln, k) => (
-                <span className="ln" key={ln}>
-                  <Words text={ln} from={g.lines.slice(0, k).join(" ").split(" ").filter(Boolean).length} />
-                </span>
-              ))}
-            </h2>
-            <p className="lead t-serif rise">
-              {g.lead}
-              {g.price && (
-                <>
-                  {" "}
-                  <Price inr={g.price.inr} usd={g.price.usd} />.
-                </>
-              )}
-            </p>
-            <div className="fine rise">
-              <span className="label">{g.label}</span>
-              <div>
-                <p className="t-body">{g.body}</p>
-                <div className="links">
-                  {g.links.map((l) => (
-                    <Link key={l.href} href={l.href} className="work-link">
-                      {l.label} <span aria-hidden>→</span>
-                    </Link>
-                  ))}
-                </div>
+        {/* ---------------- the lineage: every service, as the tips of one tree ---------------- */}
+        <div id="terms" className="beat b-terms is-left" data-in={lineage.range[0]} data-out={lineage.range[1]} data-fi="0.014">
+          <h2 className="t-display" style={{ "--n": count(lineage.lines.join(" ")) } as CSSProperties}>
+            {lineage.lines.map((ln, k) => (
+              <span className="ln" key={ln}>
+                <Words text={ln} from={lineage.lines.slice(0, k).join(" ").split(" ").filter(Boolean).length} />
+              </span>
+            ))}
+          </h2>
+          <p className="lead t-serif rise">{lineage.lead}</p>
+          <div className="fine rise">
+            <span className="label">{lineage.label}</span>
+            <div>
+              <p className="t-body">{lineage.body}</p>
+              <div className="links">
+                {lineage.links.map((l) => (
+                  <Link key={l.href} href={l.href} className="work-link">
+                    {l.label} <span aria-hidden>→</span>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
-        ))}
+        </div>
+        <Tree lineage={lineage} />
 
-        {/* ---------------- 4 · questions ---------------- */}
+        {/* ---------------- questions, under the stars ---------------- */}
         <div
           id="questions"
           className="beat b-sign"
@@ -484,7 +656,8 @@ export function Stage({ content }: { content: StageContent }) {
           </p>
         </div>
         {questions.items.map((qa, i) => {
-          const start = questions.range[0] + 0.024 + i * 0.0216;
+          const step = (questions.range[1] - questions.range[0] - 0.03) / questions.items.length;
+          const start = questions.range[0] + 0.022 + i * step;
           const last = i === questions.items.length - 1;
           return (
             <article
@@ -492,7 +665,7 @@ export function Stage({ content }: { content: StageContent }) {
               className="beat b-qa"
               style={{ "--x": QA_SPOTS[i % QA_SPOTS.length].x, "--y": QA_SPOTS[i % QA_SPOTS.length].y } as CSSProperties}
               data-in={start}
-              data-out={last ? questions.range[1] : start + 0.0196}
+              data-out={last ? questions.range[1] : start + step - 0.002}
               data-fi="0.008"
               data-fo="0.004"
             >
@@ -502,7 +675,7 @@ export function Stage({ content }: { content: StageContent }) {
           );
         })}
 
-        {/* ---------------- the brief ---------------- */}
+        {/* ---------------- the egg: the brief ---------------- */}
         <div id="brief" className="beat b-brief" data-in={brief.range[0]} data-out={brief.range[1]} data-fi="0.014" data-fo="0.01">
           <div className="brief-intro">
             <span className="chip rise">{brief.chip}</span>

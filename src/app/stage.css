@@ -309,7 +309,7 @@
   height: 100svh;
   overflow: clip;
   /* shown until (and unless) the film takes over */
-  background: linear-gradient(#0a2f8c, #1d5fc4);
+  background: linear-gradient(#0b2a80, #061a5c 55%, #03103f);
   color: var(--fg);
   transition: color 0.5s ease;
 }
@@ -543,8 +543,19 @@
 }
 .b-hero h1 {
   margin: 0;
-  font-size: clamp(2.1rem, 5.357vw, 7rem);
+  font-size: clamp(2.1rem, 5.1vw, 6.6rem);
+  line-height: 0.96;
   white-space: nowrap;
+}
+.b-hero h1 .ln {
+  display: block;
+}
+.b-hero .kicker {
+  margin: 0.5vw 0 0;
+  font-size: clamp(1.5rem, 3.32vw, 4.4rem);
+  font-style: italic;
+  color: var(--fg2);
+  animation: rise-in 1s var(--ease) 0.62s both;
 }
 .b-hero h1 .w {
   animation: word-in 1s var(--ease) both;
@@ -560,7 +571,7 @@
   display: block;
 }
 .b-hero .cta {
-  margin-top: 4.65vw;
+  margin-top: 2.6vw;
   animation: rise-in 1s var(--ease) 0.95s both;
 }
 @keyframes word-in {
@@ -613,6 +624,178 @@
 }
 .b-say h2 span.ln {
   display: block;
+}
+
+/* -- the clock in the top band: where in deep time the scroll is -- */
+.era {
+  position: absolute;
+  z-index: 3;
+  left: calc(var(--gx1) + 2.2vw);
+  top: calc(var(--gy1) / 2);
+  margin: 0;
+  display: flex;
+  gap: 1.4em;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fg3);
+  font-variant-numeric: tabular-nums;
+  animation: rise-in 1s var(--ease) 1.3s both;
+}
+.era span:first-child {
+  color: var(--fg);
+}
+.era span:first-child::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 0.9em;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: 1px;
+  animation: era-pulse 2.4s ease-in-out infinite;
+}
+@keyframes era-pulse {
+  50% {
+    opacity: 0.25;
+  }
+}
+.menu-open .stage .era {
+  opacity: 0 !important;
+}
+
+/* -- the notebook: leader lines and labels pinned to the specimen -- */
+.b-specimen {
+  inset: 0;
+  pointer-events: none;
+}
+.specimen {
+  position: absolute;
+  left: calc(50% + var(--ox, 0) * 50%);
+  top: calc(50% - var(--oy, 0) * 50%);
+  width: 0;
+  height: 0;
+  --u: calc(var(--os, 0.6) * 50svh);
+}
+.specimen svg {
+  position: absolute;
+  left: calc(-2 * var(--u));
+  top: calc(-1.5 * var(--u));
+  width: calc(4 * var(--u));
+  height: calc(3 * var(--u));
+  overflow: visible;
+}
+.specimen line {
+  stroke: var(--fg);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  opacity: clamp(0, var(--v) * 2.4 - var(--i) * 0.22, 1);
+}
+.specimen g {
+  --i: 0;
+}
+.specimen circle {
+  fill: var(--fg);
+  opacity: clamp(0, var(--v) * 2.4 - var(--i) * 0.22, 1);
+}
+.specimen .part,
+.specimen .fig {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fg);
+}
+.specimen .part {
+  left: calc(var(--lx) * var(--u));
+  top: calc(var(--ly) * -1 * var(--u));
+  transform: translate(-50%, -50%);
+  padding: 3px 7px;
+  background: var(--paper, #f2f1ed);
+  opacity: clamp(0, var(--v) * 2.4 - var(--i) * 0.22 - 0.5, 1);
+}
+.specimen .part b {
+  margin-right: 0.8em;
+  font-weight: 400;
+  color: var(--fg3);
+}
+.specimen .fig {
+  left: 0;
+  top: calc(1.02 * var(--u));
+  transform: translateX(-50%);
+  color: var(--fg3);
+  opacity: clamp(0, var(--v) * 2 - 1, 1);
+}
+
+/* -- the lineage: every service, as the tips of one tree -- */
+.b-tree {
+  left: 60.5vw;
+  right: calc(var(--pad) * 0.5);
+  top: 13%;
+  height: 50%;
+}
+.b-tree .rules i {
+  position: absolute;
+  background: var(--fg);
+  --k: clamp(0, var(--t) * 7 - var(--d), 1);
+}
+.b-tree .rules i.h {
+  height: 1px;
+  transform: scaleX(var(--k));
+  transform-origin: 0 50%;
+}
+.b-tree .rules i.v {
+  width: 1px;
+  transform: scaleY(var(--k));
+  transform-origin: 50% 0;
+}
+.b-tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.b-tree li {
+  position: absolute;
+  left: 44%;
+  transform: translateY(-50%);
+  opacity: clamp(0, var(--t) * 7 - var(--d), 1);
+  font-family: var(--font-mono);
+  font-size: clamp(0.625rem, 0.76vw, 0.8rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.b-tree li a {
+  color: var(--fg);
+  text-decoration: none;
+  padding: 3px 0;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.42s var(--ease);
+}
+.b-tree .clade {
+  position: absolute;
+  left: 13.5%;
+  transform: translateY(-160%);
+  opacity: clamp(0, var(--t) * 7 - var(--d), 1);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg3);
+}
+@media (hover: hover) {
+  .b-tree li a:hover {
+    background-size: 100% 1px;
+  }
 }
 
 /* -- chapter 2: a column that travels through the pinned frame, with a ruler -- */
@@ -776,6 +959,11 @@
 }
 .b-terms h2 span.ln {
   display: block;
+}
+.b-terms.is-notebook h2 {
+  font-size: clamp(2rem, 4.05vw, 5.3rem);
+  line-height: 0.95;
+  white-space: nowrap;
 }
 .b-terms .lead {
   max-width: 36vw;
@@ -1167,18 +1355,50 @@
 
 /* ---------- narrow screens: the same stage, re-hung ---------- */
 @media (width <= 720px) {
+  .era {
+    left: 50%;
+    top: 33px;
+    gap: 0.9em;
+    transform: translate(-50%, -50%);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+  }
+  .era span:first-child::before {
+    display: none;
+  }
   .b-hero {
-    bottom: calc(28.8% + 50px);
+    bottom: calc(28.8% + 34px);
   }
   .b-hero h1 {
-    font-size: 8.46vw;
+    font-size: 8.9vw;
+  }
+  .b-hero .kicker {
+    margin-top: 6px;
+    font-size: 6.4vw;
+  }
+  .specimen .part,
+  .specimen .fig {
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    padding: 2px 4px;
+  }
+  .b-tree {
+    left: var(--pad);
+    right: var(--pad);
+    top: 84px;
+    height: 37svh;
+  }
+  .b-tree li {
+    left: 45%;
+    font-size: 8px;
+    letter-spacing: 0.12em;
   }
   .b-hero .sub {
     margin-top: 12px;
     font-size: 3.68vw;
   }
   .b-hero .cta {
-    margin-top: 40px;
+    margin-top: 26px;
   }
   .b-lower {
     top: calc(71.2% + 45px);
