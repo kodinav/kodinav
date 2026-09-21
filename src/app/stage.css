@@ -309,7 +309,7 @@
   height: 100svh;
   overflow: clip;
   /* shown until (and unless) the film takes over */
-  background: linear-gradient(#0b2a80, #061a5c 55%, #03103f);
+  background: radial-gradient(120% 90% at 70% 40%, #1b1a1c, #08080a 70%);
   color: var(--fg);
   transition: color 0.5s ease;
 }
@@ -666,6 +666,21 @@
 }
 .menu-open .stage .era {
   opacity: 0 !important;
+}
+
+/* -- the plates, credited -- */
+.end-plates {
+  margin: 0 0 14px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  line-height: 1.7;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg3);
+}
+.end-plates span {
+  color: var(--fg2);
+  margin-right: 0.8em;
 }
 
 /* -- a cue to begin, and a line along the bottom that fills with the scroll -- */
@@ -1427,11 +1442,14 @@
     bottom: calc(28.8% + 34px);
   }
   .b-hero h1 {
-    font-size: 8.9vw;
+    font-size: 7.6vw;
   }
   .b-hero .kicker {
     margin-top: 6px;
     font-size: 6.4vw;
+  }
+  .specimen .fig {
+    display: none;
   }
   .specimen .part,
   .specimen .fig {

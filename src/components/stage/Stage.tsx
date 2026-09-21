@@ -7,8 +7,7 @@ import { Price } from "@/components/Price";
 import { getAttribution } from "@/lib/attribution";
 import { trackLead } from "@/lib/fbq";
 import { chapters, eras, SCREENS, type StageContent } from "./content";
-import { sampleStage, STAGE } from "./creatures";
-import { Film, filmAt } from "./film";
+import { Film } from "./film";
 import { StageButton, StageSubmit } from "./StageButton";
 
 /**
@@ -17,9 +16,8 @@ import { StageButton, StageSubmit } from "./StageButton";
  * everything: the film behind the type, which "beats" of copy are on stage,
  * the travelling work column, the rail, the tone of the chrome.
  *
- * The film tells one story — a cell becomes a fish, a tetrapod, a bird — and
- * the copy captions it. The creatures' dots are built in a worker so the page
- * never waits on them.
+ * The film tells one story — the evolution of a human being, in paintings —
+ * and the copy captions it (see `film.ts`).
  *
  * Every beat is ordinary server-rendered HTML — headings, paragraphs, links,
  * a form — so crawlers and screen readers get the whole page in order. Only
@@ -59,7 +57,8 @@ const QA_SPOTS = [
 
 /** Deep time, to three significant figures. */
 function yearsAgo(y: number) {
-  if (y < 1000) return "Today";
+  if (y < 1) return "Today";
+  if (y < 1000) return `${Math.round(y)} years ago`;
   const mag = Math.pow(10, Math.floor(Math.log10(y)) - 2);
   return `${(Math.round(y / mag) * mag).toLocaleString("en-US")} years ago`;
 }
@@ -149,7 +148,7 @@ export function Stage({ content }: { content: StageContent }) {
   const [workNear, setWorkNear] = useState(false);
   const [form, setForm] = useState<"idle" | "sending" | "done" | "error">("idle");
 
-  const { hero, statements, notebook, work, lineage, questions, brief, signoff } = content;
+  const { hero, statements, notebook, work, lineage, questions, brief, signoff, plates } = content;
 
   useEffect(() => {
     const root = rootRef.current;
@@ -159,32 +158,14 @@ export function Stage({ content }: { content: StageContent }) {
     const scope = root.closest<HTMLElement>(".stage-scope");
 
     const narrowMq = window.matchMedia("(max-width: 720px)");
-    // The film re-frames earlier than the layout does: from a small laptop down
-    // the instrument plays smaller, and on a portrait tablet it sits above the
-    // type rather than behind it.
-    const tallMq = window.matchMedia("(max-width: 1100px)");
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let narrow = narrowMq.matches;
-
-    let tall = tallMq.matches;
+    // In any upright frame the plates sit above the type and the paintings are seen in a tall slice.
     let portrait = window.innerHeight > window.innerWidth;
     const film = new Film(canvas, window.innerWidth <= 900);
     filmRef.current = film;
-    film.instant = reduce || window.scrollY > 40; // the opening gather is for arrivals at the top
-    let worker: Worker | null = null;
-    if (film.ok) {
-      pin.classList.add("has-film");
-      // The first cell is cheap, so it is on screen at once; the rest of the
-      // lineage is built off the main thread, in the order the story needs it.
-      const cells = sampleStage(STAGE.cells, film.count);
-      film.load(STAGE.cells, cells.pos, cells.nrm);
-      worker = new Worker(new URL("./sampler.worker.ts", import.meta.url), { type: "module" });
-      worker.onmessage = (e: MessageEvent<{ stage: number; pos: Float32Array; nrm: Float32Array }>) =>
-        film.load(e.data.stage, e.data.pos, e.data.nrm);
-      worker.postMessage({ count: film.count, stages: [STAGE.fish, STAGE.tetrapod, STAGE.firstBird, STAGE.egg, STAGE.bird] });
-    }
-    // No WebGL (or a driver that rejects the shader): step aside and let the
-    // CSS water behind the canvas carry the stage.
+    if (film.ok) pin.classList.add("has-film");
+    // No WebGL (or a driver that rejects the shader): step aside for the CSS backdrop.
     else canvas.style.display = "none";
 
     type Beat = { el: HTMLElement; a: number; b: number; fi: number; fo: number; on: boolean | null; v: number; o: number; t: number };
@@ -209,7 +190,6 @@ export function Stage({ content }: { content: StageContent }) {
       vh = pin.offsetHeight;
       max = Math.max(1, root.offsetHeight - vh);
       narrow = narrowMq.matches;
-      tall = tallMq.matches;
       portrait = window.innerHeight > window.innerWidth;
       const track = trackRef.current;
       if (track) {
@@ -269,14 +249,13 @@ export function Stage({ content }: { content: StageContent }) {
       }
 
       // film + tone of the chrome
-      const state = filmAt(p, narrow ? "narrow" : tall ? "tablet" : "wide", portrait);
-      film.render(state, reduce ? 0 : time);
-      // what is pinned to the creature (the specimen's labels) follows it
-      const fr = `${state.ox.toFixed(4)},${state.oy.toFixed(4)},${state.os.toFixed(4)}`;
+      const shot = film.frame(p, reduce ? 0 : time, narrow || portrait);
+      // what is pinned to the picture (the labels on Huxley's last skeleton) follows the camera
+      const fr = `${shot.ax.toFixed(4)},${shot.ay.toFixed(4)},${shot.au.toFixed(4)}`;
       if (fr !== framing) {
-        pin.style.setProperty("--ox", state.ox.toFixed(4));
-        pin.style.setProperty("--oy", state.oy.toFixed(4));
-        pin.style.setProperty("--os", state.os.toFixed(4));
+        pin.style.setProperty("--ox", shot.ax.toFixed(4));
+        pin.style.setProperty("--oy", shot.ay.toFixed(4));
+        pin.style.setProperty("--os", shot.au.toFixed(4));
         framing = fr;
       }
       const pr = p.toFixed(4);
@@ -292,7 +271,7 @@ export function Stage({ content }: { content: StageContent }) {
         eraValueRef.current.textContent = era.value;
         eraText = et;
       }
-      const nextTone = state.paper > 0.52 ? "light" : "dark";
+      const nextTone = shot.light ? "light" : "dark";
       if (nextTone !== tone && scope) {
         scope.dataset.tone = nextTone;
         tone = nextTone;
@@ -383,7 +362,7 @@ export function Stage({ content }: { content: StageContent }) {
       if (bt && bt.o < 0.5) goTo(bt.a + Math.min(bt.fi * 2, (bt.b - bt.a) / 2));
     };
     const onPointer = (e: PointerEvent) => {
-      film.pointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1), e.pointerType === "mouse");
+      if (e.pointerType === "mouse") film.pointer((e.clientX / window.innerWidth) * 2 - 1, -((e.clientY / window.innerHeight) * 2 - 1));
     };
 
     measure();
@@ -406,7 +385,6 @@ export function Stage({ content }: { content: StageContent }) {
       window.removeEventListener("hashchange", onHash);
       pin.removeEventListener("focusin", onFocus);
       window.removeEventListener("pointermove", onPointer);
-      worker?.terminate();
       filmRef.current = null;
       film.destroy();
     };
@@ -426,7 +404,7 @@ export function Stage({ content }: { content: StageContent }) {
       if (!res.ok) throw new Error(String(res.status));
       trackLead("home-stage");
       setForm("done");
-      filmRef.current?.hatchEgg(); // the egg lights up
+      filmRef.current?.flare(); // the lamps in the cave flare
     } catch {
       setForm("error");
     }
@@ -518,7 +496,7 @@ export function Stage({ content }: { content: StageContent }) {
         ))}
 
         {/* ---------------- the notebook: the specimen, every part named ---------------- */}
-        <div className="beat b-specimen" data-in={notebook.range[0] + 0.006} data-out={notebook.range[1]} data-fi="0.02" aria-hidden>
+        <div className="beat b-specimen" data-in={notebook.range[0] + 0.002} data-out={notebook.range[1]} data-fi="0.012" aria-hidden>
           <div className="specimen">
             <svg viewBox="-2 -1.5 4 3" preserveAspectRatio="none">
               {notebook.parts.map((pt, i) => (
@@ -543,7 +521,7 @@ export function Stage({ content }: { content: StageContent }) {
             <span className="fig">{notebook.fig}</span>
           </div>
         </div>
-        <div className="beat b-terms is-right is-notebook" data-in={notebook.range[0]} data-out={notebook.range[1]} data-fi="0.014">
+        <div id={notebook.id} className="beat b-terms is-right is-notebook" data-in={notebook.range[0]} data-out={notebook.range[1]} data-fi="0.014">
           <h2 className="t-display" style={{ "--n": count(notebook.lines.join(" ")) } as CSSProperties}>
             {notebook.lines.map((ln, k) => (
               <span className="ln" key={ln}>
@@ -753,6 +731,9 @@ export function Stage({ content }: { content: StageContent }) {
               <Link href="/privacy-policy">Privacy</Link>
               <Link href="/terms">Terms</Link>
             </nav>
+            <p className="end-plates">
+              <span>Plates</span> {plates.join(" · ")}
+            </p>
             <div className="end-legal">
               <p>{signoff.legal}</p>
               <p>

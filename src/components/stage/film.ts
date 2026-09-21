@@ -1,227 +1,102 @@
 /**
- * The film: Kodinav's scroll-scrubbed backdrop, rendered live in WebGL. It is
- * original artwork in code, and it tells one story — a living thing that
- * changes as the page is scrolled:
+ * The film: the evolution of a human being, told in paintings and scrubbed by
+ * the scroll. Each scene is a real work of art in the public domain — a monkey
+ * regarding a skeleton, Huxley's line of skeletons from gibbon to man, stone-age
+ * toolmakers, a migration, a mammoth hunt, painters in a lamp-lit cave,
+ * Leonardo's measured man — and the camera moves through it as the page moves:
+ * a push, a pan along the line-up, a drift across a canvas.
  *
- *   · one cell in deep water, which divides into a colony,
- *   · a fish, studied on paper as an engraving, then carrying a light through
- *     the dark, then outswimming a school in the sunlit shallows,
- *   · a tetrapod hauling itself up a bank, half in the water and half out,
- *   · a first bird perched under the stars, an egg in a nest, and a bird in
- *     flight at dawn through halftone clouds.
+ * One WebGL fragment shader does the work: two paintings at a time, each under
+ * its own camera; a pixel-dither wipe between them; the old paper of a plate
+ * multiplied onto the site's own paper so a drawing has no edges; a slow warp
+ * so the paint is never quite still; lamplight that flickers; a lens that
+ * drifts with the pointer; vignette, grain, and a scrim where the type sits.
  *
- * Every creature is a body of tens of thousands of halftone dots — the same
- * language as the clouds — scattered over a distance field (`creatures.ts`)
- * and sized by the light that falls on them: cream dots on water and sky, ink
- * stipple on paper. Between stages the dots let go, swirl, and settle into the
- * next form; under a mouse they part. The worlds (water, paper, night, sky)
- * dissolve into each other through a pixel-dither wipe.
- *
- * Two passes: a full-screen fragment shader paints the world, then the dots
- * are drawn over it as depth-tested points — no ray marching, so it holds its
- * frame rate on a phone.
- *
- * The stage feeds it a handful of numbers per frame (see `filmAt`); nothing
- * here knows about the DOM. If WebGL is unavailable the canvas stays empty
- * and the CSS gradient behind it shows instead.
+ * Paintings are loaded only as the scroll approaches them and let go again
+ * afterwards. With no WebGL the canvas steps aside for a CSS backdrop.
+ * Credits for every plate are printed in the sign-off (see `content.ts`).
  */
 
-/** What the picture is doing, independent of screen shape. */
-type World = {
-  /** 0 = sky/water world, 1 = paper world (dissolved with a dither wipe). */
-  paper: number;
-  /** 0 = day, 1 = night (the abyss, or the night sky). */
-  night: number;
-  /** Cloud cover, 0..1. */
-  cloud: number;
-  /** Clouds on the right-hand side, 0..1. */
-  cr: number;
-  /** 0 cells · 1 fish · 2 tetrapod · 3 first bird · 4 egg · 5 bird in flight. Fractions blend. */
-  stage: number;
-  /** Cell divisions so far, 0..3 (1 → 2 → 4 → 8 cells). */
-  div: number;
-  /** Waterline, in the creature's own units above its centre (±9 = off screen). */
-  surf: number;
-  /** 0 = sunlit shallows, 1 = deep water. */
-  depth: number;
-  /** The bank the tetrapod climbs. */
-  bank: number;
-  /** The branch (and nest) of the night scenes. */
-  perch: number;
-  /** The fish's lantern. */
-  glow: number;
-  /** Swimming speed: streaks the water and hurries the tail. */
-  speed: number;
-  /** How much the body moves (a pinned specimen barely does). */
-  swim: number;
-  /** The other fish: unlit in the deep, left behind in the shallows. */
-  others: number;
-  /** Dots shed into a wake behind a swimmer or a flyer. */
-  trail: number;
-  /** Dawn light on the horizon. */
-  dawn: number;
-  /** Camera orbit, radians. */
-  yaw: number;
-  pitch: number;
+type SceneId = "ape" | "lineup" | "hands" | "trek" | "hunt" | "cave" | "measure" | "paper" | "navy";
+
+/** kind: 0 a painting on a dark wall · 1 a drawing multiplied onto paper · 2 bare paper · 3 deep blue */
+const SCENES: Record<SceneId, { aspect: number; kind: number; tint: [number, number, number]; flicker?: number }> = {
+  ape: { aspect: 900 / 1232, kind: 0, tint: [0.035, 0.03, 0.028] },
+  lineup: { aspect: 3149 / 1330, kind: 1, tint: [0.955, 0.93, 0.85] },
+  hands: { aspect: 3840 / 2413, kind: 0, tint: [0.03, 0.035, 0.05] },
+  trek: { aspect: 1920 / 1648, kind: 0, tint: [0.05, 0.04, 0.035] },
+  hunt: { aspect: 3840 / 1402, kind: 0, tint: [0.03, 0.03, 0.04] },
+  cave: { aspect: 1600 / 1071, kind: 0, tint: [0.01, 0.012, 0.02], flicker: 1 },
+  measure: { aspect: 1876 / 605, kind: 1, tint: [0.93, 0.80, 0.63] },
+  paper: { aspect: 1, kind: 2, tint: [1, 1, 1] },
+  navy: { aspect: 1, kind: 3, tint: [0, 0, 0] },
 };
 
-/** Where the creature sits in the frame — this is what changes with screen shape. */
-type Framing = {
-  /** Centre: x as a fraction of half-width, y of half-height. */
-  ox: number;
-  oy: number;
-  /** Scale (1 ≈ the creature's unit is half the viewport height). */
-  os: number;
-  /** Opacity. */
-  oa: number;
-};
+/**
+ * A camera: the point of the picture at the centre (cx, cy in 0…1), how many
+ * picture-heights fit in the viewport's height (vh: below 1 fills the screen,
+ * above 1 shows the whole plate with room round it), and where on screen that
+ * centre sits (ox as a fraction of half-width, oy of half-height).
+ */
+type Cam = { cx: number; cy: number; vh: number; ox?: number; oy?: number };
+type Shot = { scene: SceneId; from: number; to: number; a: Cam; b: Cam; na?: Cam; nb?: Cam; pan?: number; dim?: number };
 
-export type FilmState = Omit<World, "surf"> & Framing & { /** Waterline in screen units. */ surf: number };
+const still: Cam = { cx: 0.5, cy: 0.5, vh: 1 };
+const SHOTS: Shot[] = [
+  // the question: a monkey regards what it will become
+  { scene: "ape", from: 0, to: 0.052, a: { cx: 0.5, cy: 0.5, vh: 1.3, ox: 0.6 }, b: { cx: 0.5, cy: 0.48, vh: 1.16, ox: 0.6 },
+    na: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.5 }, nb: { cx: 0.5, cy: 0.47, vh: 2.25, oy: 0.5 } },
+  // the answer, 1863: the camera walks the line from gibbon to man
+  { scene: "lineup", from: 0.064, to: 0.122, pan: 0.5, a: { cx: 0.08, cy: 0.47, vh: 1.02, ox: -0.3 }, b: { cx: 0.772, cy: 0.47, vh: 1.2, ox: -0.46 },
+    na: { cx: 0.08, cy: 0.47, vh: 2.5, oy: 0.44 }, nb: { cx: 0.77, cy: 0.46, vh: 2.6, oy: 0.44 } },
+  { scene: "hands", from: 0.13, to: 0.182, a: { cx: 0.31, cy: 0.64, vh: 0.6 }, b: { cx: 0.42, cy: 0.5, vh: 1.0 },
+    na: { cx: 0.27, cy: 0.64, vh: 0.78 }, nb: { cx: 0.36, cy: 0.52, vh: 0.95 } },
+  { scene: "trek", from: 0.192, to: 0.244, a: { cx: 0.42, cy: 0.52, vh: 0.78 }, b: { cx: 0.6, cy: 0.5, vh: 0.92 },
+    na: { cx: 0.3, cy: 0.5, vh: 0.9 }, nb: { cx: 0.72, cy: 0.48, vh: 0.98 } },
+  { scene: "hunt", from: 0.256, to: 0.308, a: { cx: 0.56, cy: 0.52, vh: 0.98 }, b: { cx: 0.74, cy: 0.45, vh: 0.8 },
+    na: { cx: 0.5, cy: 0.5, vh: 0.98 }, nb: { cx: 0.76, cy: 0.46, vh: 0.9 } },
+  { scene: "cave", from: 0.322, to: 0.376, a: { cx: 0.3, cy: 0.52, vh: 0.74 }, b: { cx: 0.62, cy: 0.45, vh: 0.92 },
+    na: { cx: 0.22, cy: 0.5, vh: 0.9 }, nb: { cx: 0.62, cy: 0.45, vh: 0.98 } },
+  { scene: "paper", from: 0.396, to: 0.718, a: still, b: still },
+  // by lamplight: the questions, and the brief
+  { scene: "cave", from: 0.742, to: 0.936, dim: 0.66, a: { cx: 0.62, cy: 0.45, vh: 0.92 }, b: { cx: 0.46, cy: 0.5, vh: 1.0 },
+    na: { cx: 0.62, cy: 0.45, vh: 0.98 }, nb: { cx: 0.4, cy: 0.5, vh: 1.0 } },
+  // the measure of man: the span of the arms, as a frieze above the type
+  { scene: "measure", from: 0.948, to: 0.978, a: { cx: 0.5, cy: 0.5, vh: 2.7, oy: 0.34 }, b: { cx: 0.5, cy: 0.5, vh: 2.3, oy: 0.34 },
+    na: { cx: 0.5, cy: 0.5, vh: 2.9, oy: 0.44 }, nb: { cx: 0.5, cy: 0.5, vh: 2.5, oy: 0.44 } },
+  { scene: "navy", from: 0.986, to: 1.01, a: still, b: still },
+];
 
-type Keyed<T> = T & { p: number };
-
-/** Rows state only what changes; everything else carries over from the row before. */
-function track<T>(first: T, rows: [number, Partial<T>][]): Keyed<T>[] {
-  let cur = first;
-  return rows.map(([p, patch]) => {
-    cur = { ...cur, ...patch };
-    return { ...cur, p };
-  });
-}
-
-const WORLD = track<World>(
-  { paper: 0, night: 0, cloud: 0, cr: 1, stage: 0, div: 0, surf: 9, depth: 0.9, bank: 0, perch: 0, glow: 0, speed: 0, swim: 1, others: 0, trail: 0, dawn: 0, yaw: -0.1, pitch: 0.08 },
-  [
-    [0, {}],
-    [0.052, { yaw: 0.1 }],
-    [0.1, { div: 3, yaw: 0.3, pitch: 0 }], //                                     one cell has become eight
-    [0.104, {}],
-    [0.128, { paper: 1, stage: 1, swim: 0.2, yaw: 0.26, depth: 0.6 }], // the notebook: a fish, pinned
-    [0.172, { yaw: 0.12 }],
-    [0.196, { paper: 0, night: 1, depth: 1, glow: 1, others: 1, swim: 0.8, yaw: 0.42, trail: 0.3 }], // the deep
-    [0.238, { yaw: 0.66 }],
-    [0.262, { night: 0, glow: 0, depth: 0.18, speed: 1, swim: 1, yaw: 0.5, trail: 1 }], // the shallows
-    [0.303, { yaw: 0.28 }],
-    [0.332, { stage: 2, surf: -0.2, bank: 1, speed: 0, others: 0, cloud: 0.8, depth: 0.08, yaw: 0.38, trail: 0 }], // the shore
-    [0.372, { yaw: 0.2 }],
-    [0.398, { paper: 1 }], //                                  the cabinet
-    [0.64, { bank: 0, surf: -9 }],
-    [0.7, { stage: 3, cloud: 0.25 }],
-    [0.716, {}],
-    [0.742, { paper: 0, night: 1, perch: 1, yaw: 0.22 }], //   the night
-    [0.852, { yaw: 0.46 }],
-    [0.872, { stage: 4, yaw: 0.1 }], //                        the egg
-    [0.93, { dawn: 0.35 }],
-    [0.955, { stage: 5, night: 0, dawn: 1, perch: 0, cloud: 1, yaw: 0.44, pitch: 0.9, trail: 0.8 }], // first flight, seen from above
-    [1, { dawn: 0.7, yaw: 0.2, pitch: 0.78 }],
-  ],
-);
-
-/* Wide screens keep the creature beside the type… */
-const WIDE = track<Framing>({ ox: 0.6, oy: 0.04, os: 0.6, oa: 1 }, [
-  [0, {}],
-  [0.052, { ox: 0.58, oy: 0.06, os: 0.66 }],
-  [0.1, { ox: 0.5, oy: 0.02, os: 0.78 }],
-  [0.128, { ox: -0.42, oy: 0.02, os: 0.6 }],
-  [0.172, { os: 0.62 }],
-  [0.196, { ox: 0.46, oy: 0.04, os: 0.7 }],
-  [0.238, { ox: 0.44, oy: 0.06, os: 0.74 }],
-  [0.262, { ox: 0.42, oy: 0.02, os: 0.8 }],
-  [0.303, { ox: 0.38, oy: 0.0, os: 0.84 }],
-  [0.332, { ox: 0.46, oy: -0.1, os: 0.66 }],
-  [0.372, { ox: 0.44, oy: -0.08, os: 0.7 }],
-  [0.398, { ox: -0.56, oy: -0.34, os: 1.2, oa: 0.09 }], //   a watermark behind the plates
-  [0.64, { ox: -0.6, oy: 0.2, os: 1.3 }],
-  [0.66, { ox: 0.5, oy: 0, os: 0.6, oa: 0 }], //             the lineage is drawn in ink instead
-  [0.716, {}],
-  [0.742, { ox: 0.7, oy: -0.4, os: 0.46, oa: 0.92 }],
-  [0.852, { oy: -0.38, os: 0.48 }],
-  [0.872, { ox: -0.54, oy: -0.42, os: 0.5, oa: 1 }],
-  [0.93, { oy: -0.4, os: 0.52 }],
-  [0.955, { ox: 0.44, oy: -0.02, os: 0.6 }], //              wings spread, whole, inside the frame
-  [0.978, { ox: 0.42, oy: 0.04, os: 0.64 }],
-  [1, { ox: 0.7, oy: 0.26, os: 0.5, oa: 0.9 }], //            up and away, clear of the sign-off
-]);
-
-/* …a portrait tablet keeps two columns in a tall frame, so it keeps to the top… */
-const PORTRAIT = track<Framing>({ ox: 0.22, oy: 0.5, os: 0.4, oa: 1 }, [
-  [0, {}],
-  [0.052, { ox: 0.2, oy: 0.52, os: 0.44 }],
-  [0.1, { ox: 0.1, oy: 0.42, os: 0.5 }],
-  [0.128, { ox: -0.44, oy: 0.56, os: 0.3 }],
-  [0.172, { os: 0.31 }],
-  [0.196, { ox: 0.1, oy: 0.42, os: 0.44 }],
-  [0.303, { ox: 0.08, oy: 0.4, os: 0.48 }],
-  [0.332, { ox: 0.12, oy: 0.4, os: 0.42 }],
-  [0.372, { os: 0.44 }],
-  [0.398, { ox: -0.45, oy: 0.62, os: 0.42, oa: 0.12 }],
-  [0.64, { oy: 0.6 }],
-  [0.66, { oa: 0 }],
-  [0.716, {}],
-  [0.742, { ox: 0.5, oy: -0.62, os: 0.36, oa: 0.9 }],
-  [0.852, {}],
-  [0.872, { ox: -0.5, oy: -0.5, os: 0.36, oa: 1 }],
-  [0.93, {}],
-  [0.955, { ox: 0.1, oy: 0.42, os: 0.42 }],
-  [0.978, { ox: 0.08, oy: 0.46, os: 0.44 }],
-  [1, { ox: 0.5, oy: 0.62, os: 0.4, oa: 0.7 }],
-]);
-
-/* …and a phone lifts it above the type. */
-const NARROW = track<Framing>({ ox: 0.12, oy: 0.52, os: 0.38, oa: 1 }, [
-  [0, {}],
-  [0.052, { ox: 0.1, oy: 0.54, os: 0.42 }],
-  [0.1, { ox: 0, oy: 0.46, os: 0.38 }],
-  [0.128, { ox: 0.05, oy: 0.58, os: 0.34 }],
-  [0.172, { os: 0.35 }],
-  [0.196, { ox: 0, oy: 0.46, os: 0.44 }],
-  [0.303, { oy: 0.44, os: 0.48 }],
-  [0.332, { ox: 0.04, oy: 0.42, os: 0.44 }],
-  [0.372, { os: 0.46 }],
-  [0.398, { ox: 0, oy: 0.62, os: 0.7, oa: 0.1 }],
-  [0.64, {}],
-  [0.66, { oa: 0 }],
-  [0.716, {}],
-  [0.742, { ox: 0.3, oy: -0.66, os: 0.34, oa: 0.85 }],
-  [0.852, {}],
-  [0.872, { ox: 0, oy: 0.2, os: 0.27, oa: 1 }], //            between the invitation and the form
-  [0.93, {}],
-  [0.955, { ox: 0.05, oy: 0.4, os: 0.36 }],
-  [0.978, { oy: 0.44, os: 0.38 }],
-  [1, { ox: 0.45, oy: 0.66, os: 0.3, oa: 0.5 }],
-]);
+/** Where the skeleton of Man stands in the line-up plate: the specimen's labels are pinned to it. */
+const MAN = { u: 0.772, v: 0.45, halfHeight: 0.435 };
 
 const smooth = (t: number) => t * t * (3 - 2 * t);
-
-function at<T extends Record<string, number>>(keys: Keyed<T>[], p: number): T {
-  let a = keys[0];
-  let b = keys[keys.length - 1];
-  for (let i = 0; i < keys.length - 1; i++) {
-    if (p >= keys[i].p && p <= keys[i + 1].p) {
-      a = keys[i];
-      b = keys[i + 1];
-      break;
-    }
-  }
-  if (p <= keys[0].p) b = a = keys[0];
-  const t = smooth(Math.min(1, Math.max(0, (p - a.p) / Math.max(1e-6, b.p - a.p))));
-  const out: Record<string, number> = {};
-  for (const k of Object.keys(a)) out[k] = a[k] + (b[k] - a[k]) * t;
-  return out as T;
+const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
+const lerpCam = (a: Cam, b: Cam, t: number): Required<Cam> => ({
+  cx: a.cx + (b.cx - a.cx) * t,
+  cy: a.cy + (b.cy - a.cy) * t,
+  vh: a.vh + (b.vh - a.vh) * t,
+  ox: (a.ox ?? 0) + ((b.ox ?? 0) - (a.ox ?? 0)) * t,
+  oy: (a.oy ?? 0) + ((b.oy ?? 0) - (a.oy ?? 0)) * t,
+});
+function camOf(shot: Shot, p: number, narrow: boolean) {
+  const a = narrow ? (shot.na ?? shot.a) : shot.a;
+  const b = narrow ? (shot.nb ?? shot.b) : shot.b;
+  const t = clamp01((p - shot.from) / ((shot.to - shot.from) * (shot.pan ?? 1)));
+  return lerpCam(a, b, smooth(t));
 }
 
-/** wide: beside the type · tablet: ≤1100px, still two columns · narrow: one column */
-export type FilmMode = "wide" | "tablet" | "narrow";
+const VERT = `attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}`;
+const FRAG = `
+precision highp float;
+uniform vec2 uRes; uniform float uTime; uniform vec2 uPtr;
+uniform sampler2D tA, tB;
+uniform vec4 camA, camB;     // cx, cy, vh, picture aspect
+uniform vec4 parA, parB;     // ox, oy, kind, dim
+uniform vec4 extA, extB;     // tint.rgb, flicker
+uniform vec2 uHas;           // is each picture loaded yet
+uniform float uMix, uFlare, uNarrow;
 
-export function filmAt(p: number, mode: FilmMode, portrait = false): FilmState {
-  const w = at(WORLD, p);
-  const f = at(mode === "narrow" ? NARROW : mode === "tablet" && portrait ? PORTRAIT : WIDE, p);
-  // A small landscape screen runs the wide film with a smaller creature.
-  if (mode === "tablet" && !portrait) f.os *= 0.8;
-  return { ...w, ...f, surf: f.oy + w.surf * f.os };
-}
-
-const NOISE = `
 float hash(vec2 p){ p=fract(p*vec2(123.34,456.21)); p+=dot(p,p+45.32); return fract(p.x*p.y); }
 float vnoise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f);
   return mix(mix(hash(i),hash(i+vec2(1,0)),f.x), mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x), f.y); }
@@ -229,485 +104,116 @@ float fbm(vec2 p){ float a=.5, s=0.; for(int i=0;i<4;i++){ s+=a*vnoise(p); p=p*2
 float bayer2(vec2 a){ a=floor(a); return fract(a.x/2.+a.y*a.y*.75); }
 float bayer4(vec2 a){ return bayer2(.5*a)*.25+bayer2(a); }
 float bayer8(vec2 a){ return bayer4(.5*a)*.25+bayer2(a); }
-mat2 rot(float a){ float c=cos(a), s=sin(a); return mat2(c,-s,s,c); }
-vec2 r2(vec2 v, float a){ float c=cos(a), s=sin(a); return vec2(c*v.x-s*v.y, s*v.x+c*v.y); }
-float seg(vec2 p, vec2 a, vec2 b){ vec2 pa=p-a, ba=b-a; float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.); return length(pa-ba*h); }
-// the dither wipe between the worlds: both passes must agree on it
-float wipeField(vec2 uv, vec2 frag, vec2 p, float px){
-  float field=abs(uv.x-.5)*1.5+abs(uv.y-.5)*.35;
-  return field*.62+bayer8(floor(frag/(3.*px)))*.16+fbm(p*3.4+7.)*.30;
-}
-// the nest sits in front of the egg
-float nestBowl(vec2 q){ vec2 nq=q-vec2(0.,-.50);
-  return max(length(nq*vec2(1.,2.1))-.74, nq.y-.05+.035*sin(q.x*38.)+.02*sin(q.x*71.)); }
-`;
 
-const BG_VERT = `attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}`;
-
-const BG_FRAG = `
-precision highp float;
-uniform vec2 uRes; uniform float uTime;
-uniform float uPaper,uNight,uCloud,uCloudR,uObjA;
-uniform vec3 uObj;   // x, y, scale
-uniform vec2 uPtr;
-uniform float uStage,uSurf,uDepth,uBank,uPerch,uGlow,uSpeed,uOthers,uDawn,uYaw,uPitch,uHatch;
-${NOISE}
-void main(){
-  vec2 frag=gl_FragCoord.xy;
-  vec2 uv=frag/uRes;
-  float asp=uRes.x/uRes.y;
-  vec2 p=(frag-.5*uRes)/(.5*uRes.y);           // y in [-1,1], x in [-asp,asp]
-  float px=uRes.y/900.;                         // design pixels
-  float dth=bayer8(frag/(1.6*px));
-  vec2 oc=vec2(uObj.x*asp,uObj.y)+uPtr*.012;
-  vec2 q=(p-oc)/uObj.z;                         // the creature's own frame
-
-  vec3 paper=vec3(.949,.945,.929);
-  if(uPaper>.999){                              // wholly on paper: none of the sky or water is worked out
-    paper*=1.+.035*(fbm(p*2.2+40.)-.5);
-    gl_FragColor=vec4(paper+(hash(frag+fract(uTime)*91.7)-.5)*.04,1.);
-    return;
+// motes of dust in the light, a little out of focus
+vec3 motes(vec2 p, float asp){
+  vec3 s=vec3(0.);
+  for(int i=0;i<8;i++){
+    float fi=float(i), h1=hash(vec2(fi,21.)), h2=hash(vec2(fi,22.)), h3=hash(vec2(fi,23.));
+    float r=.018+.05*h3*h3;
+    vec2 c=vec2((fract(h1-uTime*(.004+.01*h3))*2.8-1.4)*asp,(fract(h2+uTime*.006*(h3-.3))-.5)*2.5)+uPtr*vec2(.06,.04)*(.4+h3);
+    float d=length(p-c);
+    s+=vec3(1.,.93,.80)*smoothstep(r,r*.7,d)*(.55+.45*smoothstep(r*.45,r*.95,d))*(.03+.05*h3);
   }
-
-  // ---------- sky ----------
-  vec3 dayTop=vec3(.035,.165,.52), dayLow=vec3(.10,.37,.78);
-  vec3 nitTop=vec3(.016,.02,.05),  nitLow=vec3(.05,.085,.2);
-  float gy=smoothstep(0.,1.,uv.y);
-  vec3 sky=mix(mix(dayLow,dayTop,gy), mix(nitLow,nitTop,gy), uNight);
-  sky=mix(sky, vec3(.99,.80,.60), uDawn*(1.-uNight)*smoothstep(.45,-1.,p.y)*.62);
-  sky*=1.+.10*(fbm(p*1.3+3.)-.5);
-
-  vec2 sc=floor(frag/(2.2*px));
-  float st=step(.9972,hash(sc))*uNight*(.55+.45*sin(uTime*1.5+hash(sc+3.)*40.));
-  sky+=vec3(.95,.93,.85)*st*smoothstep(-.2,.6,p.y);
-
-  // a thin moon over the night scenes
-  vec2 mc=vec2(mix(.52,-.10,step(1.,asp))*asp,.80); float mr=.05;   // on a phone it keeps to the right, clear of the chip
-  float moon=smoothstep(mr,mr-.004,length(p-mc))*smoothstep(mr*.92-.004,mr*.92,length(p-mc-vec2(.034,.018)));
-  sky=mix(sky,vec3(.93,.92,.84),moon*uPerch*uNight);
-  sky+=vec3(.10,.12,.18)*exp(-length(p-mc)*length(p-mc)*26.)*uPerch*uNight;
-
-  // the halftone screen shared by the clouds and the other fish
-  float cell=6.5*px;
-  vec2 cc=(floor(frag/cell)+.5)*cell;
-  vec2 cp=(cc-.5*uRes)/(.5*uRes.y);
-  float dens=0., lit=0.;
-  if(uCloud>.01) for(int i=0;i<5;i++){
-    float fi=float(i);
-    vec2 c=vec2(0.); float s=.3;
-    if(i==0){ c=vec2(.10*asp, .80); s=.30; }
-    if(i==1){ c=vec2(.80*asp, .46); s=.24; }
-    if(i==2){ c=vec2(-.66*asp,.70); s=.27; }
-    if(i==3){ c=vec2(-.06*asp,-.84); s=.26; }
-    if(i==4){ c=vec2(.62*asp,-.70); s=.22; }
-    s*=clamp(asp/1.6,.42,1.);
-    c.x+=sin(uTime*.013+fi*2.1)*.05+uTime*.0016*(fi-2.);
-    vec2 d=(cp-c)/vec2(s*1.75,s*.66);
-    float bump=fbm(cp*5.2+fi*7.3)*.62;
-    float body=1.-length(d)+bump-.34;
-    float under=smoothstep(-.34,.02,d.y);
-    float dn=smoothstep(.0,.30,body)*under;
-    dn*=mix(1., uCloudR, smoothstep(.50,.60,uv.x));
-    lit=max(lit, dn*smoothstep(-.5,.7,d.y+bump*.5));
-    dens=max(dens,dn);
-  }
-  dens*=uCloud;
-  float rad=sqrt(clamp(dens,0.,1.))*.52*cell;
-  float dotm=smoothstep(rad,rad-1.1*px,length(frag-cc))*step(.03,dens);
-  vec3 cloudCol=mix(vec3(.60,.64,.76),vec3(.98,.95,.87),clamp(lit/max(dens,.001),0.,1.));
-  cloudCol=mix(cloudCol,vec3(.42,.5,.72),uNight*.75);
-  cloudCol=mix(cloudCol,vec3(1.,.90,.78),uDawn*(1.-uNight)*.5);
-  sky=mix(sky,cloudCol,dotm*.96);
-
-  // low hills under the night sky
-  float hl=smoothstep(0.,.012,(-.80+.12*fbm(vec2(p.x*1.1,5.))+.05*sin(p.x*1.7))-p.y)*uPerch;
-  sky=mix(sky,vec3(.012,.018,.05),hl);
-
-  // ---------- water ----------
-  float wave=.010*sin(p.x*8.+uTime*1.1)+.006*sin(p.x*19.-uTime*1.6);
-  float below=smoothstep(.006,-.006,p.y-uSurf-wave);
-  vec3 scene=sky;
-  if(below>.001){
-    float dd=clamp((uSurf-p.y)*.45,0.,1.);
-    vec3 wA=mix(vec3(.075,.34,.74),vec3(.03,.13,.42),dd);
-    vec3 wB=mix(vec3(.010,.04,.17),vec3(.035,.15,.47),uv.y);
-    vec3 water=mix(wA,wB,uDepth);
-    water=mix(water, mix(vec3(.004,.008,.03),vec3(.02,.035,.10),uv.y), uNight);
-    water*=1.+.10*(fbm(p*1.3+3.)-.5);
-
-    // light from above: a pool of it, and rays that fan out from one point and drift
-    vec2 lp=p-vec2(.22*asp,1.75);
-    float ll=length(lp), an=atan(lp.x,-lp.y);
-    float pool=exp(-ll*ll*.42);
-    float rays=smoothstep(.30,.85,vnoise(vec2(an*8.+uTime*.035,1.)))*(.45+.55*vnoise(vec2(an*21.-uTime*.06,4.)));
-    float sh=rays*exp(-ll*.62)*2.4*(1.-uNight)*(1.-.30*uDepth);
-    float shq=step(bayer8(frag/(2.*px)),sh*.62);
-    water+=vec3(.16,.30,.46)*shq*.42+vec3(.07,.13,.21)*sh+vec3(.035,.10,.20)*pool*(1.-uNight);
-    water+=vec3(.10,.16,.20)*smoothstep(.55,0.,uSurf-p.y)*(1.-uNight);
-
-    // out-of-focus motes close to the lens: they give the water its depth
-    for(int i=0;i<9;i++){
-      float fi=float(i);
-      float h1=hash(vec2(fi,21.)), h2=hash(vec2(fi,22.)), h3=hash(vec2(fi,23.));
-      float r=.025+.06*h3*h3;
-      vec2 c=vec2((fract(h1-uTime*(.004+.012*h3)*(1.+uSpeed*5.))*2.8-1.4)*asp,(fract(h2+uTime*.005*(h3-.4))-.5)*2.5);
-      c+=uPtr*vec2(.07,.05)*(.4+h3);
-      float d=length(p-c);
-      float a=smoothstep(r,r*.72,d)*(.55+.45*smoothstep(r*.45,r*.95,d));
-      water+=mix(vec3(.30,.50,.78),vec3(.20,.55,.75),uNight)*a*(.035+.06*h3)*(1.-.5*uNight);
-    }
-
-    // the others — unlit in the deep, left behind in the shallows — through the same dot screen
-    float oth=0.;
-    if(uOthers>.01) for(int i=0;i<7;i++){
-      float fi=float(i);
-      float scl=.10+.09*hash(vec2(fi,1.));
-      float vx=(.010+.018*hash(vec2(fi,2.)))*(1.+uSpeed*7.);
-      vec2 c=vec2((fract(hash(vec2(fi,3.))-uTime*vx)*2.8-1.4)*asp,(hash(vec2(fi,5.))-.5)*1.6);
-      vec2 o=(cp-c)/scl; o.y+=.14*sin(o.x*2.+uTime*3.+fi);
-      float body=length(o*vec2(1.,2.7))-1.;
-      float tail=max(abs(o.y)-(-o.x-.75)*.85, max(-o.x-1.7,o.x+.75));
-      oth=max(oth,smoothstep(.10,-.12,min(body,tail))*(.45+.55*hash(vec2(fi,9.))));
-    }
-    oth*=uOthers;
-    float orad=sqrt(clamp(oth,0.,1.))*.42*cell;
-    float odot=smoothstep(orad,orad-1.1*px,length(frag-cc))*step(.03,oth);
-    water=mix(water, mix(water*1.9+vec3(.03,.05,.09),vec3(.035,.06,.13),uNight), odot*.8);
-
-    // drifting motes: marine snow by day, living sparks in the deep
-    for(int l=0;l<3;l++){
-      float fl=float(l);
-      float cs=(30.+24.*fl)*px;
-      vec2 g=frag; g.x+=uTime*px*(4.+6.*fl)*(1.+uSpeed*14.); g.y+=uTime*px*(2.+1.5*fl);
-      vec2 id=floor(g/cs), lc=fract(g/cs);
-      vec2 pp=vec2(hash(id),hash(id+7.))*.7+.15;
-      float sz=(1.1+1.7*hash(id+3.))*px/cs;
-      vec2 dv=vec2((lc.x-pp.x)/(1.+uSpeed*3.5),lc.y-pp.y);
-      float on=step(max(abs(dv.x),abs(dv.y)),sz)*step(.5+.22*uSpeed,hash(id+11.));
-      float tw=.6+.4*sin(uTime*(1.+2.*hash(id+5.))+hash(id)*30.);
-      vec3 mcol=mix(vec3(.55,.68,.82),vec3(.45,.95,1.),uNight);
-      water+=mcol*on*tw*(.20+.14*fl)*(1.+uNight*1.4);
-    }
-    scene=mix(sky,water,below);
-    float sl=smoothstep(.014,0.,abs(p.y-uSurf-wave));
-    scene+=vec3(.55,.66,.76)*sl*.55*(1.-uNight)*step(.2,fract(p.x*7.+uTime*.2+vnoise(vec2(p.x*9.,uTime))*.6));
-  }
-
-  // ---------- the bank the tetrapod climbs ----------
-  if(uBank>.001){
-    float gh=-.31+.52*(smoothstep(-1.6,1.6,q.x)-.5)+.03*(fbm(vec2(q.x*3.2,2.))-.5);
-    float bk=smoothstep(0.,.012,gh-q.y)*uBank;
-    float bsh=clamp(.86-(gh-q.y)*1.1+.34*(fbm(q*7.)-.5),0.,1.);
-    float bq=floor(bsh*3.+dth)/3.;
-    vec3 bankCol=mix(vec3(.13,.20,.42),vec3(.93,.90,.80),bq);
-    bankCol=mix(bankCol,scene*.62+bankCol*.30,below);
-    scene=mix(scene,bankCol,bk);
-  }
-
-  // ---------- the branch, and the nest ----------
-  float eggW=clamp(1.-abs(uStage-4.),0.,1.);
-  if(uPerch>.001){
-    float br=seg(q,vec2(-.85,-.70),vec2(7.,-.50))-(.05+.012*sin(q.x*9.));
-    br=min(br,seg(q,vec2(-.85,-.70),vec2(-1.3,-.79))-.028);
-    br=min(br,seg(q,vec2(.95,-.63),vec2(1.4,-.28))-.022);
-    br=min(br,seg(q,vec2(1.4,-.28),vec2(1.66,-.22))-.013);
-    br=min(br,seg(q,vec2(1.18,-.46),vec2(1.5,-.50))-.012);
-    float bm=smoothstep(.008,-.008,br)*uPerch;
-    vec3 brCol=mix(vec3(.17,.21,.38),vec3(.03,.04,.10),smoothstep(0.,-.045,br));
-    brCol=mix(brCol,vec3(.30,.22,.24),uDawn*(1.-uNight)*.6);
-    scene=mix(scene,brCol,bm);
-    float bowl=nestBowl(q);
-    float nm=smoothstep(.008,-.008,bowl)*uPerch*eggW;
-    float tw=step(.5,fract((q.x*1.3+q.y*3.)*9.+vnoise(q*14.)*2.));
-    vec3 nestCol=mix(vec3(.035,.045,.11),vec3(.17,.21,.38),tw*.85);
-    scene=mix(scene,nestCol,nm);
-  }
-
-  // light that spills: the lantern in the deep, and the egg when the brief is sent
-  if(uGlow>.001){
-    vec3 lp=vec3(1.02,.47,0.);
-    lp.xz=r2(lp.xz,-(uYaw+uPtr.x*.10)); lp.yz=r2(lp.yz,uPitch-uPtr.y*.06);
-    vec2 lq=lp.xy*4.2/(4.2+lp.z);
-    float hr=length(q-lq);
-    float gl=uGlow*uObjA*(exp(-hr*hr*6.)*.8+exp(-hr*hr*60.)*1.3)*(.9+.1*sin(uTime*3.));
-    scene+=vec3(.42,.80,1.)*floor(gl*5.+dth)/5.*.55;
-  }
-  if(uHatch>.001){
-    float hr=length(q-vec2(0.,-.1));
-    scene+=vec3(1.,.86,.62)*floor(uHatch*eggW*exp(-hr*hr*1.6)*4.+dth)/4.*.34;
-  }
-
-  // ---------- paper, and the wipe between the worlds ----------
-  vec3 col=scene;
-  if(uPaper>.001){
-    paper*=1.+.035*(fbm(p*2.2+40.)-.5);
-    float field=wipeField(uv,frag,p,px);
-    float k=uPaper*1.16-.06;
-    col=mix(scene,paper,step(field,k));
-    float edge=smoothstep(.05,0.,abs(field-k));
-    float rnd=hash(floor(frag/(3.*px))+floor(uTime*8.));
-    vec3 spark=.5+.5*cos(6.2831*(rnd+vec3(0.,.33,.67)));
-    col=mix(col,spark,edge*step(.55,rnd)*.85);
-  }
-
-  // a lens: the corners fall away (hardly at all on paper)
-  float vg=length((uv-.5)*vec2(1.08,1.));
-  col*=1.-mix(.62,.10,uPaper)*smoothstep(.35,.95,vg)*vg;
-  col+=(hash(frag+fract(uTime)*91.7)-.5)*.04;
-  gl_FragColor=vec4(col,1.);
-}`;
-
-const PT_VERT = `
-precision highp float;
-attribute vec4 aA; attribute vec3 aNA; attribute vec4 aB; attribute vec3 aNB; attribute float aSeed;
-uniform vec2 uRes; uniform float uTime;
-uniform vec3 uObj; uniform vec2 uPtr;
-uniform float uSA,uF,uDiv,uSwim,uPh,uYaw,uPitch,uHatch,uGlow,uPaper,uObjA,uDot,uRepel,uIntro,uTrail,uNight;
-varying float vShade; varying float vAlpha; varying float vKind; varying float vTint;
-vec2 r2(vec2 v, float a){ float c=cos(a), s=sin(a); return vec2(c*v.x-s*v.y, s*v.x+c*v.y); }
-float hash1(float n){ return fract(sin(n*91.345)*47453.5453); }
-
-// fold a wing: the outer half about the wrist, then the whole of it about the shoulder
-void flap(inout vec3 P, inout vec3 N, float sgn, float outer, float fl, float fl2){
-  vec3 S=vec3(.10,.07,sgn*.10), W=vec3(-.02,.07,sgn*.62);
-  if(outer>.5){
-    vec3 v=P-W; vec2 r=r2(vec2(v.z*sgn,v.y),fl2); P=W+vec3(v.x,r.y,r.x*sgn);
-    r=r2(vec2(N.z*sgn,N.y),fl2); N=vec3(N.x,r.y,r.x*sgn);
-  }
-  vec3 v=P-S; vec2 r=r2(vec2(v.z*sgn,v.y),fl); P=S+vec3(v.x,r.y,r.x*sgn);
-  r=r2(vec2(N.z*sgn,N.y),fl); N=vec3(N.x,r.y,r.x*sgn);
+  return s;
 }
 
-void pose(float st, vec4 a, vec3 n, out vec3 P, out vec3 N){
-  P=a.xyz; N=n; float part=a.w;
-  if(st<.5){
-    // one cell, dividing: 1, 2, 4, 8
-    float d1=smoothstep(0.,1.,uDiv), d2=smoothstep(1.,2.,uDiv), d3=smoothstep(2.,3.,uDiv);
-    float r=.62*pow(.81,d1+d2+d3);
-    float nuc=step(.5,part);
-    vec3 dir=a.xyz;
-    vec3 side=step(.5,fract(aSeed*vec3(2.,4.,8.)))*2.-1.;      // which daughter this dot goes with
-    P=vec3(d1,d2,d3)*r*.90*side+r*dir*mix(1.,.34,nuc);
-    P+=dir*.022*sin(dir.x*7.+uTime*1.3)*sin(dir.y*6.-uTime*1.1)*(1.-nuc);
-    P.xz=r2(P.xz,uTime*.12); N.xz=r2(N.xz,uTime*.12);
-    P.xy=r2(P.xy,.3+uTime*.07); N.xy=r2(N.xy,.3+uTime*.07);
-  } else if(st<1.5){
-    float env=smoothstep(.75,-1.05,P.x);
-    float amp=uSwim*(.20*env*env+.02);
-    P.z+=amp*sin(3.3*P.x+uPh);
-    P.y+=uSwim*.012*sin(uPh*.5);
-    N.x-=amp*3.3*cos(3.3*a.x+uPh)*N.z*.6; N=normalize(N);
-  } else if(st<2.5){
-    if(part>.5 && part<4.5){
-      float front=step(part,2.5), near=step(.5,mod(part,2.));   // 1, 3 are the near side
-      float xs=mix(-.38,.36,front), zs=mix(1.,-1.,near);
-      float ph=uPh+(abs(part-1.)<.5||abs(part-4.)<.5?0.:3.14159);
-      vec3 S=vec3(xs,-.05,zs*.20);
-      vec3 v=P-S; float along=clamp(-v.y/.27,0.,1.);
-      v.xy=r2(v.xy,.34*sin(ph)*along); N.xy=r2(N.xy,.34*sin(ph)*along);
-      P=S+v; P.y+=.06*max(0.,cos(ph))*along;
-    }
-    P.y+=.012*sin(uPh*2.);
-    P.z+=uSwim*.08*sin(2.4*P.x+uPh)*smoothstep(.3,-1.1,P.x);
-    P.xy=r2(P.xy,.24); N.xy=r2(N.xy,.24);
-  } else if(st<3.5){
-    P.y+=.010*sin(uTime*1.6)*smoothstep(-.4,.3,P.y);
-    if(part>8.5){ P.x+=.03*sin(uTime*.7); P.y+=.012*sin(uTime*1.1); }
-  } else if(st<4.5){
-    vec2 base=vec2(0.,-.72);
-    float wob=uHatch*.10*sin(uTime*11.);
-    P.xy=base+r2(P.xy-base,wob); N.xy=r2(N.xy,wob);
-  } else {
-    float f1=.12+.72*sin(uPh), f2=.22+.62*sin(uPh-.9);
-    if(part>.5 && part<4.5){
-      float sgn=part<2.5?-1.:1.;
-      float outer=(abs(part-2.)<.5||abs(part-4.)<.5)?1.:0.;
-      flap(P,N,sgn,outer,f1,f2);
-    }
-    P.y+=.05*cos(uPh);
+vec3 shot(sampler2D t, vec4 cam, vec4 par, vec4 ext, float has, vec2 p, float asp, out float dark){
+  float kind=par.z;
+  vec3 paper=vec3(.949,.945,.929)*(1.+.035*(fbm(p*2.2+40.)-.5));
+  dark=0.;
+  if(kind>1.5 && kind<2.5) return paper;
+  if(kind>2.5){
+    dark=1.;
+    vec3 navy=mix(vec3(.030,.090,.30),vec3(.012,.030,.12),smoothstep(-1.,1.,-p.y+.3*length(p)));
+    return navy*(1.+.10*(fbm(p*1.3+3.)-.5))+motes(p,asp)*.6;
   }
+  // the lens drifts with the pointer, and the paint is never quite still
+  vec2 q=p-vec2(par.x*asp,par.y)-uPtr*vec2(.014,.010);
+  q+=.0045*cam.z*vec2(fbm(p*1.6+vec2(uTime*.05,0.))-.5,fbm(p*1.6+vec2(9.,-uTime*.045))-.5);
+  vec2 uv=vec2(cam.x+q.x*cam.z*.5/cam.w, cam.y-q.y*cam.z*.5);
+  vec3 img=texture2D(t,clamp(uv,0.,1.)).rgb;
+  vec2 e=min(uv,1.-uv);
+  if(kind>.5){
+    // a drawing: divide its own old paper away, then lay the ink on ours, fading at the sheet's edge
+    vec3 ink=clamp(img/ext.rgb,0.,1.);
+    ink=mix(vec3(1.),ink,1.12);
+    float edge=smoothstep(0.,.05,e.x)*smoothstep(0.,.06,e.y);
+    return paper*mix(vec3(1.),clamp(ink,0.,1.),edge*has);
+  }
+  dark=1.;
+  // a painting: graded toward the studio's palette — cool in the shadows, warm in the lights
+  float lum=dot(img,vec3(.30,.59,.11));
+  img=mix(img,img*vec3(.84,.93,1.14),.42*(1.-lum));
+  img=mix(img,img*vec3(1.06,1.0,.92),.35*lum);
+  img=pow(img,vec3(1.05))*1.04;
+  // lamplight
+  float fl=ext.a*(.55+.45*vnoise(vec2(uTime*5.,3.)))*(.8+.2*vnoise(vec2(uTime*13.,7.)))+uFlare;
+  img+=vec3(.16,.09,.03)*lum*lum*fl;
+  // dimmed, it recedes: darker, greyer
+  img=mix(img,vec3(lum)*vec3(.80,.88,1.05),par.w*.55)*(1.-par.w*.62);
+  // off the canvas there is a dark wall, a hairline frame, and a little shadow
+  float inside=step(0.,e.x)*step(0.,e.y);
+  float dist=max(-e.x*cam.w,-e.y)/(cam.z*.5);          // distance outside the canvas, in screen units
+  vec3 wall=ext.rgb*(1.+.5*(fbm(p*1.4)-.5))+vec3(.015,.02,.035)*smoothstep(1.4,0.,length(p-vec2(par.x*asp,par.y)));
+  wall*=.55+.45*smoothstep(0.,.10,dist);
+  wall+=vec3(.55,.5,.42)*smoothstep(.006,.003,abs(dist-.012))*.35;
+  vec3 col=mix(wall,img*has+ext.rgb*(1.-has),inside);
+  return col+motes(p,asp)*(1.-par.w*.5);
 }
 
-// per-stage dot size: the same number of dots covers very different areas
-float dotOf(float st){ return st<.5?1.34: st<1.5?1.: st<2.5?1.06: st<3.5?1.02: st<4.5?.74: 1.42; }
-
 void main(){
-  float asp=uRes.x/uRes.y;
-  vec3 PA,NA,PB,NB;
-  pose(uSA,aA,aNA,PA,NA);
-  pose(uSA+1.,aB,aNB,PB,NB);
-  // a change of form sweeps the body from nose to tail, rather than happening everywhere at once
-  float along=clamp((aA.x+1.1)/2.2,0.,1.);
-  float f=clamp(uF*1.62-(1.-along)*.5-aSeed*.12,0.,1.); f=f*f*(3.-2.*f);
-  vec3 P=mix(PA,PB,f);
-  vec3 N=normalize(mix(NA,NB,f)+1e-5);
-  vec3 R=mix(aA.xyz,aB.xyz,f);
-  float part=f<.5?aA.w:aB.w;
-  float sNow=uSA+f;
-  float wCell=clamp(1.-sNow,0.,1.), wFish=clamp(1.-abs(sNow-1.),0.,1.);
-  float wEgg=clamp(1.-abs(sNow-4.),0.,1.), wFly=clamp(sNow-4.,0.,1.);
-
-  // between forms the dots let go: wound round the body's axis, carried back by the current, then settled
-  float m=sin(f*3.14159);
-  vec3 tq=P*4.+aSeed*37.;
-  P.yz=r2(P.yz,m*(1.3+2.4*(aSeed-.5)))*(1.+m*.6);
-  P.x-=m*.42;
-  P+=m*.09*vec3(sin(tq.y+uTime*1.1),sin(tq.z+uTime*1.3),sin(tq.x+uTime*.9));
-  P+=.0035*vec3(sin(uTime*2.+aSeed*90.),cos(uTime*1.7+aSeed*70.),0.);
-
-  // a tenth of the dots are loose: shed from the skin into a wake, fading as they fall behind
-  float lamp=step(4.5,part)*step(part,8.5)*(1.-step(5.5,part)*step(part,7.5));   // stalk and bulb
-  float loose=step(.9,aSeed)*uTrail*(1.-m)*(1.-lamp);
-  float life=fract(aSeed*53.+uTime*(.22+.25*hash1(aSeed*3.)));
-  vec3 wk=P+vec3(-life*(1.0+1.5*uTrail),.12*sin(life*9.+aSeed*40.)+life*.3*(hash1(aSeed*5.)-.35),.14*cos(life*7.+aSeed*20.));
-  P=mix(P,wk,loose);
-
-  // what swims or flies is never still: it rides a slow swell and rolls with it
-  float afloat=smoothstep(1.9,1.5,sNow)+smoothstep(4.4,4.8,sNow);
-  P.y+=afloat*.03*sin(uTime*.7);
-  P.yz=r2(P.yz,afloat*.06*sin(uTime*.5)); N.yz=r2(N.yz,afloat*.06*sin(uTime*.5));
-
-  // on arrival the first cell gathers itself out of the water
-  float iv=(1.-uIntro)*(1.-uIntro);
-  vec3 rdir=normalize(vec3(hash1(aSeed*7.)-.5,hash1(aSeed*13.)-.5,hash1(aSeed*29.)-.5)+1e-4);
-  P+=rdir*iv*(1.6+2.6*aSeed);
-  P.xy=r2(P.xy,iv*2.2*(aSeed-.3));
-
-  // the only light in the deep is the one it carries (measured before the camera turns)
-  vec3 lv=vec3(1.02,.47,0.)-P; float ld=length(lv);
-  float lsh=clamp(dot(N,lv/ld),0.,1.)*1.7/(1.+5.*ld*ld);
-
-  float yaw=uYaw+uPtr.x*.10, pit=uPitch-uPtr.y*.06;
-  P.xz=r2(P.xz,-yaw); N.xz=r2(N.xz,-yaw);
-  P.yz=r2(P.yz,pit);  N.yz=r2(N.yz,pit);
-
-  float w=4.2/(4.2+P.z);
-  vec2 q=P.xy*w;
-  vec2 oc=vec2(uObj.x*asp,uObj.y)+uPtr*.012;
-  vec2 pq=(vec2(uPtr.x*asp,uPtr.y)-oc)/uObj.z;
-  vec2 dq=q-pq; float dl=length(dq)+1e-4;
-  q+=dq/dl*.10*exp(-dl*dl*9.)*uRepel;
-  vec2 s=oc+q*uObj.z;
-  gl_Position=vec4(s.x/asp,s.y,clamp(P.z*.4,-.95,.95),1.);
-
-  vec3 L=normalize(vec3(-.55,.75,-.55));
-  float facing=-N.z;
-  float dif=clamp(dot(N,L),0.,1.), amb=.5+.5*N.y;
-  float rim=pow(1.-abs(facing),2.2);
-  float shade=clamp(dif*.85+amb*.22+rim*.25,0.,1.);
-  // a cell is mostly membrane: bright at the rim, a nucleus glowing inside
-  float nuc=step(.5,part)*wCell;
-  shade=mix(shade,mix(.16+rim*1.15,.95,nuc),wCell);
-  // bars on the fish, speckles on the egg, barring on the wings
-  float bars=smoothstep(.1,.9,sin(R.x*13.+sin(R.y*7.)*1.3))*smoothstep(-.06,.16,R.y)*smoothstep(.60,.40,R.x);
-  shade*=1.-.42*bars*wFish;
-  shade*=1.-.55*step(.80,hash1(floor(R.x*17.)+floor(R.y*17.)*31.+floor(R.z*9.)*7.))*wEgg;
-  shade*=1.-.34*smoothstep(.2,.8,sin(abs(R.z)*30.+R.x*7.))*smoothstep(.2,.4,abs(R.z))*wFly;
-  shade=mix(shade,clamp(lsh+rim*.14,0.,1.),uGlow*.92);
-  shade=clamp(shade+uHatch*wEgg*(.22+.18*sin(uTime*5.)),0.,1.);
-
-  float vis=mix(smoothstep(-.14,.12,facing), mix(.42,1.,smoothstep(-.1,.1,facing)), wCell*(1.-nuc));
-  vis=mix(vis,(1.-life)*(.5+.6*hash1(aSeed*11.)),loose);
-  float mul=1.; vKind=0.;
-  if(part>5.5 && part<6.5) vis=0.;                         // the pupil: no dots at all
-  if(part>6.5 && part<7.5){ shade=1.; mul=1.35; }          // and a bright ring round it
-  if((part>4.5 && part<5.5) || (part>7.5 && part<8.5)){ vis*=smoothstep(.05,.6,uGlow); }
-  if(part>7.5 && part<8.5){ shade=1.; mul=1.15; vKind=1.; }
-  vis*=1.-m*.35;
-
-  // on paper the dots are ink, and gather where the shadow is
-  float ink=clamp(1.02-shade*.92+rim*.45,0.,1.);
-  float S=mix(shade,ink,step(.5,uPaper));
-  float size=uDot*mix(dotOf(uSA),dotOf(uSA+1.),f)*uRes.y*uObj.z*w*(.26+1.2*S)*mul*vis;
-  size*=(1.+.85*uNight*(1.-step(.5,uPaper)))*mix(.35,1.,uIntro);   // in the dark each dot carries a little glow
-  gl_PointSize=max(size,1.);
-  vAlpha=uObjA*clamp(size,0.,1.)*step(.001,vis)*smoothstep(0.,.5,uIntro);
-  vShade=shade;
-  vTint=.5+.5*sin(R.x*3.1+R.y*5.3+uTime*.35);
-}`;
-
-const PT_FRAG = `
-precision highp float;
-uniform vec2 uRes; uniform float uTime;
-uniform vec3 uObj; uniform vec2 uPtr;
-uniform float uPaper,uNight,uDawn,uSurf,uDepth,uPerch,uStage;
-varying float vShade; varying float vAlpha; varying float vKind; varying float vTint;
-${NOISE}
-void main(){
-  vec2 c=gl_PointCoord-.5; float r=length(c);
-  if(r>.5 || vAlpha<.004) discard;
   vec2 frag=gl_FragCoord.xy; vec2 uv=frag/uRes;
   float asp=uRes.x/uRes.y;
   vec2 p=(frag-.5*uRes)/(.5*uRes.y);
   float px=uRes.y/900.;
-  vec2 oc=vec2(uObj.x*asp,uObj.y)+uPtr*.012;
-  vec2 q=(p-oc)/uObj.z;
-  float eggW=clamp(1.-abs(uStage-4.),0.,1.);
-  if(uPerch*eggW>.5 && nestBowl(q)<0.) discard;            // the nest is in front of the egg
-
-  float wave=.010*sin(p.x*8.+uTime*1.1)+.006*sin(p.x*19.-uTime*1.6);
-  float below=smoothstep(.006,-.006,p.y-uSurf-wave);
-  vec3 lite=mix(vec3(.985,.96,.885),vec3(.80,.92,1.),below*(.35+.4*uDepth));
-  lite=mix(lite,vec3(.72,.82,.98),uNight);
-  lite=mix(lite,vec3(1.,.93,.80),uDawn*(1.-uNight)*.8);
-  lite=mix(lite,vec3(.62,.95,1.)*1.15,vKind);
-  lite*=mix(vec3(1.),vec3(.80,.95,1.10),vTint*(.30+.30*below)*(1.-uDawn*.6));   // a cool sheen that travels over the skin
-  lite*=.80+.20*vShade;
-  vec3 inkc=vec3(.115,.11,.10);
-  float onPaper=uPaper<.001?0.:uPaper>.999?1.:step(wipeField(uv,frag,p,px),uPaper*1.16-.06);
-  vec3 col=mix(lite,inkc,onPaper);
-  float soft=uNight*(1.-onPaper);                          // hard print dots by day, soft lights by night
-  float a=vAlpha*mix(smoothstep(.5,.40,r),exp(-r*r*15.)*1.15,soft)*mix(1.,.94,onPaper)*(1.-.42*below*step(uSurf,1.5));
-  if(a<.06) discard;
-  gl_FragColor=vec4(col,a);
+  float dA, dB;
+  vec3 col=shot(tA,camA,parA,extA,uHas.x,p,asp,dA);
+  float dk=dA;
+  if(uMix>.001){
+    vec3 cb=shot(tB,camB,parB,extB,uHas.y,p,asp,dB);
+    // the wipe between scenes: a field of pixels that opens from the middle
+    float field=(abs(uv.x-.5)*1.5+abs(uv.y-.5)*.35)*.62+bayer8(floor(frag/(3.*px)))*.16+fbm(p*3.4+7.)*.30;
+    float k=uMix*1.16-.06, m=step(field,k);
+    col=mix(col,cb,m); dk=mix(dA,dB,m);
+    float edge=smoothstep(.05,0.,abs(field-k));
+    float rnd=hash(floor(frag/(3.*px))+floor(uTime*8.));
+    col=mix(col,.5+.5*cos(6.2831*(rnd+vec3(0.,.33,.67))),edge*step(.55,rnd)*.85);
+  }
+  // a scrim where the type sits: the left on a wide screen, the foot on a phone
+  float sc=uNarrow>.5 ? smoothstep(.55,-.55,p.y)*.84 : max(smoothstep(.30,-1.25,p.x/asp)*.86,smoothstep(-.30,-1.05,p.y)*.66);
+  col*=1.-sc*dk;
+  float vg=length((uv-.5)*vec2(1.08,1.));
+  col*=1.-mix(.10,.60,dk)*smoothstep(.35,.95,vg)*vg;
+  col+=(hash(frag+fract(uTime)*91.7)-.5)*.045;
+  gl_FragColor=vec4(col,1.);
 }`;
 
-const BG_UNIFORMS = [
-  "uRes", "uTime", "uPaper", "uNight", "uCloud", "uCloudR", "uObjA", "uObj", "uPtr", "uStage", "uSurf", "uDepth",
-  "uBank", "uPerch", "uGlow", "uSpeed", "uOthers", "uDawn", "uYaw", "uPitch", "uHatch",
-] as const;
-const PT_UNIFORMS = [
-  "uRes", "uTime", "uObj", "uPtr", "uSA", "uF", "uDiv", "uSwim", "uPh", "uYaw", "uPitch", "uHatch", "uGlow", "uPaper",
-  "uObjA", "uDot", "uRepel", "uNight", "uDawn", "uSurf", "uDepth", "uPerch", "uStage", "uIntro", "uTrail",
-] as const;
-const STAGES = 6;
+const UNIFORMS = ["uRes", "uTime", "uPtr", "tA", "tB", "camA", "camB", "parA", "parB", "extA", "extB", "uHas", "uMix", "uFlare", "uNarrow"] as const;
+
+export type Frame = {
+  /** The chrome should read dark-on-light. */
+  light: boolean;
+  /** Where the labelled specimen stands on screen: x of half-width, y of half-height, and its half-height. */
+  ax: number;
+  ay: number;
+  au: number;
+};
 
 export class Film {
   ok = false;
-  /** How many dots each creature is made of. */
-  readonly count: number;
   private gl: WebGLRenderingContext | null = null;
-  private bg: WebGLProgram | null = null;
-  private pt: WebGLProgram | null = null;
-  private ub: Record<string, WebGLUniformLocation | null> = {};
-  private up: Record<string, WebGLUniformLocation | null> = {};
-  private quad: WebGLBuffer | null = null;
-  private seeds: WebGLBuffer | null = null;
-  private pos: (WebGLBuffer | null)[] = Array(STAGES).fill(null);
-  private nrm: (WebGLBuffer | null)[] = Array(STAGES).fill(null);
-  private loc = { a: -1, aA: -1, aNA: -1, aB: -1, aNB: -1, aSeed: -1 };
+  private u: Record<string, WebGLUniformLocation | null> = {};
+  private tex = new Map<SceneId, { t: WebGLTexture | null; ready: boolean }>();
+  private blank: WebGLTexture | null = null;
   private scale = 1;
-  private dot = 0.0105;
   private ptr = [0, 0];
-  private repel = 0;
-  private repelTo = 0;
-  private ph = 0;
+  private flareTo = 0;
+  private flareNow = 0;
   private lastTime = 0;
-  private hatchTo = 0;
-  private hatch = 0;
-  private born = -1;
-  /** Skip the opening gather (reduced motion, or a deep link). */
-  instant = false;
 
-  constructor(private canvas: HTMLCanvasElement, narrow: boolean) {
-    this.count = narrow ? 15000 : 26000;
-    const gl = canvas.getContext("webgl", {
-      antialias: false,
-      alpha: false,
-      depth: true,
-      powerPreference: "high-performance",
-      preserveDrawingBuffer: false,
-    });
+  constructor(private canvas: HTMLCanvasElement, private small: boolean) {
+    const gl = canvas.getContext("webgl", { antialias: false, alpha: false, depth: false, powerPreference: "high-performance" });
     if (!gl) return;
     const make = (type: number, src: string) => {
       const s = gl.createShader(type);
@@ -720,70 +226,68 @@ export class Film {
       }
       return s;
     };
-    const link = (vsrc: string, fsrc: string) => {
-      const vs = make(gl.VERTEX_SHADER, vsrc);
-      const fs = make(gl.FRAGMENT_SHADER, fsrc);
-      const prog = gl.createProgram();
-      if (!vs || !fs || !prog) return null;
-      gl.attachShader(prog, vs);
-      gl.attachShader(prog, fs);
-      gl.linkProgram(prog);
-      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-        console.warn("[film] shader failed to link:", gl.getProgramInfoLog(prog));
-        return null;
-      }
-      return prog;
-    };
-    const bg = link(BG_VERT, BG_FRAG);
-    const pt = link(PT_VERT, PT_FRAG);
-    if (!bg || !pt) return;
-    for (const name of BG_UNIFORMS) this.ub[name] = gl.getUniformLocation(bg, name);
-    for (const name of PT_UNIFORMS) this.up[name] = gl.getUniformLocation(pt, name);
-    this.loc = {
-      a: gl.getAttribLocation(bg, "a"),
-      aA: gl.getAttribLocation(pt, "aA"),
-      aNA: gl.getAttribLocation(pt, "aNA"),
-      aB: gl.getAttribLocation(pt, "aB"),
-      aNB: gl.getAttribLocation(pt, "aNB"),
-      aSeed: gl.getAttribLocation(pt, "aSeed"),
-    };
-    this.quad = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.quad);
+    const vs = make(gl.VERTEX_SHADER, VERT);
+    const fs = make(gl.FRAGMENT_SHADER, FRAG);
+    const prog = gl.createProgram();
+    if (!vs || !fs || !prog) return;
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.warn("[film] shader failed to link:", gl.getProgramInfoLog(prog));
+      return;
+    }
+    gl.useProgram(prog);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const seeds = new Float32Array(this.count);
-    for (let i = 0; i < seeds.length; i++) seeds[i] = (Math.sin(i * 12.9898) * 43758.5453) % 1;
-    for (let i = 0; i < seeds.length; i++) seeds[i] = Math.abs(seeds[i]);
-    this.seeds = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.seeds);
-    gl.bufferData(gl.ARRAY_BUFFER, seeds, gl.STATIC_DRAW);
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-    gl.depthFunc(gl.LEQUAL);
-
+    const loc = gl.getAttribLocation(prog, "a");
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    for (const name of UNIFORMS) this.u[name] = gl.getUniformLocation(prog, name);
+    this.blank = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, this.blank);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([8, 8, 10, 255]));
     this.gl = gl;
-    this.bg = bg;
-    this.pt = pt;
-    // The world pass is fill-rate bound, so the buffer is rendered below native
-    // resolution; the dither and grain hide the difference.
-    this.scale = narrow ? 0.7 : 0.85;
+    this.scale = small ? 0.8 : 1;
     this.ok = true;
     this.resize();
   }
 
-  /** Hand the film one creature's dots (see `sampleStage`). */
-  load(stage: number, pos: Float32Array, nrm: Float32Array) {
+  /** Fetch a painting as the scroll nears it; forget it once it is far behind. */
+  private want(id: SceneId) {
     const gl = this.gl;
-    if (!gl || stage < 0 || stage >= STAGES || pos.length !== this.count * 4) return;
-    this.pos[stage] = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.pos[stage]);
-    gl.bufferData(gl.ARRAY_BUFFER, pos, gl.STATIC_DRAW);
-    this.nrm[stage] = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.nrm[stage]);
-    gl.bufferData(gl.ARRAY_BUFFER, nrm, gl.STATIC_DRAW);
+    if (!gl || SCENES[id].kind > 1.5 || this.tex.has(id)) return;
+    const entry = { t: null as WebGLTexture | null, ready: false };
+    this.tex.set(id, entry);
+    const img = new Image();
+    img.decoding = "async";
+    img.onload = () => {
+      if (!this.gl || this.tex.get(id) !== entry) return;
+      const t = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      entry.t = t;
+      entry.ready = true;
+    };
+    img.src = `/film/${id}-${this.small ? "m" : "d"}.webp`;
+  }
+  private forget(keep: Set<SceneId>) {
+    for (const [id, e] of this.tex) {
+      if (keep.has(id) || !e.ready) continue;
+      this.gl?.deleteTexture(e.t);
+      this.tex.delete(id);
+    }
   }
 
   resize() {
     if (!this.gl) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.6) * this.scale;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2) * this.scale;
     const w = Math.max(2, Math.round(this.canvas.clientWidth * dpr));
     const h = Math.max(2, Math.round(this.canvas.clientHeight * dpr));
     if (this.canvas.width !== w || this.canvas.height !== h) {
@@ -793,133 +297,90 @@ export class Film {
     }
   }
 
-  /** Step the film down a notch: fewer pixels for the world pass. */
+  /** Step the film down a notch. */
   degrade() {
-    if (!this.gl || this.scale < 0.45) return;
-    this.scale *= 0.82;
+    if (!this.gl || this.scale < 0.5) return;
+    this.scale *= 0.85;
     this.resize();
   }
 
-  /** x, y in −1…1, y up. Only a mouse parts the dots; a finger is busy scrolling. */
-  pointer(x: number, y: number, mouse = true) {
-    this.ptr[0] += (x - this.ptr[0]) * 0.08;
-    this.ptr[1] += (y - this.ptr[1]) * 0.08;
-    this.repelTo = mouse ? 1 : 0;
+  pointer(x: number, y: number) {
+    this.ptr[0] += (x - this.ptr[0]) * 0.06;
+    this.ptr[1] += (y - this.ptr[1]) * 0.06;
   }
 
-  /** The brief was sent: the egg lights up. */
-  hatchEgg() {
-    this.hatchTo = 1;
+  /** The brief was sent: the lamps flare. */
+  flare() {
+    this.flareTo = 1;
   }
 
-  render(s: FilmState, time: number) {
+  /** Which shots are on screen at p, and how far the wipe between them has opened. */
+  static at(p: number) {
+    let i = 0;
+    SHOTS.forEach((s, k) => {
+      if (p >= s.from) i = k;
+    });
+    const cur = SHOTS[i];
+    const next = SHOTS[i + 1];
+    const mix = next && p > cur.to ? clamp01((p - cur.to) / (next.from - cur.to)) : 0;
+    return { cur, next, mix: smooth(mix) };
+  }
+
+  frame(p: number, time: number, narrow: boolean): Frame {
+    const { cur, next, mix } = Film.at(p);
+    const lead = mix > 0.5 && next ? next : cur;
+    const asp = this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight);
+    // the line-up's labels follow Man across the screen
+    const lineup = [cur, next].find((s) => s?.scene === "lineup");
+    let ax = 0, ay = 0, au = 0.5;
+    if (lineup) {
+      const c = camOf(lineup, p, narrow);
+      const sc = SCENES.lineup;
+      ax = c.ox + (MAN.u - c.cx) / ((c.vh * 0.5) / sc.aspect) / asp;
+      ay = c.oy - (MAN.v - c.cy) / (c.vh * 0.5);
+      au = MAN.halfHeight / (c.vh * 0.5);
+    }
+    const out: Frame = { light: SCENES[lead.scene].kind > 0.5 && SCENES[lead.scene].kind < 2.5, ax, ay, au };
+
     const gl = this.gl;
-    if (!gl || !this.bg || !this.pt) return;
+    if (!gl) return out;
+    // keep this painting, the next and the one after within reach; let the rest go
+    const idx = SHOTS.indexOf(cur);
+    const keep = new Set<SceneId>();
+    for (let k = Math.max(0, idx - 1); k <= Math.min(SHOTS.length - 1, idx + 2); k++) keep.add(SHOTS[k].scene);
+    // fetch the next painting at once, and the one after it only when this shot is half gone
+    const ahead = p > (cur.from + cur.to) / 2 ? 2 : 1;
+    for (let k = idx; k <= Math.min(SHOTS.length - 1, idx + ahead); k++) this.want(SHOTS[k].scene);
+    this.forget(keep);
+
     const dt = Math.min(0.05, Math.max(0, time - this.lastTime));
     this.lastTime = time;
-    // Tail, legs and wings run on one phase, advanced here so a change of pace never makes it jump.
-    const pace = s.stage < 1.5 ? 3 + 6.5 * s.speed : s.stage < 3 ? 2.4 : 7.6;
-    this.ph = (this.ph + dt * pace) % (Math.PI * 200);
-    this.hatch += (this.hatchTo - this.hatch) * Math.min(1, dt * 1.6);
-    this.repel += (this.repelTo - this.repel) * Math.min(1, dt * 3);
-    if (this.born < 0) this.born = time;
-    const it = this.instant ? 1 : Math.min(1, (time - this.born) / 2.6);
-    const intro = 1 - Math.pow(1 - it, 3);
-    const W = this.canvas.width, H = this.canvas.height;
+    this.flareNow += (this.flareTo - this.flareNow) * Math.min(1, dt * 2);
 
-    // ---- the world ----
-    gl.useProgram(this.bg);
-    gl.disable(gl.DEPTH_TEST);
-    gl.disable(gl.BLEND);
-    gl.depthMask(true);
-    gl.clear(gl.DEPTH_BUFFER_BIT);
-    const b = this.ub;
-    gl.uniform2f(b.uRes, W, H);
-    gl.uniform1f(b.uTime, time);
-    gl.uniform1f(b.uPaper, s.paper);
-    gl.uniform1f(b.uNight, s.night);
-    gl.uniform1f(b.uCloud, s.cloud);
-    gl.uniform1f(b.uCloudR, s.cr);
-    gl.uniform1f(b.uObjA, s.oa);
-    gl.uniform3f(b.uObj, s.ox, s.oy, s.os);
-    gl.uniform2f(b.uPtr, this.ptr[0], this.ptr[1]);
-    gl.uniform1f(b.uStage, s.stage);
-    gl.uniform1f(b.uSurf, s.surf);
-    gl.uniform1f(b.uDepth, s.depth);
-    gl.uniform1f(b.uBank, s.bank);
-    gl.uniform1f(b.uPerch, s.perch);
-    gl.uniform1f(b.uGlow, s.glow);
-    gl.uniform1f(b.uSpeed, s.speed);
-    gl.uniform1f(b.uOthers, s.others);
-    gl.uniform1f(b.uDawn, s.dawn);
-    gl.uniform1f(b.uYaw, s.yaw);
-    gl.uniform1f(b.uPitch, s.pitch);
-    gl.uniform1f(b.uHatch, this.hatch);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.quad);
-    gl.enableVertexAttribArray(this.loc.a);
-    gl.vertexAttribPointer(this.loc.a, 2, gl.FLOAT, false, 0, 0);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-    // ---- the creature ----
-    if (s.oa < 0.01) return;
-    let sa = Math.min(STAGES - 2, Math.floor(s.stage));
-    let f = s.stage - sa;
-    if (!this.pos[sa + 1]) f = 0; //           the next form is not sampled yet: hold this one
-    if (!this.pos[sa]) {
-      // deep-linked past what is loaded: show the nearest form we have
-      let k = sa;
-      while (k > 0 && !this.pos[k]) k--;
-      if (!this.pos[k]) return;
-      sa = Math.min(k, STAGES - 2);
-      f = k === STAGES - 1 ? 1 : 0;
-    }
-    const posB = this.pos[sa + 1] ?? this.pos[sa];
-    const nrmB = this.nrm[sa + 1] ?? this.nrm[sa];
-
-    gl.useProgram(this.pt);
-    gl.enable(gl.DEPTH_TEST);
-    gl.enable(gl.BLEND);
-    const bind = (loc: number, buf: WebGLBuffer | null, size: number) => {
-      if (loc < 0) return;
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, size, gl.FLOAT, false, 0, 0);
+    const u = this.u;
+    const set = (shot: Shot, cam: string, par: string, ext: string, unit: number, tex: string) => {
+      const sc = SCENES[shot.scene];
+      const c = camOf(shot, p, narrow);
+      gl.uniform4f(u[cam], c.cx, c.cy, c.vh, sc.aspect);
+      gl.uniform4f(u[par], c.ox, c.oy, sc.kind, shot.dim ?? 0);
+      gl.uniform4f(u[ext], sc.tint[0], sc.tint[1], sc.tint[2], sc.flicker ?? 0);
+      const e = this.tex.get(shot.scene);
+      gl.activeTexture(gl.TEXTURE0 + unit);
+      gl.bindTexture(gl.TEXTURE_2D, e?.ready ? e.t : this.blank);
+      gl.uniform1i(u[tex], unit);
+      return e?.ready ? 1 : 0;
     };
-    bind(this.loc.aA, this.pos[sa], 4);
-    bind(this.loc.aNA, this.nrm[sa], 3);
-    bind(this.loc.aB, posB, 4);
-    bind(this.loc.aNB, nrmB, 3);
-    bind(this.loc.aSeed, this.seeds, 1);
-    const u = this.up;
-    gl.uniform2f(u.uRes, W, H);
+    const hasA = set(cur, "camA", "parA", "extA", 0, "tA");
+    const hasB = set(next ?? cur, "camB", "parB", "extB", 1, "tB");
+    gl.uniform2f(u.uHas, hasA, hasB);
+    gl.uniform2f(u.uRes, this.canvas.width, this.canvas.height);
     gl.uniform1f(u.uTime, time);
-    gl.uniform3f(u.uObj, s.ox, s.oy, s.os);
     gl.uniform2f(u.uPtr, this.ptr[0], this.ptr[1]);
-    gl.uniform1f(u.uSA, sa);
-    gl.uniform1f(u.uF, f);
-    gl.uniform1f(u.uDiv, s.div);
-    gl.uniform1f(u.uSwim, s.swim);
-    gl.uniform1f(u.uPh, this.ph);
-    gl.uniform1f(u.uYaw, s.yaw);
-    gl.uniform1f(u.uPitch, s.pitch);
-    gl.uniform1f(u.uHatch, this.hatch);
-    gl.uniform1f(u.uGlow, s.glow);
-    gl.uniform1f(u.uPaper, s.paper);
-    gl.uniform1f(u.uObjA, s.oa);
-    gl.uniform1f(u.uDot, this.dot);
-    gl.uniform1f(u.uRepel, this.repel);
-    gl.uniform1f(u.uNight, s.night);
-    gl.uniform1f(u.uDawn, s.dawn);
-    gl.uniform1f(u.uSurf, s.surf);
-    gl.uniform1f(u.uDepth, s.depth);
-    gl.uniform1f(u.uPerch, s.perch);
-    gl.uniform1f(u.uStage, s.stage);
-    gl.uniform1f(u.uIntro, intro);
-    gl.uniform1f(u.uTrail, s.trail);
-    gl.drawArrays(gl.POINTS, 0, this.count);
-    for (const l of [this.loc.aA, this.loc.aNA, this.loc.aB, this.loc.aNB, this.loc.aSeed]) {
-      if (l >= 0) gl.disableVertexAttribArray(l);
-    }
+    gl.uniform1f(u.uMix, mix);
+    gl.uniform1f(u.uFlare, this.flareNow * 1.4);
+    gl.uniform1f(u.uNarrow, narrow ? 1 : 0);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    return out;
   }
 
   destroy() {
