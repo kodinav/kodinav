@@ -98,7 +98,7 @@ export function Intro() {
 
   if (!on) return null;
   return (
-    <div className={`intro ${fade ? "is-out" : ""}`} aria-hidden>
+    <div className={`opening ${fade ? "is-out" : ""}`} aria-hidden>
       <canvas id="intro-canvas" />
     </div>
   );
