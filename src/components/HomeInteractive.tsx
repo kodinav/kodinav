@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /** The stacked, coloured service rows: one open at a time, the rest folded to a title. */
 export function ServiceStack({
@@ -72,5 +72,36 @@ export function QuoteCarousel({ items, badges = [] }: { items: { q: string; a: s
         </button>
       </div>
     </div>
+  );
+}
+
+/** A figure that is already right in the HTML, and counts up from nothing when it comes into view. */
+export function CountUp({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        io.disconnect();
+        const t0 = performance.now();
+        const step = (t: number) => {
+          const k = Math.min(1, (t - t0) / 1600);
+          el.textContent = `${Math.round(value * (1 - Math.pow(1 - k, 3)))}${suffix}`;
+          if (k < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [value, suffix]);
+  return (
+    <span ref={ref}>
+      {value}
+      {suffix}
+    </span>
   );
 }

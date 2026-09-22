@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { QuoteCarousel, ServiceStack } from "@/components/HomeInteractive";
+import { HeroMotion } from "@/components/HeroMotion";
+import { CountUp, QuoteCarousel, ServiceStack } from "@/components/HomeInteractive";
+import { Intro } from "@/components/Intro";
 import { Price } from "@/components/Price";
 import { ButtonLink } from "@/components/ui";
 import { homeFaq } from "@/data/homeFaq";
@@ -43,14 +45,21 @@ export default function Home() {
 
       {/* ---------- hero ---------- */}
       <section className="hero">
+        <Intro />
+        <HeroMotion />
         <div className="hero-in">
           <h1 className="hero-h">
-            Build A Website{" "}
-            <br />
-            <span className="hero-line">
-              That <hr />
+            <span className="hl">
+              <span>Build A Website</span>
             </span>{" "}
-            <span className="hero-it">Performs</span>
+            <span className="hl">
+              <span className="hero-line">
+                That <hr />
+              </span>
+            </span>{" "}
+            <span className="hl hl-it">
+              <span className="hero-it">Performs</span>
+            </span>
           </h1>
           <div className="hero-side">
             <p>
@@ -67,11 +76,19 @@ export default function Home() {
         </div>
         <div className="hero-feat">
           <p className="annotation">Built for</p>
-          <ul>
-            {projects.map((p) => (
-              <li key={p.slug}>{p.name}</li>
-            ))}
-          </ul>
+          <div className="feat-marquee">
+            <div className="feat-track">
+              {[0, 1].map((k) => (
+                <ul key={k} aria-hidden={k === 1}>
+                  {projects.map((p, i) => (
+                    <li key={p.slug} style={{ "--i": i } as React.CSSProperties}>
+                      {p.name}
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -115,19 +132,27 @@ export default function Home() {
         </p>
         <dl className="stats">
           <div>
-            <dd>{projects.length}</dd>
+            <dd>
+              <CountUp value={projects.length} />
+            </dd>
             <dt>Projects live</dt>
           </div>
           <div>
-            <dd>{services.length}</dd>
+            <dd>
+              <CountUp value={services.length} />
+            </dd>
             <dt>Services</dt>
           </div>
           <div>
-            <dd>{TOOL_COUNT}</dd>
+            <dd>
+              <CountUp value={TOOL_COUNT} />
+            </dd>
             <dt>Free tools</dt>
           </div>
           <div>
-            <dd>1</dd>
+            <dd>
+              <CountUp value={1} />
+            </dd>
             <dt>Engineer, start to finish</dt>
           </div>
         </dl>
