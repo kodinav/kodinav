@@ -1,69 +1,60 @@
 @import "tailwindcss";
-@import "./stage.css";
-@import "./home.css";
 
 /* ============================================================
-   KODINAV — "Meridian" (v4)
-   An engineering studio presented like a world-class practice.
-   Primarily light + editorial: warm architectural paper, near-black
-   ink, one confident cobalt accent, generous air, precise hairlines
-   and register marks. Dark bands punctuate for emphasis (hero rail,
-   CTA, footer). No glassmorphism, no neon, no gradient soup.
+   KODINAV — v7 "Studio"
+   Off-white paper, near-black ink, one electric cobalt. A working
+   grotesk for everything, an italic serif for one word in a headline,
+   a mono for labels and figures. Pill buttons, hairlines, big type,
+   air. Dark (.ink) bands for services, the brief and the footer.
 
    Token and utility class NAMES are stable across redesigns — every
-   page styles itself from these values, so the identity can change
-   here without touching 40 pages. (Font var names are frozen too;
-   only the typefaces bound to them in layout.tsx change.)
+   page styles itself from these values, so the identity changes here
+   without touching 40 pages. Font var names are frozen too; only the
+   typefaces bound to them in lib/fonts.ts change.
    ============================================================ */
-
 :root {
-  --background: #f2f1ed; /* paper */
-  --surface: #e9e7e0; /* recessed paper */
-  --surface-raised: #faf9f6; /* a lighter sheet, never pure white */
-  --foreground: #1d1c19; /* ink */
-  --muted: #55534d; /* secondary text — ≥7:1 on paper */
-  --faint: #65635c; /* small mono annotations — ≥4.7:1 on every light surface (WCAG AA).
-                       #6c6e77 passed on bare paper but fell to 4.1–4.4:1 on the
-                       tinted surfaces the annotations actually sit on. */
-  --border: rgba(29, 28, 25, 0.13);
-  --border-strong: rgba(29, 28, 25, 0.3);
-  --accent: #1b3ad6; /* cobalt — the single signature hue */
-  --accent-strong: #1630ae;
-  --accent-soft: #1b3ad6;
-  --violet: #1b3ad6;
-  --accent-contrast: #ffffff; /* text/marks on an accent fill */
-  --brass: #1b3ad6; /* decorative marks + the "." — remapped to cobalt */
-  --card-bg: #faf9f6;
-  --shadow-card: 0 1px 2px rgba(22, 23, 27, 0.04);
+  --background: #f4f3ee;
+  --surface: #eceae3;
+  --surface-raised: #fbfaf7;
+  --foreground: #0e0e10;
+  --muted: #56554f; /* ≥7:1 on paper */
+  --faint: #66655f; /* small mono annotations — ≥4.9:1 on every light surface */
+  --border: rgba(14, 14, 16, 0.12);
+  --border-strong: rgba(14, 14, 16, 0.3);
+  --accent: #2a4bff;
+  --accent-strong: #1d3af0;
+  --accent-soft: #2a4bff;
+  --violet: #2a4bff;
+  --accent-contrast: #ffffff;
+  --brass: #2a4bff;
+  --card-bg: #fbfaf7;
+  --shadow-card: 0 1px 2px rgba(14, 14, 16, 0.04);
   --shadow-lift:
-    0 1px 1px rgba(22, 23, 27, 0.03), 0 10px 30px -14px rgba(22, 23, 27, 0.22),
-    0 3px 8px -4px rgba(22, 23, 27, 0.12);
+    0 1px 1px rgba(14, 14, 16, 0.03), 0 10px 30px -14px rgba(14, 14, 16, 0.22), 0 3px 8px -4px rgba(14, 14, 16, 0.12);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-/* Ink band — invert a whole section by remapping the tokens.
-   A deep, cool-neutral near-black (not pure #000): premium, not harsh. */
+/* Ink band — invert a whole section by remapping the tokens. */
 .ink {
-  --background: #0b0a09;
-  --surface: #161513;
-  --surface-raised: #1d1c19;
-  --foreground: #f2f1ed;
-  --muted: #a9abb4;
-  --faint: #83868f; /* ≥4.5:1 on ink */
-  --border: rgba(242, 241, 234, 0.13);
-  --border-strong: rgba(242, 241, 234, 0.3);
-  --accent: #9bb0ff; /* cobalt is too dark on ink — use the light cut */
-  --accent-strong: #b9c7ff;
-  --accent-soft: #9bb0ff;
-  --violet: #9bb0ff;
-  --accent-contrast: #14151a;
-  --brass: #9bb0ff;
-  --card-bg: rgba(242, 241, 234, 0.035);
+  --background: #0e0e10;
+  --surface: #17171a;
+  --surface-raised: #1d1d21;
+  --foreground: #f4f3ee;
+  --muted: #a7a7ad;
+  --faint: #8b8b92;
+  --border: rgba(244, 243, 238, 0.13);
+  --border-strong: rgba(244, 243, 238, 0.3);
+  --accent: #8fa4ff;
+  --accent-strong: #aebdff;
+  --accent-soft: #8fa4ff;
+  --violet: #8fa4ff;
+  --accent-contrast: #0e0e10;
+  --brass: #8fa4ff;
+  --card-bg: rgba(244, 243, 238, 0.04);
   --shadow-card: none;
   --shadow-lift: 0 20px 50px -28px rgba(0, 0, 0, 0.7);
   background: var(--background);
   color: var(--foreground);
 }
-
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
@@ -79,13 +70,10 @@
   --color-violet: var(--violet);
   --color-accent-contrast: var(--accent-contrast);
   --color-brass: var(--brass);
-  /* Font var names are stable (see layout.tsx). The typefaces behind them
-     changed with v4: display = Bricolage Grotesque, body/sans = Geist,
-     mono = Geist Mono, and serif = Instrument Serif (the editorial accent). */
   --font-sans: "Rupee", var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Rupee", var(--font-space-mono), ui-monospace, monospace;
-  --font-display: "Rupee", var(--font-anton), "Iowan Old Style", Georgia, serif;
-  --font-serif: "Rupee", var(--font-anton), ui-serif, Georgia, serif;
+  --font-display: "Rupee", var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Rupee", var(--font-anton), "Iowan Old Style", Georgia, serif;
 }
 
 html {
@@ -94,7 +82,6 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
-
 /* ₹ (U+20B9) lives in the latin-ext range, so set in a webfont it makes the
    browser fetch that family's whole extended file (80–100 kB) for one glyph.
    This one-glyph face answers it from a font already on the device; it is
@@ -102,8 +89,7 @@ html {
    covers it, so nothing can go missing. */
 @font-face {
   font-family: "Rupee";
-  src: local("Helvetica Neue"), local("Segoe UI"), local("Roboto"), local("Noto Sans"),
-    local("Arial");
+  src: local("Helvetica Neue"), local("Segoe UI"), local("Roboto"), local("Noto Sans"), local("Arial");
   unicode-range: U+20B9;
 }
 
@@ -136,38 +122,35 @@ html {
    explicitly picks the right regional glyph set (HK vs Taiwan standards)
    instead of whatever CJK font the OS guesses first — and ships zero bytes. */
 :root:lang(zh-HK) {
-  --font-cjk: "PingFang HK", "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK HK", "Noto Sans HK",
-    "Noto Sans TC", "Noto Sans CJK TC", sans-serif;
+  --font-cjk: "PingFang HK", "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK HK", "Noto Sans HK", "Noto Sans TC",
+    "Noto Sans CJK TC", sans-serif;
 }
 :root:lang(zh-TW) {
-  --font-cjk: "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", "Noto Sans TC", "PingFang HK",
-    sans-serif;
+  --font-cjk: "PingFang TC", "Microsoft JhengHei", "Noto Sans CJK TC", "Noto Sans TC", "PingFang HK", sans-serif;
 }
 :root:lang(zh-HK) body,
 :root:lang(zh-TW) body {
   font-family: var(--font-archivo), var(--font-cjk);
 }
-/* Unlayered, so these beat the (inlined) Tailwind font utilities on zh pages */
 :root:lang(zh-HK) :is(h1, h2, .font-display),
 :root:lang(zh-TW) :is(h1, h2, .font-display) {
-  font-family: var(--font-anton), var(--font-cjk);
+  font-family: var(--font-archivo), var(--font-cjk);
 }
 :root:lang(zh-HK) :is(.font-mono, .annotation),
 :root:lang(zh-TW) :is(.font-mono, .annotation) {
   font-family: var(--font-space-mono), var(--font-cjk);
   letter-spacing: 0.06em;
 }
-/* The serif-italic accent word doesn't translate: hanzi have no italic, and
-   browsers fake one by slanting. Chinese accents keep the cobalt, drop the slant. */
+/* Instrument Serif has no CJK glyphs and browsers would fake an italic by
+   slanting them. Chinese accents keep the weight, drop the slant. */
 :root:lang(zh-HK) :is(.text-gradient, .text-accent-gradient),
 :root:lang(zh-TW) :is(.text-gradient, .text-accent-gradient) {
-  font-family: var(--font-anton), var(--font-cjk);
+  font-family: var(--font-archivo), var(--font-cjk);
   font-style: normal;
   font-weight: 600;
   font-size: 1em;
   line-height: inherit;
 }
-/* CJK doesn't hyphenate, and wide Latin tracking reads as gaps between hanzi */
 :root:lang(zh-HK) .prose-justify,
 :root:lang(zh-TW) .prose-justify {
   hyphens: manual;
@@ -181,6 +164,7 @@ html {
   line-height: 1.2;
 }
 
+/* ---------- base ---------- */
 body {
   background: var(--background);
   color: var(--foreground);
@@ -192,214 +176,157 @@ body {
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
 }
-
-/* ---------- Safe areas (iPhone notch / Dynamic Island / home bar) ---------- */
 .pt-safe {
   padding-top: env(safe-area-inset-top);
 }
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
 }
-
 ::selection {
   background: var(--accent);
   color: var(--accent-contrast);
 }
-
-/* ---------- Display type: Bricolage Grotesque, sentence case ---------- */
-
 h1,
 h2 {
   font-family: var(--font-display);
-  font-weight: 320;
+  font-weight: 500;
   font-synthesis: none;
-  letter-spacing: -0.02em;
-  line-height: 1.02;
+  letter-spacing: -0.03em;
+  line-height: 1;
   text-wrap: balance;
 }
-
 h3,
 h4 {
+  font-weight: 500;
   font-synthesis: none;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.015em;
 }
-
-/* Accent word inside a heading: a flash of editorial serif italic in cobalt.
-   The one deliberate flourish in an otherwise grotesk/mono system.
+/* The one flourish: the accent word of a headline, in the italic serif.
    (Class names kept across redesigns so every page inherits the device.) */
 .text-gradient,
 .text-accent-gradient {
-  /* v6 is monochrome: the accent word is simply the same light serif */
-  font-family: inherit;
-  font-style: normal;
-  font-weight: inherit;
-  letter-spacing: inherit;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
   color: inherit;
-  font-size: 1em;
+  font-size: 1.06em;
   line-height: inherit;
 }
 
-/* ---------- Cards: crisp white on paper, hairline, small radius ---------- */
-
+/* ---------- surfaces & marks (names stable) ---------- */
 .glass,
 .glass-strong {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 6px;
   box-shadow: var(--shadow-card);
-  /* No backdrop blur — the brief rules out glassmorphism. Name kept for pages. */
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-
 .glass-strong {
   background: var(--surface-raised);
 }
-
 .card-hover {
   transition:
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s var(--ease),
     border-color 0.4s ease,
-    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow 0.5s var(--ease);
 }
-
-/* Pointer devices: a refined lift with a soft, believable shadow */
-@media (hover: hover) and (pointer: fine) {
-  .card-hover:hover {
-    transform: translateY(-4px);
-    border-color: var(--border-strong);
-    box-shadow: var(--shadow-lift);
-  }
+.card-hover:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lift);
 }
-
-/* Touch devices: press feedback instead of a sticky hover state */
-@media (hover: none) {
-  .card-hover:active {
-    transform: scale(0.99);
-    border-color: var(--border-strong);
-    transition-duration: 0.12s;
-  }
+.annotation {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--faint);
 }
-
-/* ---------- Textures / motifs ---------- */
-
-/* Coordinate field — a faint two-axis engineering grid. Precision paper. */
+.crosshair {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.crosshair::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  opacity: 0.35;
+}
 .bg-grid {
   background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 56px 56px;
-  opacity: 0.7;
+    linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 96px 96px;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 30%, transparent 75%);
 }
-
-/* A finer plotting dot-grid, for panels that want more texture */
-.bg-dots {
-  background-image: radial-gradient(
-    var(--border-strong) 0.75px,
-    transparent 0.75px
-  );
-  background-size: 20px 20px;
-  opacity: 0.6;
-}
-
 .bg-noise::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.35;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity: 0.28;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-
-/* Retired v1 glow orbs — kept as a no-op so old markup can't glow */
+.hatch {
+  background-image: repeating-linear-gradient(45deg, var(--foreground) 0 2px, transparent 2px 5px);
+}
 .orb {
   display: none;
 }
-
-/* Mono annotation label: "No. 01 · Services" */
-.annotation {
-  font-family: var(--font-mono);
-  font-size: 0.625rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--faint);
+.u-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.45s var(--ease);
+  padding-bottom: 2px;
+}
+.u-draw:hover,
+.u-draw:focus-visible {
+  background-size: 100% 1px;
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+.prose-justify {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-wrap: pretty;
+}
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
-/* Hatch — the "warning" fill on audit meters and severity swatches.
-   Texture, not hue, separates warning from pass/critical so status
-   survives greyscale and colour-blindness. */
-.hatch {
-  background-image: repeating-linear-gradient(
-    45deg,
-    var(--foreground) 0 2px,
-    transparent 2px 5px
-  );
-}
-
-/* Register mark — a fine engineering "+" crosshair. Replaces the old
-   rotated square; the class name stays so every Eyebrow inherits it. */
-.crosshair {
-  position: relative;
-  width: 11px;
-  height: 11px;
-  flex: none;
-  color: var(--accent);
-}
-.crosshair::before,
-.crosshair::after {
-  content: "";
-  position: absolute;
-  background: currentColor;
-}
-.crosshair::before {
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  transform: translateY(-50%);
-}
-.crosshair::after {
-  left: 50%;
-  top: 0;
-  height: 100%;
-  width: 1.5px;
-  transform: translateX(-50%);
-}
-
-/* ---------- Motion ---------- */
-
+/* ---------- motion (names stable) ---------- */
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
   to {
     transform: translateX(-50%);
   }
 }
 .animate-marquee {
-  animation: marquee 42s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 .marquee-mask {
-  mask-image: linear-gradient(
-    90deg,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    90deg,
-    transparent,
-    black 8%,
-    black 92%,
-    transparent
-  );
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
-
-/* Hero line reveal — pure CSS so the headline paints before JS hydrates (LCP) */
 @keyframes rise {
   from {
-    transform: translateY(115%);
+    transform: translateY(110%);
   }
   to {
     transform: translateY(0);
@@ -413,23 +340,21 @@ h4 {
 }
 .reveal-line > span {
   display: block;
-  animation: rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise 0.9s var(--ease) both;
 }
-
-/* Transform-only entrance: painted from frame one (no opacity:0), so it can
-   be the LCP element without penalty. */
 @keyframes rise-soft {
   from {
-    transform: translateY(22px);
+    opacity: 0;
+    transform: translateY(16px);
   }
   to {
-    transform: translateY(0);
+    opacity: 1;
+    transform: none;
   }
 }
 .rise-soft {
-  animation: rise-soft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: rise-soft 0.8s var(--ease) both;
 }
-
 @keyframes spin-slow {
   to {
     transform: rotate(360deg);
@@ -438,115 +363,632 @@ h4 {
 .animate-spin-slow {
   animation: spin-slow 26s linear infinite;
 }
-
 @keyframes blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
+  50% {
     opacity: 0;
   }
 }
 .animate-blink {
   animation: blink 1.1s step-end infinite;
 }
-
 @keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
   }
 }
 .animate-float-slow {
-  animation: float-slow 8s ease-in-out infinite;
+  animation: float-slow 7s ease-in-out infinite;
 }
 .animate-float-slower {
   animation: float-slow 11s ease-in-out infinite;
-  animation-delay: -3s;
 }
-
-/* SVG diagram stroke draw — for the signature engineering diagrams */
 @keyframes draw {
   to {
     stroke-dashoffset: 0;
   }
 }
 .diagram-draw {
-  stroke-dasharray: var(--len, 1000);
-  stroke-dashoffset: var(--len, 1000);
-  animation: draw 1.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.6s var(--ease) forwards;
 }
-
-/* Slow accent dash travelling along a connector line */
 @keyframes flow {
   to {
-    stroke-dashoffset: -1000;
+    stroke-dashoffset: -140;
   }
 }
 .diagram-flow {
   stroke-dasharray: 4 10;
   animation: flow 20s linear infinite;
 }
-
-/* Justified long-form prose with auto-hyphenation (blog bodies) */
-.prose-justify {
-  text-align: justify;
-  hyphens: auto;
-  -webkit-hyphens: auto;
-  text-wrap: pretty;
+/* Anything marked data-reveal rises in once (RevealObserver adds .in). Only
+   once JavaScript has run is anything held back, so no-JS readers and
+   crawlers see it all at once. */
+.js [data-reveal]:not(.in) {
+  opacity: 0;
+  transform: translateY(22px);
+}
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
 }
 
-/* Hide scrollbars on horizontally-scrolling chip rows */
-.scrollbar-none {
-  scrollbar-width: none;
+/* ---------- navigation ---------- */
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  padding-top: env(safe-area-inset-top);
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    backdrop-filter 0.4s ease;
+  border-bottom: 1px solid transparent;
 }
-.scrollbar-none::-webkit-scrollbar {
+.nav.is-scrolled {
+  background: color-mix(in srgb, var(--background) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: var(--border);
+}
+.nav.is-open {
+  background: var(--background);
+  border-color: var(--border);
+}
+.nav-inner {
+  margin: 0 auto;
+  max-width: 1440px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  height: 72px;
+  padding: 0 clamp(20px, 2.2vw, 32px);
+}
+.nav-links {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+.nav-links > li > a,
+.nav-links > li > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+}
+.nav-links > li > a:hover,
+.nav-links > li > a[aria-current="page"],
+.nav-links > li:hover > button,
+.nav-links > li:focus-within > button {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+.nav-links > li {
+  position: relative;
+}
+.nav-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 8px);
+  width: max-content;
+  max-width: min(92vw, 880px);
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-lift);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s var(--ease),
+    transform 0.4s var(--ease),
+    visibility 0s linear 0.3s;
+}
+.nav-links > li:hover > .nav-panel,
+.nav-links > li:focus-within > .nav-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition-delay: 0s;
+}
+.nav-panel ul {
+  display: grid;
+  gap: 0.15rem 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-panel.cols-2 ul {
+  grid-template-columns: repeat(2, minmax(200px, 1fr));
+}
+.nav-panel.cols-3 ul {
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+}
+.nav-panel a {
+  display: block;
+  padding: 0.5rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: background-color 0.25s;
+}
+.nav-panel a small {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+.nav-panel a:hover {
+  background: color-mix(in srgb, var(--foreground) 6%, transparent);
+}
+.nav-panel .all {
+  margin: 0.75rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 44px;
+  padding: 0 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--foreground);
+  cursor: pointer;
+}
+.nav-sheet {
+  display: none;
+  border-top: 1px solid var(--border);
+  max-height: calc(100svh - 72px);
+  overflow: auto;
+  padding: 1rem clamp(20px, 2.2vw, 32px) 2rem;
+}
+.nav.is-open .nav-sheet {
+  display: block;
+}
+.nav-sheet a {
+  display: block;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+  text-decoration: none;
+}
+.nav-sheet .sub a {
+  padding: 0.5rem 0;
+  border: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.nav-sheet .annotation {
+  margin: 1.4rem 0 0.4rem;
+}
+@media (width >= 1024px) {
+  .nav-links {
+    display: flex;
+  }
+  .nav-toggle {
+    display: none;
+  }
+  .nav-sheet {
+    display: none !important;
+  }
+}
+@media (width < 1024px) {
+  .nav-cta {
+    display: none;
+  }
+}
+
+/* ---------- home & shared blocks ---------- */
+.spec {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem 1.5rem;
+  margin: 1.5rem 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--border);
+}
+.spec dt {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.spec dd {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+.marquee-set {
+  display: flex;
+  padding: 1.1rem 0;
+}
+.marquee-set > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding: 0 0.6rem 0 1.4rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.5rem);
+  letter-spacing: -0.02em;
+  color: var(--muted);
+}
+.marquee-set i {
+  font-style: normal;
+  color: var(--accent);
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+.cover {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+.cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 1.1s var(--ease);
+}
+.cover:hover img {
+  transform: scale(1.03);
+}
+.cover-cap {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.worklist {
+  position: relative;
+}
+.worklist ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+.worklist li a {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1.4fr) minmax(0, 1fr) 2rem;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+  transition: padding 0.5s var(--ease);
+}
+.worklist h3 {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.6rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
+}
+.worklist .sum {
+  display: block;
+  max-width: 52ch;
+  margin-top: 0.55rem;
+  font-size: 0.93rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.worklist .idx,
+.worklist .meta {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.worklist .meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.worklist .go {
+  font-size: 1.5rem;
+  color: var(--accent);
+  transition: transform 0.5s var(--ease);
+}
+.worklist li.is-active a {
+  padding-left: 0.75rem;
+}
+.worklist li.is-active .go {
+  transform: translate(4px, -4px);
+}
+.worklist .thumb {
   display: none;
 }
-
-/* Link underline draw */
-.u-draw {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+.worklist .preview {
+  position: absolute;
+  z-index: 2;
+  left: var(--px, 0px);
+  top: var(--py, 0px);
+  width: min(26vw, 400px);
+  aspect-ratio: 16 / 10;
+  transform: translate(28px, -50%) rotate(-1.5deg);
+  pointer-events: none;
+  border-radius: 8px;
+  overflow: hidden;
 }
-.u-draw:hover {
-  background-size: 100% 1px;
+.worklist .preview img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  opacity: 0;
+  clip-path: inset(14% 0 14% 0);
+  transition:
+    opacity 0.35s var(--ease),
+    clip-path 0.6s var(--ease);
 }
-
-/* Tabular numerals for stat/metric rows (consistent digit widths) */
-.tabular {
+.worklist .preview img.is-on {
+  opacity: 1;
+  clip-path: inset(0);
+}
+@media (hover: none), (width < 760px) {
+  .worklist .preview {
+    display: none;
+  }
+  .worklist li a {
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    align-items: start;
+  }
+  .worklist .thumb {
+    display: block;
+    aspect-ratio: 16 / 10;
+    margin-bottom: 0.9rem;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .worklist .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .worklist .meta {
+    grid-column: 2;
+    justify-content: flex-start;
+    gap: 1.5rem;
+  }
+  .worklist .go {
+    display: none;
+  }
+}
+.svc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+.svc a {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) 2rem;
+  gap: 1.25rem;
+  align-items: baseline;
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--border);
+  color: inherit;
+  text-decoration: none;
+}
+.svc .idx {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  color: var(--faint);
+}
+.svc .name {
+  display: block;
+  font-size: clamp(1.25rem, 2.1vw, 1.85rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  transition: transform 0.5s var(--ease);
+}
+.svc .short {
+  display: block;
+  max-width: 56ch;
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--muted);
+  transition:
+    max-height 0.55s var(--ease),
+    opacity 0.4s var(--ease),
+    margin 0.4s var(--ease);
+}
+.svc a:hover .short,
+.svc a:focus-visible .short {
+  max-height: 6rem;
+  margin-top: 0.5rem;
+  opacity: 1;
+}
+.svc a:hover .name {
+  transform: translateX(6px);
+}
+.svc .go {
+  color: var(--accent);
+  transition: transform 0.5s var(--ease);
+}
+.svc a:hover .go {
+  transform: translateX(6px);
+}
+@media (hover: none) {
+  .svc .short {
+    max-height: none;
+    margin-top: 0.5rem;
+    opacity: 1;
+  }
+}
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2rem;
+  border-top: 1px solid var(--border);
+}
+.steps li {
+  padding-top: 1.25rem;
+}
+.steps h3 {
+  margin-top: 0.9rem;
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+}
+.steps p {
+  max-width: 34ch;
+  margin-top: 0.6rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+@media (width >= 760px) {
+  .steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+.figures {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.5rem;
+  margin: 0;
+}
+.figures dd {
+  margin: 0;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
+}
+.figures dt {
+  margin-top: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+@media (width >= 760px) {
+  .figures {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.audit {
+  padding: 1.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+}
+.audit h3 {
+  margin-top: 0.6rem;
+  font-size: 1.5rem;
+}
+.audit p:not(.annotation) {
+  margin: 0.6rem 0 1.2rem;
+  line-height: 1.5;
+  color: var(--muted);
 }
 
-/* ---------- Form controls (iOS) ---------- */
-
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236c6e77' stroke-width='1.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.9rem center;
-  background-size: 12px 8px;
-  padding-right: 2.5rem;
-  border-radius: 3px;
+/* ---------- footer ---------- */
+.foot-word {
+  font-size: clamp(4rem, 15vw, 15rem);
+  font-weight: 600;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  margin: 0;
+  color: var(--foreground);
 }
-
-input,
-textarea {
-  border-radius: 3px;
-  -webkit-appearance: none;
+.foot-word i {
+  font-style: normal;
+  color: var(--accent);
 }
-
-/* ---------- Accessibility ---------- */
+.foot-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.5rem;
+}
+.foot-cols ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.foot-cols a {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.foot-cols a:hover {
+  color: var(--foreground);
+}
+@media (width >= 900px) {
+  .foot-cols {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -555,12 +997,9 @@ textarea {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
-}
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: 1px;
+  .js [data-reveal]:not(.in) {
+    opacity: 1;
+    transform: none;
+  }
 }

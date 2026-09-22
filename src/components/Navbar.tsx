@@ -3,35 +3,37 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { services } from "@/data/services";
 import { nav } from "@/data/site";
-import { featuredTools } from "@/data/tools";
-import { ServicesMenu } from "./ServicesMenu";
-import { ToolsMenu } from "./ToolsMenu";
+import { featuredTools, TOOL_COUNT } from "@/data/tools";
+import { ButtonLink } from "./ui";
 import { Wordmark } from "./Wordmark";
 
+/**
+ * One bar: the wordmark, the sections, a pill to book a call. Services and
+ * Tools open panels on hover or focus; every link in them is in the HTML, so
+ * crawlers see the whole site from every page. On small screens the bar
+ * folds into a sheet.
+ */
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Close the mobile menu when the route changes (state-during-render pattern)
-  const [prevPath, setPrevPath] = useState(pathname);
-  if (prevPath !== pathname) {
-    setPrevPath(pathname);
+  // close on navigation (state-during-render pattern)
+  const [prev, setPrev] = useState(pathname);
+  if (prev !== pathname) {
+    setPrev(pathname);
     setOpen(false);
   }
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    const raf = requestAnimationFrame(onScroll);
+    document.documentElement.classList.add("js");
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
   useEffect(() => {
     document.documentElement.style.overflow = open ? "hidden" : "";
     return () => {
@@ -39,177 +41,114 @@ export function Navbar() {
     };
   }, [open]);
 
-  return (
-    <>
-      <header
-        className={`pt-safe fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-300 ${
-          open
-            ? "border-transparent bg-transparent"
-            : scrolled
-              ? "border-line bg-background/80 backdrop-blur-xl"
-              : "border-transparent bg-transparent"
-        }`}
-      >
-        <nav
-          aria-label="Main"
-          className="mx-auto flex max-w-7xl items-center gap-8 px-5 py-4 sm:px-8"
-        >
-          <Link
-            href="/"
-            aria-label="Kodinav — home"
-            className={`relative z-50 shrink-0 ${open ? "text-accent-contrast" : ""}`}
-          >
-            <Wordmark />
-          </Link>
+  const current = (href: string) => (pathname === href || (href !== "/" && pathname.startsWith(href + "/")) ? "page" : undefined);
 
-          <ul className="ml-auto hidden items-center gap-6 lg:flex xl:gap-8">
-            {nav.map((item) => {
-              const active =
-                item.href === pathname || pathname.startsWith(item.href + "/");
-              if ("mega" in item && item.mega) {
-                return (
-                  <li key={item.href}>
-                    <ToolsMenu active={active || pathname === "/free-tools"} />
-                  </li>
-                );
-              }
-              if (item.href === "/services") {
-                return (
-                  <li key={item.href}>
-                    <ServicesMenu active={active} />
-                  </li>
-                );
-              }
-              return (
+  return (
+    <header className={`nav ${scrolled ? "is-scrolled" : ""} ${open ? "is-open" : ""}`}>
+      <div className="nav-inner">
+        <Link href="/" aria-label="Kodinav — home" className="shrink-0">
+          <Wordmark />
+        </Link>
+
+        <nav aria-label="Primary">
+          <ul className="nav-links">
+            {nav.map((item) =>
+              item.label === "Services" ? (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`u-draw font-mono text-[0.7rem] uppercase tracking-[0.15em] transition-colors ${
-                      active
-                        ? "text-accent"
-                        : "text-foreground/75 hover:text-foreground"
-                    }`}
-                  >
+                  <button type="button" aria-haspopup="true" aria-expanded="false">
+                    Services
+                  </button>
+                  <div className="nav-panel cols-3" role="group" aria-label="Services">
+                    <ul>
+                      {services.map((s) => (
+                        <li key={s.slug}>
+                          <Link href={`/services/${s.slug}`} prefetch={false}>
+                            {s.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="all">
+                      <Link href="/services" className="u-draw text-sm font-medium">
+                        All {services.length} services →
+                      </Link>
+                    </p>
+                  </div>
+                </li>
+              ) : "mega" in item && item.mega ? (
+                <li key={item.href}>
+                  <button type="button" aria-haspopup="true" aria-expanded="false">
+                    Tools
+                  </button>
+                  <div className="nav-panel cols-2" role="group" aria-label="Free tools">
+                    <ul>
+                      {featuredTools.map((t) => (
+                        <li key={t.href}>
+                          <Link href={t.href} prefetch={false}>
+                            {t.name}
+                            <small>{t.blurb}</small>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="all">
+                      <Link href="/free-tools" className="u-draw text-sm font-medium">
+                        All {TOOL_COUNT} free tools →
+                      </Link>
+                    </p>
+                  </div>
+                </li>
+              ) : (
+                <li key={item.href}>
+                  <Link href={item.href} aria-current={current(item.href)}>
                     {item.label}
                   </Link>
                 </li>
-              );
-            })}
+              ),
+            )}
           </ul>
-
-          {/* Language entry for Hong Kong / Taiwan visitors (the zh-HK page
-              links onward to zh-TW) */}
-          <Link
-            href="/zh-hk"
-            hrefLang="zh-HK"
-            lang="zh-HK"
-            title="繁體中文（香港・台灣）"
-            className="hidden shrink-0 text-[0.8rem] text-foreground/75 transition-colors hover:text-accent lg:inline-flex"
-          >
-            繁中
-          </Link>
-
-          <Link
-            href="/contact"
-            className="hidden shrink-0 items-center gap-2 rounded-[3px] border border-foreground bg-foreground px-5 py-2.5 font-mono text-[0.7rem] uppercase tracking-[0.15em] text-background transition-colors duration-300 hover:border-accent hover:bg-accent hover:text-accent-contrast lg:inline-flex"
-          >
-            Book a call
-            <span aria-hidden>→</span>
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
-            className={`relative z-50 -m-3 ml-auto min-h-11 min-w-11 p-3 font-mono text-[0.7rem] uppercase tracking-[0.15em] active:opacity-60 lg:hidden ${
-              open ? "text-accent-contrast" : "text-foreground"
-            }`}
-          >
-            {open ? "Close ×" : "Menu ≡"}
-          </button>
         </nav>
-      </header>
 
-      {/* Full-screen ink overlay menu (mobile) */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="ink bg-noise fixed inset-0 z-40 flex h-dvh touch-pan-y flex-col justify-between overflow-y-auto overscroll-contain px-6 pt-[calc(5.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))] lg:hidden"
-          >
-            <div aria-hidden className="bg-grid pointer-events-none absolute inset-0 opacity-40" />
-            <ul className="relative flex flex-col">
-              {nav.map((item, i) => (
-                <motion.li
-                  key={item.href}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.06 + i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="border-b border-line"
-                >
-                  <Link
-                    href={item.href}
-                    className="group flex items-baseline gap-4 py-4 active:opacity-70"
-                  >
-                    <span className="font-mono text-xs text-faint">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span className="font-display text-[clamp(2.2rem,9vw,2.9rem)] leading-none tracking-tight transition-colors group-hover:text-accent group-active:text-accent">
-                      {item.label}
-                    </span>
-                    <span aria-hidden className="ml-auto font-mono text-lg text-faint">
-                      →
-                    </span>
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="relative flex flex-col gap-4 pt-6"
-            >
-              <div>
-                <p className="annotation mb-2.5">Popular free tools</p>
-                <div className="flex flex-wrap gap-2">
-                  {featuredTools.map((t) => (
-                    <Link
-                      key={t.href}
-                      href={t.href}
-                      className="rounded-[3px] border border-line px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.12em] text-muted active:border-accent active:text-accent"
-                    >
-                      {t.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              <Link
-                href="/contact"
-                className="flex min-h-13 items-center justify-center gap-3 rounded-[3px] bg-accent px-6 py-4 font-mono text-xs uppercase tracking-[0.15em] text-accent-contrast active:scale-[0.98]"
-              >
-                Book discovery call →
+        <div className="nav-right">
+          <ButtonLink href="/contact" className="nav-cta">
+            Book a call
+          </ButtonLink>
+          <button type="button" className="nav-toggle" aria-expanded={open} aria-controls="nav-sheet" onClick={() => setOpen((v) => !v)}>
+            {open ? "Close" : "Menu"}
+          </button>
+        </div>
+      </div>
+
+      <div id="nav-sheet" className="nav-sheet" hidden={!open}>
+        <nav aria-label="Menu">
+          {nav.map((item) => (
+            <Link key={item.href} href={item.href} prefetch={false}>
+              {item.label}
+            </Link>
+          ))}
+          <p className="annotation">Services</p>
+          <div className="sub">
+            {services.map((s) => (
+              <Link key={s.slug} href={`/services/${s.slug}`} prefetch={false}>
+                {s.name}
               </Link>
-              <div className="flex gap-5 text-sm text-muted">
-                <Link href="/zh-hk" hrefLang="zh-HK" lang="zh-HK" className="active:text-accent">
-                  香港（繁中）
-                </Link>
-                <Link href="/zh-tw" hrefLang="zh-TW" lang="zh-TW" className="active:text-accent">
-                  台灣（繁中）
-                </Link>
-              </div>
-              <div className="flex items-center justify-between">
-                <p className="annotation">Independent software studio</p>
-                <p className="annotation">Est. 2024</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+            ))}
+          </div>
+          <p className="annotation">Free tools</p>
+          <div className="sub">
+            {featuredTools.map((t) => (
+              <Link key={t.href} href={t.href} prefetch={false}>
+                {t.name}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6">
+            <ButtonLink href="/contact" size="lg">
+              Book a call
+            </ButtonLink>
+          </div>
+        </nav>
+      </div>
+    </header>
   );
 }

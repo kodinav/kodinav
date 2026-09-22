@@ -2,11 +2,10 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 /* ------------------------------------------------------------------ *
- * Buttons — crisp editorial rectangles with a mono label. The primary
- * is a solid ink fill that flips to cobalt on hover; on .ink sections
- * the tokens invert it to a light button automatically.
+ * Buttons: pills. The primary is solid ink; on .ink sections the tokens
+ * invert it to a light pill automatically. The arrow sits in its own disc
+ * and slides on hover.
  * ------------------------------------------------------------------ */
-
 export function ButtonLink({
   href,
   children,
@@ -23,32 +22,29 @@ export function ButtonLink({
   external?: boolean;
 }) {
   const base =
-    "group relative inline-flex items-center justify-center gap-4 rounded-[3px] font-mono text-[0.625rem] uppercase tracking-[0.2em] transition-[background-color,border-color,color,transform] duration-300 whitespace-nowrap border active:scale-[0.98]";
+    "group relative inline-flex items-center justify-center gap-3 rounded-full border font-sans font-medium tracking-[-0.01em] transition-[background-color,color,border-color,transform] duration-500 ease-[cubic-bezier(.22,1,.36,1)] active:scale-[0.98]";
   const sizes = {
-    md: "h-11 pl-5 pr-2.5",
-    lg: "h-12 pl-6 pr-3",
+    md: "h-11 pl-5 pr-1.5 text-[0.9rem]",
+    lg: "h-13 pl-6 pr-2 text-[0.95rem]",
   };
   const variants = {
-    primary: "bg-black text-[#f2f1ed] border-black hover:bg-[#1d1c19]",
-    outline:
-      "border-line-strong text-foreground hover:border-foreground bg-transparent",
-    ghost:
-      "border-transparent text-muted hover:text-foreground hover:border-line",
+    primary: "border-foreground bg-foreground text-background hover:bg-accent hover:border-accent hover:text-white",
+    outline: "border-line-strong bg-transparent text-foreground hover:border-foreground",
+    ghost: "border-transparent text-muted hover:text-foreground hover:border-line",
   };
   const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
   const arrow = (
     <span
       aria-hidden
-      className={`grid size-6 place-items-center overflow-hidden rounded-[3px] border ${
-        variant === "primary" ? "border-white/40" : "border-current/40"
+      className={`grid size-8 place-items-center overflow-hidden rounded-full ${
+        variant === "primary" ? "bg-background/15" : "bg-foreground/8"
       }`}
     >
-      <span className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0.5">
-        →
+      <span className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+        ↗
       </span>
     </span>
   );
-
   if (external) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
@@ -77,12 +73,9 @@ export function ArrowLink({
   className?: string;
   external?: boolean;
 }) {
-  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.625rem] uppercase tracking-[0.2em] text-foreground ${className}`;
+  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-foreground ${className}`;
   const arrow = (
-    <span
-      aria-hidden
-      className="text-accent transition-transform duration-300 group-hover:translate-x-1"
-    >
+    <span aria-hidden className="text-accent transition-transform duration-300 group-hover:translate-x-1">
       →
     </span>
   );
@@ -102,23 +95,17 @@ export function ArrowLink({
   );
 }
 
-/* Eyebrow — a register mark + a mono label. Opens most sections. */
-export function Eyebrow({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+/* Eyebrow: a register mark and a mono label. Opens most sections. */
+export function Eyebrow({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
-    <p className={`annotation flex items-center gap-3 text-foreground/70 ${className}`}>
+    <p className={`annotation flex items-center gap-3 ${className}`}>
       <span className="crosshair" aria-hidden />
       {children}
     </p>
   );
 }
 
-/* Section heading — eyebrow, display title, optional lead paragraph. */
+/* Section heading: eyebrow, display title, optional lead paragraph. */
 export function SectionHeading({
   eyebrow,
   title,
@@ -134,17 +121,11 @@ export function SectionHeading({
 }) {
   const alignCls = align === "center" ? "items-center text-center" : "";
   return (
-    <div className={`flex flex-col gap-5 ${alignCls} ${className}`}>
+    <div className={`flex flex-col gap-5 ${alignCls} ${className}`} data-reveal>
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-      <h2 className="text-balance text-[clamp(2rem,5vw,3.4rem)] leading-[1.04] text-foreground">
-        {title}
-      </h2>
+      <h2 className="text-balance text-[clamp(2rem,4.6vw,4rem)] leading-[1.0] text-foreground">{title}</h2>
       {lead && (
-        <p
-          className={`max-w-2xl text-pretty leading-relaxed text-muted sm:text-lg ${
-            align === "center" ? "mx-auto" : ""
-          }`}
-        >
+        <p className={`max-w-2xl text-pretty leading-relaxed text-muted sm:text-lg ${align === "center" ? "mx-auto" : ""}`}>
           {lead}
         </p>
       )}
@@ -153,23 +134,17 @@ export function SectionHeading({
 }
 
 /* Small outlined mono chip (tech tags, filters). */
-export function Chip({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function Chip({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <span
-      className={`inline-flex items-center rounded-[2px] bg-foreground/[0.07] px-2 py-1.5 font-mono text-[0.5625rem] leading-none uppercase tracking-[0.2em] text-foreground/80 ${className}`}
+      className={`inline-flex items-center rounded-full border border-line px-2.5 py-1 font-mono text-[0.5625rem] leading-none uppercase tracking-[0.14em] text-muted ${className}`}
     >
       {children}
     </span>
   );
 }
 
-/* Badge — a filled status/emphasis pill (e.g. "Taking projects"). */
+/* Badge: a filled status/emphasis pill (e.g. "Taking projects"). */
 export function Badge({
   children,
   tone = "neutral",
@@ -192,7 +167,7 @@ export function Badge({
   );
 }
 
-/* Live pulse dot — the "available" signal, reused across hero/nav. */
+/* Live pulse dot: the "available" signal, reused across hero and nav. */
 export function PulseDot({ className = "" }: { className?: string }) {
   return (
     <span className={`relative flex size-1.5 ${className}`}>

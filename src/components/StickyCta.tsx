@@ -43,13 +43,13 @@ export function StickyCta() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Chat on WhatsApp (${site.phone})`}
-            className="flex min-w-12 shrink-0 items-center justify-center rounded-md border border-[#1da851] bg-[#25d366] px-3.5 text-[#083a20] shadow-[0_18px_40px_-20px_rgba(22,23,27,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1da851] hover:text-[#eafff2] active:scale-[0.98]"
+            className="flex min-w-12 shrink-0 items-center justify-center rounded-full border border-[#1da851] bg-[#25d366] px-3.5 text-[#083a20] shadow-[0_18px_40px_-20px_rgba(22,23,27,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1da851] hover:text-[#eafff2] active:scale-[0.98]"
           >
             <MessageCircle className="size-5" aria-hidden />
           </a>
           <Link
             href="/contact"
-            className="flex min-h-12 flex-1 items-center justify-center gap-3 rounded-md border border-foreground bg-foreground px-5 py-3.5 font-mono text-[0.6875rem] tracking-[0.14em] text-background uppercase shadow-[0_18px_40px_-20px_rgba(22,23,27,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-contrast active:scale-[0.98] sm:px-6"
+            className="flex min-h-12 flex-1 items-center justify-center gap-3 rounded-full border border-foreground bg-foreground px-5 py-3.5 font-sans text-[0.9rem] font-medium tracking-[-0.01em] text-background shadow-[0_18px_40px_-20px_rgba(22,23,27,0.6)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-accent-contrast active:scale-[0.98] sm:px-6"
           >
             <span className="relative flex size-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />

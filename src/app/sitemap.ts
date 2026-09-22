@@ -27,7 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}/website-audit`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/free-website-audit`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/free-tools`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${site.url}/story`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
     { url: `${site.url}/website-cost-calculator`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/website-speed-test`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}/qr-code-generator`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },

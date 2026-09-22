@@ -1,232 +1,164 @@
 import Link from "next/link";
-import { site, nav } from "@/data/site";
 import { services } from "@/data/services";
+import { nav, site } from "@/data/site";
 import { featuredTools, TOOL_COUNT } from "@/data/tools";
+import { Price } from "./Price";
+
+/**
+ * The footer: the wordmark at full width, then every part of the site in
+ * columns (index, services, tools, markets, contact) so each page links to
+ * all the others, and the legal line.
+ */
+const markets = [
+  { label: "Hong Kong", href: "/web-development-hong-kong" },
+  { label: "Taiwan", href: "/web-development-taiwan" },
+  { label: "Dubai & UAE", href: "/web-development-dubai" },
+  { label: "United States", href: "/web-development-usa" },
+  { label: "Coaching institutes", href: "/coaching-institute-websites" },
+  { label: "Clinics", href: "/clinic-websites" },
+  { label: "香港（繁中）", href: "/zh-hk", lang: "zh-HK" },
+  { label: "台灣（繁中）", href: "/zh-tw", lang: "zh-TW" },
+];
 
 export function Footer() {
+  const year = new Date().getFullYear();
   return (
-    <footer className="ink bg-noise relative overflow-hidden">
-      {/* Giant wordmark */}
-      <div className="border-b border-line px-5 pt-16 sm:px-8">
-        <p
-          aria-hidden
-          className="mb-[-0.4vw] text-center font-sans text-[17vw] font-bold leading-[0.85] tracking-[-0.055em] text-foreground/95 select-none"
-        >
-          Kodinav<span className="text-brass">.</span>
+    <footer className="ink border-t border-line">
+      <div className="mx-auto max-w-[1440px] px-5 pt-16 pb-8 sm:px-8 sm:pt-24">
+        <p className="foot-word" aria-hidden>
+          Kodinav<i>.</i>
         </p>
-      </div>
-
-      <div className="pb-safe mx-auto max-w-7xl px-5 py-14 sm:px-8">
-        {/* 2-col on mobile so short link lists sit side by side instead of
-            stacking as sparse full-width columns */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-[1.3fr_1fr_1fr_1fr_1fr] md:gap-10">
-          <div className="col-span-2 flex flex-col gap-4 md:col-span-1">
-            <p className="annotation">The Studio</p>
-            <p className="max-w-xs text-sm leading-relaxed text-muted">
-              Independent software studio. Website development, web
-              applications and mobile apps, personally engineered by{" "}
-              {site.founder} with React, Next.js and Node.js.
-            </p>
-            <p className="max-w-xs text-xs leading-relaxed text-faint">
-              Working with ambitious businesses worldwide. Every timezone,
-              one engineer accountable.
-            </p>
-            {/* Region pages need internal links to rank organically —
-                without these they exist only in the sitemap */}
-            <ul className="flex flex-col gap-2">
-              <li>
-                <Link
-                  href="/web-development-hong-kong"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  For Hong Kong businesses →
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/web-development-taiwan"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  For Taiwan businesses →
-                </Link>
-              </li>
-              <li className="flex gap-4">
-                <Link
-                  href="/zh-hk"
-                  hrefLang="zh-HK"
-                  lang="zh-HK"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  香港（繁中）
-                </Link>
-                <Link
-                  href="/zh-tw"
-                  hrefLang="zh-TW"
-                  lang="zh-TW"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  台灣（繁中）
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/clinic-websites"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  For clinics &amp; doctors →
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/coaching-institute-websites"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  For coaching institutes →
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/web-development-usa"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  For US businesses →
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/web-development-dubai"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  For Dubai &amp; UAE businesses →
-                </Link>
-              </li>
-            </ul>
+        <div className="mt-8 flex flex-col justify-between gap-6 border-t border-line pt-8 lg:flex-row lg:items-end">
+          <p className="max-w-md text-pretty leading-relaxed text-muted">
+            Independent software studio. Websites, web apps and mobile apps designed, engineered and supported by{" "}
+            {site.founder}. Projects from <Price inr={site.priceFloor} usd={site.priceFloorUsd} />, fixed in writing.
+          </p>
+          <div className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[0.6875rem] tracking-[0.16em] uppercase">
+            <a href={`mailto:${site.email}`} className="u-draw text-foreground">
+              {site.email}
+            </a>
+            <a href={`tel:${site.phoneRaw}`} className="u-draw text-foreground">
+              {site.phone}
+            </a>
+            <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="u-draw text-foreground">
+              WhatsApp
+            </a>
           </div>
+        </div>
 
+        <div className="foot-cols mt-14">
           <div>
-            <p className="annotation mb-5">Index</p>
-            <ul className="flex flex-col gap-2.5">
-              {[...nav, { label: "Process", href: "/process" }].map((item) => (
+            <p className="annotation mb-4">Index</p>
+            <ul>
+              {nav.map((item) => (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                  >
+                  <Link href={item.href} prefetch={false}>
                     {item.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link
-                  href="/website-audit"
-                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
-                >
-                  Paid Website Audit
+                <Link href="/process" prefetch={false}>
+                  Process
+                </Link>
+              </li>
+              <li>
+                <Link href="/free-website-audit" prefetch={false}>
+                  Website audit
+                </Link>
+              </li>
+              <li>
+                <Link href="/website-audit" prefetch={false}>
+                  Audit report
                 </Link>
               </li>
             </ul>
           </div>
-
           <div>
-            <p className="annotation mb-5">Services</p>
-            <ul className="flex flex-col gap-2.5">
-              {services.slice(0, 6).map((s) => (
+            <p className="annotation mb-4">Services</p>
+            <ul>
+              {services.map((s) => (
                 <li key={s.slug}>
-                  <Link
-                    href={`/services/${s.slug}`}
-                    className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                  >
+                  <Link href={`/services/${s.slug}`} prefetch={false}>
                     {s.name}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
           <div>
-            <p className="annotation mb-5">Free Tools</p>
-            <ul className="flex flex-col gap-2.5">
+            <p className="annotation mb-4">Free tools</p>
+            <ul>
               {featuredTools.map((t) => (
                 <li key={t.href}>
-                  <Link
-                    href={t.href}
-                    className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                  >
+                  <Link href={t.href} prefetch={false}>
                     {t.name}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link
-                  href="/free-tools"
-                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
-                >
+                <Link href="/free-tools" prefetch={false} className="text-foreground!">
                   All {TOOL_COUNT} tools →
                 </Link>
               </li>
             </ul>
           </div>
-
-          <div className="col-span-2 md:col-span-1">
-            <p className="annotation mb-5">Contact</p>
-            <ul className="flex flex-col gap-2.5">
+          <div>
+            <p className="annotation mb-4">Markets</p>
+            <ul>
+              {markets.map((m) => (
+                <li key={m.href}>
+                  <Link href={m.href} prefetch={false} lang={m.lang} hrefLang={m.lang}>
+                    {m.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="annotation mb-4">Studio</p>
+            <ul>
               <li>
-                <a
-                  href={`mailto:${site.email}`}
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  {site.email}
+                <Link href="/about" prefetch={false}>
+                  {site.founder}
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" prefetch={false}>
+                  Book a discovery call
+                </Link>
+              </li>
+              <li>
+                <a href={site.whatsapp} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
                 </a>
               </li>
               <li>
-                <a
-                  href={site.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  WhatsApp · {site.phone}
-                </a>
+                <a href={`mailto:${site.email}`}>{site.email}</a>
               </li>
               <li>
-                <a
-                  href={`tel:${site.phoneRaw}`}
-                  className="u-draw text-sm text-muted transition-colors hover:text-foreground"
-                >
-                  {site.phone}
-                </a>
+                <a href={`tel:${site.phoneRaw}`}>{site.phone}</a>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="u-draw text-sm text-accent transition-colors hover:text-foreground"
-                >
-                  Book a discovery call →
+                <Link href="/privacy-policy" prefetch={false}>
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" prefetch={false}>
+                  Terms
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 sm:flex-row sm:items-center">
-          <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-faint">
-            © {new Date().getFullYear()} {site.name} · {site.tagline} ·{" "}
-            <Link href="/privacy-policy" className="u-draw hover:text-foreground">
-              Privacy
-            </Link>{" "}
-            ·{" "}
-            <Link href="/terms" className="u-draw hover:text-foreground">
-              Terms
-            </Link>
+        <div className="mt-14 flex flex-col justify-between gap-3 border-t border-line pt-6 sm:flex-row">
+          <p className="font-mono text-[0.625rem] tracking-[0.16em] uppercase text-faint">
+            © {year} {site.name} · {site.tagline} · {site.serviceAreas[4]}, {site.location}
           </p>
-          {/* barcode ornament */}
-          <div aria-hidden className="flex h-5 items-stretch gap-0.75 opacity-50">
-            {[2, 1, 3, 1, 1, 2, 1, 4, 1, 2, 2, 1, 3, 1, 2, 1, 1, 3].map((w, i) => (
-              <span key={i} className="bg-foreground" style={{ width: w }} />
-            ))}
-          </div>
-          <p className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-faint">
-            Designed &amp; engineered by {site.founder}
+          <p className="font-mono text-[0.625rem] tracking-[0.16em] uppercase text-faint">
+            Designed and built by {site.founder}. Response within one business day.
           </p>
         </div>
       </div>
