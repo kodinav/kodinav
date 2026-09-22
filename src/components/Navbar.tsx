@@ -61,8 +61,22 @@ export function Navbar() {
 
   const current = (href: string) => (pathname === href || pathname.startsWith(href + "/") ? "page" : undefined);
 
+  const facts = ["Fixed, itemised quotes", "A business website live in 3 to 6 weeks", "You own the code", "Reply within one business day", "India · Hong Kong · Taiwan · worldwide"];
   return (
     <>
+      <div className="ticker" aria-hidden>
+        <div className="ticker-track">
+          {[0, 1].map((k) => (
+            <span key={k} className="ticker-set">
+              {facts.map((f) => (
+                <span key={f}>
+                  <em>{f}</em>
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
       <header className="bar">
         <div className="bar-pill">
           <Link href="/" aria-label="Kodinav — home" className="bar-logo">
@@ -97,6 +111,9 @@ export function Navbar() {
       </header>
 
       <nav className={`dock ${docked ? "is-docked" : ""}`} aria-label="Primary">
+        <button type="button" className="dock-round" aria-label="Back to top" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          ↑
+        </button>
         <ul className="dock-pill">
           {primary.map((l) => (
             <li key={l.href}>
@@ -111,6 +128,9 @@ export function Navbar() {
             </button>
           </li>
         </ul>
+        <a href={site.whatsapp} target="_blank" rel="noopener noreferrer" className="dock-round is-wa" aria-label="WhatsApp">
+          W
+        </a>
       </nav>
 
       <div id="site-sheet" className={`sheet ${open ? "is-open" : ""}`} inert={!open} aria-hidden={!open} onClick={(e) => e.target === e.currentTarget && setOpen(false)}>

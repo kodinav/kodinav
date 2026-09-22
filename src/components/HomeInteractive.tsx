@@ -34,11 +34,23 @@ export function ServiceStack({
 }
 
 /** The questions, one at a time in large serif, with arrows. Every answer is in the HTML. */
-export function QuoteCarousel({ items }: { items: { q: string; a: string }[] }) {
+export function QuoteCarousel({ items, badges = [] }: { items: { q: string; a: string }[]; badges?: string[] }) {
   const [i, setI] = useState(0);
   const go = (d: number) => setI((v) => (v + d + items.length) % items.length);
   return (
     <div className="quotes">
+      <div className="quotes-badges" aria-hidden>
+        {badges.slice(0, 3).map((b) => (
+          <span key={b} className="quotes-badge" title={b}>
+            {b
+              .split(" ")
+              .slice(0, 2)
+              .map((w) => w[0])
+              .join("")}
+          </span>
+        ))}
+      </div>
+      <div className="quotes-view">
       <ol className="quotes-track" style={{ transform: `translateX(-${i * 100}%)` }}>
         {items.map((it, k) => (
           <li key={it.q} aria-hidden={k !== i} inert={k !== i}>
@@ -47,6 +59,7 @@ export function QuoteCarousel({ items }: { items: { q: string; a: string }[] }) 
           </li>
         ))}
       </ol>
+      </div>
       <div className="quotes-nav">
         <button type="button" onClick={() => go(-1)} aria-label="Previous question">
           ←

@@ -28,8 +28,10 @@ const expect = [
 
 export default function Home() {
   const first = site.founder.split(" ")[0];
-  const rowA = projects.slice(0, 4);
-  const rowB = projects.slice(4, 8);
+  // the reference mixes wide and tall cards in each row; tall ones take the phone screen
+  const mixed = (ps: typeof projects) => ps.map((p, i) => (i % 2 ? { p, tall: true, im: p.images.mobile[0] ?? p.images.cover } : { p, tall: false, im: p.images.cover }));
+  const rowA = mixed(projects.slice(0, 4));
+  const rowB = mixed(projects.slice(4, 8));
   const fanL = [projects[0], projects[1], projects[2]].map((p) => p.images.desktop[0] ?? p.images.cover);
   const fanR = [projects[3], projects[4], projects[5]].map((p) => p.images.mobile[0] ?? p.images.cover);
   const lead = services[0];
@@ -81,9 +83,9 @@ export default function Home() {
             <div className="works-track">
               {[0, 1].map((k) => (
                 <div key={k} className="works-set" aria-hidden={k === 1}>
-                  {row.map((p) => (
-                    <Link key={p.slug} href={`/work/${p.slug}`} className="work-card" tabIndex={k ? -1 : 0}>
-                      <Image src={p.images.cover.src} alt={k ? "" : p.images.cover.alt} width={1200} height={750} sizes="(max-width: 768px) 70vw, 34vw" />
+                  {row.map(({ p, tall, im }) => (
+                    <Link key={p.slug} href={`/work/${p.slug}`} className={`work-card ${tall ? "is-tall" : "is-wide"}`} tabIndex={k ? -1 : 0}>
+                      <Image src={im.src} alt={k ? "" : im.alt} width={tall ? 378 : 1200} height={tall ? 800 : 750} sizes={tall ? "(max-width: 768px) 44vw, 330px" : "(max-width: 768px) 78vw, 600px"} />
                       <span className="work-name">{p.name}</span>
                       <span className="work-tag">{p.industry.split(" · ")[0]}</span>
                     </Link>
@@ -157,8 +159,10 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ---------- the services, stacked in colour (on the light band) ---------- */}
+      <section className="ink band">
       {/* ---------- one engineer, every discipline ---------- */}
-      <section className="disc" data-reveal>
+      <div className="disc" data-reveal>
         <div>
           <h2 className="disc-h">
             One Engineer.
@@ -181,11 +185,10 @@ export default function Home() {
             access — at launch. Projects start from <Price inr={site.priceFloor} usd={site.priceFloorUsd} />.
           </p>
         </div>
-      </section>
+      </div>
 
-      {/* ---------- the services, stacked in colour (on the light band) ---------- */}
-      <section className="ink band">
         <article className="lead-card" style={{ background: colors[0] }} data-reveal>
+          <span className="lead-minus" aria-hidden />
           <div className="lead-copy">
             <span className="lead-n">1</span>
             <h3 className="lead-t">{lead.name}</h3>
@@ -205,7 +208,7 @@ export default function Home() {
       {/* ---------- fair questions, honest answers ---------- */}
       <section className="qa" data-reveal>
         <h2 className="qa-h">Fair questions, honest answers</h2>
-        <QuoteCarousel items={homeFaq} />
+        <QuoteCarousel items={homeFaq} badges={projects.slice(0, 3).map((p) => p.name)} />
       </section>
 
       {/* ---------- the names, drifting past ---------- */}

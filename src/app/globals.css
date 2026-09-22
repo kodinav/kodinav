@@ -1627,3 +1627,316 @@ footer {
     -webkit-backdrop-filter: blur(14px);
   }
 }
+
+/* ---------- v8.1 — measured against the reference, side by side ---------- */
+html {
+  font-size: 104.5%;
+}
+.aurora {
+  background: #0d0d0d;
+}
+.aurora-ring {
+  inset: -30%;
+  animation-duration: 90s;
+}
+.aurora-ring i {
+  opacity: 0.95;
+  filter: blur(40px);
+}
+.aurora-ring .a1 {
+  background: radial-gradient(circle, #ff4fd8 0%, #8a3fe0 38%, transparent 68%);
+}
+.aurora-ring .a2 {
+  background: radial-gradient(circle, #4f8cff 0%, #2f6bd6 40%, transparent 68%);
+}
+.aurora-ring .a3 {
+  background: radial-gradient(circle, #ff9a3c 0%, #e0782f 40%, transparent 68%);
+}
+.aurora-ring .a4 {
+  background: radial-gradient(circle, #3ee0c0 0%, #22a59a 40%, transparent 68%);
+}
+.aurora-band {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120vmax;
+  height: 120vmax;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #ff4fd8, #8a3fe0, #4f8cff, #3ee0c0, #ff9a3c, #ff4fd8);
+  -webkit-mask: radial-gradient(circle, transparent 38%, #000 44%, #000 56%, transparent 62%);
+  mask: radial-gradient(circle, transparent 38%, #000 44%, #000 56%, transparent 62%);
+  filter: blur(26px);
+  opacity: 0.8;
+  animation: aur-spin 44s linear infinite reverse;
+}
+.aurora-veil {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+}
+.ticker {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 62;
+  height: 22px;
+  overflow: hidden;
+  background: #0a0a0a;
+  color: #ebebe6;
+  font-size: 11px;
+  line-height: 22px;
+  white-space: nowrap;
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 46s linear infinite;
+}
+.ticker-set {
+  display: flex;
+}
+.ticker-set > span {
+  padding: 0 26px;
+}
+.ticker em {
+  font-style: normal;
+  color: #d6c6ff;
+}
+.bar {
+  padding-top: calc(36px + env(safe-area-inset-top));
+}
+.dock {
+  top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dock-round {
+  display: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(5, 5, 5, 0.92);
+  color: #ebebe6;
+  font: 500 0.95rem/1 var(--font-sans);
+  text-decoration: none;
+  cursor: pointer;
+}
+.dock-round.is-wa {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+}
+.dock.is-docked .dock-round {
+  display: grid;
+}
+.hero {
+  padding-bottom: 120px;
+}
+.hero-feat {
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  margin: 0;
+}
+.hero-feat ul {
+  margin: 0;
+  justify-content: flex-start;
+  gap: 10px 32px;
+}
+.hero-feat li {
+  font-size: 1.1rem;
+  opacity: 0.72;
+}
+@media (width < 900px) {
+  .hero-feat {
+    position: static;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 48px;
+  }
+  .hero-feat ul {
+    justify-content: center;
+  }
+}
+.work-card {
+  width: auto;
+}
+.work-card img {
+  aspect-ratio: auto;
+  border-radius: 12px;
+}
+.work-card.is-wide img {
+  width: 600px;
+  height: 401px;
+}
+.work-card.is-tall img {
+  width: 330px;
+  height: 401px;
+}
+@media (width < 768px) {
+  .work-card.is-wide img {
+    width: 78vw;
+    height: 52vw;
+  }
+  .work-card.is-tall img {
+    width: 44vw;
+    height: 52vw;
+  }
+}
+.intro-big {
+  max-width: 60ch;
+  font-size: clamp(1.3rem, 2.1vw, 1.75rem);
+  line-height: 1.28;
+}
+.fan {
+  margin-top: 80px;
+}
+.band {
+  margin-top: 120px;
+  padding: 120px 0 0;
+}
+.band .disc {
+  margin: 0 auto 100px;
+}
+.lead-card {
+  position: relative;
+  max-width: none;
+  border-radius: 0;
+  padding: 64px max(24px, calc((100vw - 1254px) / 2));
+}
+.lead-minus {
+  position: absolute;
+  right: max(24px, calc((100vw - 1254px) / 2));
+  top: 52px;
+  width: 22px;
+  height: 1.5px;
+  background: currentColor;
+}
+.stack {
+  max-width: none;
+  margin: 0;
+}
+.stack li {
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+.stack li:last-child {
+  border-radius: 0;
+}
+.stack button {
+  padding: 18px max(24px, calc((100vw - 1254px) / 2));
+}
+.stack-t {
+  font-size: clamp(1.3rem, 1.9vw, 1.6rem);
+}
+.stack-body > div {
+  padding-left: calc(max(24px, calc((100vw - 1254px) / 2)) + 56px);
+  padding-right: max(24px, calc((100vw - 1254px) / 2));
+}
+.quotes {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+  text-align: left;
+}
+.quotes-badges {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+.quotes-badge {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #fffbf3;
+  color: #1b1b1b;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+}
+.quotes-view {
+  overflow: hidden;
+}
+.quotes-q {
+  max-width: 22ch;
+  margin: 0;
+}
+.quotes-a {
+  margin: 18px 0 0;
+}
+.quotes-nav {
+  margin: 0;
+}
+@media (width >= 900px) {
+  .quotes {
+    grid-template-columns: 110px minmax(0, 1fr) 60px;
+    gap: 48px;
+  }
+  .quotes-badges {
+    flex-direction: column;
+  }
+  .quotes-nav {
+    flex-direction: column;
+  }
+}
+.expect-card {
+  flex-basis: clamp(280px, 30vw, 400px);
+  border-radius: 24px;
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(18, 18, 18, 0.72);
+}
+.expect-card img {
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+}
+.expect-t {
+  margin: 20px 12px 8px;
+  font-size: 1.9rem;
+  line-height: 1.12;
+}
+.expect-s {
+  margin: 0 12px 10px;
+  font-size: 0.95rem;
+}
+.who-card {
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(rgba(8, 8, 8, 0.86), rgba(8, 8, 8, 0.86)) padding-box,
+    linear-gradient(120deg, #3064d0, #8739d5) border-box;
+}
+.foot {
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+.foot-title {
+  font-size: 2.3rem;
+  line-height: 1;
+}
+@media (width < 900px) {
+  .dock {
+    display: none;
+  }
+}
+/* the colour is a presence behind the page, not the page: mostly dark, the ribbon showing through */
+.aurora-band {
+  opacity: 0.5;
+  filter: blur(34px);
+  -webkit-mask: radial-gradient(circle, transparent 40%, #000 45%, #000 54%, transparent 59%);
+  mask: radial-gradient(circle, transparent 40%, #000 45%, #000 54%, transparent 59%);
+}
+.aurora-ring i {
+  opacity: 0.55;
+}
+.aurora-veil {
+  background: rgba(0, 0, 0, 0.5);
+}
