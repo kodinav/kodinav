@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 /* ------------------------------------------------------------------ *
- * Buttons: pills. The primary is solid ink; on .ink sections the tokens
- * invert it to a light pill automatically. The arrow sits in its own disc
- * and slides on hover.
+ * Buttons: small pills with a hairline border and an arrow in a disc.
+ * outline = transparent with a light border (the default look);
+ * primary = filled light; ghost = text only.
  * ------------------------------------------------------------------ */
 export function ButtonLink({
   href,
@@ -22,27 +22,17 @@ export function ButtonLink({
   external?: boolean;
 }) {
   const base =
-    "group relative inline-flex items-center justify-center gap-3 rounded-full border font-sans font-medium tracking-[-0.01em] transition-[background-color,color,border-color,transform] duration-500 ease-[cubic-bezier(.22,1,.36,1)] active:scale-[0.98]";
-  const sizes = {
-    md: "h-11 pl-5 pr-1.5 text-[0.9rem]",
-    lg: "h-13 pl-6 pr-2 text-[0.95rem]",
-  };
+    "group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border font-sans transition-[background-color,color,border-color,transform] duration-300 ease-out hover:-translate-y-0.5";
+  const sizes = { md: "px-4 py-2 text-[0.9rem]", lg: "px-6 py-3 text-[1.05rem]" };
   const variants = {
-    primary: "border-foreground bg-foreground text-background hover:bg-accent hover:border-accent hover:text-white",
-    outline: "border-line-strong bg-transparent text-foreground hover:border-foreground",
-    ghost: "border-transparent text-muted hover:text-foreground hover:border-line",
+    primary: "border-foreground bg-foreground text-background hover:bg-background hover:text-foreground",
+    outline: "border-foreground/90 bg-transparent text-foreground hover:bg-foreground hover:text-background",
+    ghost: "border-transparent text-muted hover:text-foreground",
   };
   const cls = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
   const arrow = (
-    <span
-      aria-hidden
-      className={`grid size-8 place-items-center overflow-hidden rounded-full ${
-        variant === "primary" ? "bg-background/15" : "bg-foreground/8"
-      }`}
-    >
-      <span className="transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-        ↗
-      </span>
+    <span aria-hidden className="grid size-[1.15rem] place-items-center rounded-full border border-current text-[0.65em] transition-transform duration-500 ease-out group-hover:rotate-45">
+      ↗
     </span>
   );
   if (external) {
@@ -61,7 +51,7 @@ export function ButtonLink({
   );
 }
 
-/* Text link with a mono label and an underline that draws on hover. */
+/* Text link with an underline that draws on hover. */
 export function ArrowLink({
   href,
   children,
@@ -73,9 +63,9 @@ export function ArrowLink({
   className?: string;
   external?: boolean;
 }) {
-  const cls = `u-draw group inline-flex items-center gap-2 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-foreground ${className}`;
+  const cls = `u-draw group inline-flex items-center gap-2 text-[0.9rem] font-medium text-foreground ${className}`;
   const arrow = (
-    <span aria-hidden className="text-accent transition-transform duration-300 group-hover:translate-x-1">
+    <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
       →
     </span>
   );
@@ -95,7 +85,7 @@ export function ArrowLink({
   );
 }
 
-/* Eyebrow: a register mark and a mono label. Opens most sections. */
+/* Eyebrow: a small uppercase, widely tracked label. */
 export function Eyebrow({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <p className={`annotation flex items-center gap-3 ${className}`}>
@@ -123,7 +113,7 @@ export function SectionHeading({
   return (
     <div className={`flex flex-col gap-5 ${alignCls} ${className}`} data-reveal>
       {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-      <h2 className="text-balance text-[clamp(2rem,4.6vw,4rem)] leading-[1.0] text-foreground">{title}</h2>
+      <h2 className="text-balance text-[clamp(2.1rem,4.4vw,3.6rem)] leading-[1.08] text-foreground">{title}</h2>
       {lead && (
         <p className={`max-w-2xl text-pretty leading-relaxed text-muted sm:text-lg ${align === "center" ? "mx-auto" : ""}`}>
           {lead}
@@ -133,7 +123,7 @@ export function SectionHeading({
   );
 }
 
-/* Small outlined mono chip (tech tags, filters). */
+/* Small outlined chip (tech tags, filters). */
 export function Chip({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <span
@@ -167,7 +157,7 @@ export function Badge({
   );
 }
 
-/* Live pulse dot: the "available" signal, reused across hero and nav. */
+/* Live pulse dot: the "available" signal. */
 export function PulseDot({ className = "" }: { className?: string }) {
   return (
     <span className={`relative flex size-1.5 ${className}`}>

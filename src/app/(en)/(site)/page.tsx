@@ -1,11 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { DotSphere } from "@/components/DotSphere";
-import { Faq } from "@/components/Faq";
-import { LeadForm } from "@/components/LeadForm";
+import { QuoteCarousel, ServiceStack } from "@/components/HomeInteractive";
 import { Price } from "@/components/Price";
-import { ArrowLink, ButtonLink, Eyebrow } from "@/components/ui";
-import { WorkList } from "@/components/WorkList";
+import { ButtonLink } from "@/components/ui";
 import { homeFaq } from "@/data/homeFaq";
 import { projects } from "@/data/projects";
 import { services } from "@/data/services";
@@ -18,300 +15,254 @@ import { faqSchema } from "@/lib/schema";
  * metadata, and the organisation / founder / website JSON-LD from
  * RootDocument; this page adds the FAQ it answers.
  *
- * Built for the person deciding whether to spend their own money: what is
- * built, proof it works, the price and the time, the person, and a way in.
  * Everything here is a claim the site already makes; nothing is invented.
  */
-const steps = [
-  {
-    n: "01",
-    title: "A short call",
-    body: "You explain the business and what is stuck. No deck, no sales team: you talk to the engineer who would build it.",
-  },
-  {
-    n: "02",
-    title: "A fixed, written quote",
-    body: "Every screen and workflow is named and priced. Nothing vague, nothing added mid-project.",
-  },
-  {
-    n: "03",
-    title: "Launch, then support",
-    body: "A typical business website is live in three to six weeks. Source code, documentation and access are handed over: you own it completely.",
-  },
+const colors = ["#b5533c", "#2f5f8f", "#2f7c78", "#5c4d8f", "#a3541f", "#7a4f6d", "#4f7d55", "#2c4a70", "#4b4f93", "#8a5a2b", "#3f6f6a", "#6b4a7e", "#3b5a8a"];
+
+const expect = [
+  { t: "A fixed, itemised quote before any work starts", s: "Every screen and workflow named and priced. Nothing vague, nothing added mid-project." },
+  { t: "A business website live in three to six weeks", s: "Applications are sliced so you see working software in weeks, not months." },
+  { t: "Source code, documentation and access handed over", s: "At launch, everything is yours. Every project includes a support period." },
+  { t: "A reply within one business day, from the engineer", s: "No account managers, no handoffs: the person you talk to writes your software." },
 ];
 
 export default function Home() {
-  const work = projects.map((p) => ({
-    slug: p.slug,
-    name: p.name,
-    industry: p.industry.split(" · ")[0],
-    year: p.year,
-    summary: p.summary,
-    cover: p.images.cover,
-    url: p.url,
-  }));
   const first = site.founder.split(" ")[0];
+  const rowA = projects.slice(0, 4);
+  const rowB = projects.slice(4, 8);
+  const fanL = [projects[0], projects[1], projects[2]].map((p) => p.images.desktop[0] ?? p.images.cover);
+  const fanR = [projects[3], projects[4], projects[5]].map((p) => p.images.mobile[0] ?? p.images.cover);
+  const lead = services[0];
+  const rest = services.slice(1).map((s, i) => ({ slug: s.slug, name: s.name, short: s.short, color: colors[(i + 1) % colors.length], n: i + 2 }));
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema(homeFaq)) }} />
 
-      {/* ---------------- hero ---------------- */}
-      <section className="relative overflow-hidden pt-36 pb-10 sm:pt-44 sm:pb-14">
-        <div className="mx-auto max-w-[1440px] px-5 sm:px-8">
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,1fr)] lg:items-end">
-            <div data-reveal>
-              <Eyebrow>Independent software studio · India · Hong Kong · Taiwan</Eyebrow>
-              <h1 className="mt-7 text-balance text-[clamp(2.7rem,7.1vw,7.4rem)] leading-[0.94] tracking-[-0.035em]">
-                Websites, web apps and mobile apps, <span className="text-gradient">built by one engineer.</span>
-              </h1>
-              <p className="mt-8 max-w-xl text-pretty text-lg leading-relaxed text-muted sm:text-xl">
-                A fixed, written quote. A typical business website live in three to six weeks. You own the code. Projects
-                start from <Price inr={site.priceFloor} usd={site.priceFloorUsd} />.
-              </p>
-              <div className="mt-9 flex flex-wrap gap-3">
-                <ButtonLink href={site.whatsapp} external size="lg">
-                  WhatsApp {first}
-                </ButtonLink>
-                <ButtonLink href="/contact" variant="outline" size="lg">
-                  Book a discovery call
-                </ButtonLink>
-              </div>
-            </div>
-            <div className="relative" data-reveal>
-              <DotSphere className="mx-auto block aspect-square w-full max-w-[420px] text-foreground lg:ml-auto" />
-              <dl className="spec">
-                <div>
-                  <dt>Quote</dt>
-                  <dd>Fixed, itemised, in writing</dd>
-                </div>
-                <div>
-                  <dt>Time</dt>
-                  <dd>3 to 6 weeks for a business website</dd>
-                </div>
-                <div>
-                  <dt>Ownership</dt>
-                  <dd>Source, docs and access handed over</dd>
-                </div>
-                <div>
-                  <dt>Reply</dt>
-                  <dd>Within one business day</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-        </div>
-        <div className="marquee mt-16 border-y border-line" aria-hidden>
-          <div className="marquee-track">
-            {[0, 1].map((k) => (
-              <span key={k} className="marquee-set">
-                {services.map((s) => (
-                  <span key={s.slug}>
-                    {s.name}
-                    <i>·</i>
-                  </span>
-                ))}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- the work ---------------- */}
-      <section id="work" className="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 sm:py-28">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-6" data-reveal>
-          <div>
-            <Eyebrow>Selected work · {projects.length} projects</Eyebrow>
-            <h2 className="mt-5 text-[clamp(2rem,4.6vw,4rem)] leading-[1]">
-              Real projects, <span className="text-gradient">built and shipped.</span>
-            </h2>
-          </div>
-          <ArrowLink href="/work">All case files</ArrowLink>
-        </div>
-        <div className="mb-14 grid gap-5 sm:grid-cols-2" data-reveal>
-          {projects.slice(0, 2).map((p) => (
-            <Link key={p.slug} href={`/work/${p.slug}`} className="cover group">
-              <Image src={p.images.cover.src} alt={p.images.cover.alt} width={1600} height={1000} sizes="(max-width: 640px) 92vw, 46vw" priority />
-              <span className="cover-cap">
-                <span>{p.name}</span>
-                <span className="annotation">{p.industry.split(" · ")[0]} · {p.year}</span>
-              </span>
-            </Link>
-          ))}
-        </div>
-        <div data-reveal>
-          <WorkList items={work} />
-        </div>
-      </section>
-
-      {/* ---------------- services ---------------- */}
-      <section className="ink">
-        <div className="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 sm:py-28">
-          <div className="grid gap-10 lg:grid-cols-[minmax(280px,1fr)_minmax(0,2fr)]">
-            <div className="lg:sticky lg:top-28 lg:self-start" data-reveal>
-              <Eyebrow>Services · {services.length}</Eyebrow>
-              <h2 className="mt-5 text-[clamp(2rem,4.6vw,4rem)] leading-[1]">
-                From a five-page site <span className="text-gradient">to a full ERP.</span>
-              </h2>
-              <p className="mt-6 max-w-md text-pretty leading-relaxed text-muted">
-                Business websites, landing pages and stores. Web applications, learning platforms, CRMs, ERPs, dashboards
-                and mobile apps. Performance, search and care for what already exists. All quoted the same way: every
-                screen named, every price fixed.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-6">
-                <ArrowLink href="/services">All services</ArrowLink>
-                <ArrowLink href="/free-tools">{TOOL_COUNT} free tools</ArrowLink>
-              </div>
-            </div>
-            <ol className="svc" data-reveal>
-              {services.map((s, i) => (
-                <li key={s.slug}>
-                  <Link href={`/services/${s.slug}`}>
-                    <span className="idx">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="body">
-                      <span className="name">{s.name}</span>
-                      <span className="short">{s.short}</span>
-                    </span>
-                    <span className="go" aria-hidden>
-                      →
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- how it works ---------------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-20 sm:px-8 sm:py-28">
-        <div className="grid gap-10 lg:grid-cols-[minmax(280px,1fr)_minmax(0,2fr)]">
-          <div data-reveal>
-            <Eyebrow>How it works</Eyebrow>
-            <h2 className="mt-5 text-[clamp(2rem,4.6vw,4rem)] leading-[1]">
-              Three steps, <span className="text-gradient">no surprises.</span>
-            </h2>
-          </div>
-          <ol className="steps" data-reveal>
-            {steps.map((s) => (
-              <li key={s.n}>
-                <span className="annotation">{s.n}</span>
-                <h3>{s.title}</h3>
-                <p>{s.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ---------------- the person ---------------- */}
-      <section className="border-y border-line">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[minmax(240px,340px)_minmax(0,1fr)] lg:items-center">
-          <div className="portrait" data-reveal>
-            <Image src="/founder.jpg" alt={`${site.founder}, founder of ${site.name}`} width={800} height={800} sizes="(max-width: 1024px) 60vw, 340px" />
-          </div>
-          <div data-reveal>
-            <Eyebrow>Who you deal with</Eyebrow>
-            <h2 className="mt-5 text-[clamp(2rem,4.6vw,4rem)] leading-[1]">
-              You talk to the person <span className="text-gradient">who builds it.</span>
-            </h2>
-            <p className="mt-6 max-w-xl text-pretty leading-relaxed text-muted sm:text-lg">
-              I’m {site.founder}. {site.name} is an independent studio, not an agency that hands your work to juniors. No
-              account managers, no handoffs: the engineer on your first call is the one who writes your software and
-              answers when something needs fixing.
+      {/* ---------- hero ---------- */}
+      <section className="hero">
+        <div className="hero-in">
+          <h1 className="hero-h">
+            Build A Website{" "}
+            <br />
+            <span className="hero-line">
+              That <hr />
+            </span>{" "}
+            <span className="hero-it">Performs</span>
+          </h1>
+          <div className="hero-side">
+            <p>
+              Templates made every business website look the same. I build websites and software that work for the business
+              behind them — designed, engineered and supported by one engineer, from discovery and structure to launch and
+              support. A fixed, written quote, live in weeks, and you own the code.
             </p>
-            <div className="mt-8 flex flex-wrap gap-6">
-              <ArrowLink href="/about">About me</ArrowLink>
-              <ArrowLink href={`mailto:${site.email}`} external>
-                {site.email}
-              </ArrowLink>
-              <ArrowLink href={`tel:${site.phoneRaw}`} external>
-                {site.phone}
-              </ArrowLink>
+            <div className="hero-cta">
+              <ButtonLink href="/process" variant="outline">
+                How I build websites
+              </ButtonLink>
             </div>
           </div>
         </div>
+        <div className="hero-feat">
+          <p className="annotation">Built for</p>
+          <ul>
+            {projects.map((p) => (
+              <li key={p.slug}>{p.name}</li>
+            ))}
+          </ul>
+        </div>
       </section>
 
-      {/* ---------------- the numbers ---------------- */}
-      <section className="mx-auto max-w-[1440px] px-5 py-16 sm:px-8 sm:py-20">
-        <dl className="figures" data-reveal>
+      {/* ---------- featured work: two rows drifting past ---------- */}
+      <section className="works" id="work">
+        <h2 className="works-h">Featured work</h2>
+        {[rowA, rowB].map((row, r) => (
+          <div key={r} className={`works-row ${r ? "is-rev" : ""}`}>
+            <div className="works-track">
+              {[0, 1].map((k) => (
+                <div key={k} className="works-set" aria-hidden={k === 1}>
+                  {row.map((p) => (
+                    <Link key={p.slug} href={`/work/${p.slug}`} className="work-card" tabIndex={k ? -1 : 0}>
+                      <Image src={p.images.cover.src} alt={k ? "" : p.images.cover.alt} width={1200} height={750} sizes="(max-width: 768px) 70vw, 34vw" />
+                      <span className="work-name">{p.name}</span>
+                      <span className="work-tag">{p.industry.split(" · ")[0]}</span>
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div className="works-cta">
+          <ButtonLink href="/work" variant="outline">
+            View all projects
+          </ButtonLink>
+        </div>
+      </section>
+
+      {/* ---------- who, and the figures ---------- */}
+      <section className="intro" data-reveal>
+        <p className="intro-k">
+          {site.name} is an independent software studio based in {site.serviceAreas[4]}, working with businesses in India, Hong Kong,
+          Taiwan, the US and the UAE.
+        </p>
+        <p className="intro-big">
+          Business owners trust one engineer to solve their online problems end to end: business websites and stores, web
+          applications, learning platforms, CRMs, ERPs, dashboards and mobile apps, plus the performance, search and support
+          that keep them working. Every project is scoped in writing, built personally, and handed over completely.
+        </p>
+        <dl className="stats">
           <div>
             <dd>{projects.length}</dd>
-            <dt>Projects, live and documented</dt>
+            <dt>Projects live</dt>
           </div>
           <div>
             <dd>{services.length}</dd>
-            <dt>Services, each with a fixed quote</dt>
+            <dt>Services</dt>
           </div>
           <div>
             <dd>{TOOL_COUNT}</dd>
-            <dt>Free tools for business websites</dt>
+            <dt>Free tools</dt>
           </div>
           <div>
             <dd>1</dd>
             <dt>Engineer, start to finish</dt>
           </div>
         </dl>
-        <div className="mt-12 grid gap-8 border-t border-line pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]" data-reveal>
-          <div>
-            <Eyebrow>What it costs</Eyebrow>
-            <h2 className="mt-5 text-[clamp(1.75rem,3.4vw,3rem)] leading-[1.02]">
-              From <Price inr={site.priceFloor} usd={site.priceFloorUsd} />, <span className="text-gradient">fixed in writing.</span>
-            </h2>
-            <div className="mt-7 flex flex-wrap gap-6">
-              <ArrowLink href="/pricing">How pricing works</ArrowLink>
-              <ArrowLink href="/website-cost-calculator">Estimate your project</ArrowLink>
-            </div>
-          </div>
-          <div className="audit">
-            <p className="annotation">Not sure what you need?</p>
-            <h3>Start with a website audit.</h3>
-            <p>
-              A real engineer tells you why your site is slow, invisible on Google or losing enquiries, with a prioritised
-              fix list in {site.audit.turnaround}.
-            </p>
-            <ButtonLink href="/free-website-audit" variant="outline">
-              See the audit
+      </section>
+
+      {/* ---------- step into the work: fanned screens ---------- */}
+      <section className="fan">
+        <div className="fan-side fan-l" aria-hidden>
+          {fanL.map((im, i) => (
+            <Image key={im.src} src={im.src} alt="" width={640} height={400} sizes="22vw" className={`f${i}`} />
+          ))}
+        </div>
+        <div className="fan-mid" data-reveal>
+          <p className="annotation">Real screens, real products</p>
+          <h2 className="fan-h">
+            Step Into
+            <br />
+            The Work
+          </h2>
+          <p className="fan-sub">Explore the screens, systems and stories behind every project.</p>
+          <ButtonLink href="/work" variant="outline">
+            Start exploring
+          </ButtonLink>
+        </div>
+        <div className="fan-side fan-r" aria-hidden>
+          {fanR.map((im, i) => (
+            <Image key={im.src} src={im.src} alt="" width={378} height={800} sizes="14vw" className={`f${i}`} />
+          ))}
+        </div>
+      </section>
+
+      {/* ---------- one engineer, every discipline ---------- */}
+      <section className="disc" data-reveal>
+        <div>
+          <h2 className="disc-h">
+            One Engineer.
+            <br />
+            Every Discipline.
+          </h2>
+          <ButtonLink href="/services" variant="outline">
+            See all services
+          </ButtonLink>
+        </div>
+        <div className="disc-p">
+          <p>
+            As an independent studio, {site.name} covers what an agency splits across a team: structure and content planning,
+            interface design, engineering, performance, search visibility and support. One person holds the whole picture,
+            so nothing is lost between a designer, a developer and an account manager.
+          </p>
+          <p>
+            Every engagement runs the same way: a short discovery call, a fixed and itemised quote naming every screen and
+            workflow, working software in weeks, and a complete handover — source code, documentation and infrastructure
+            access — at launch. Projects start from <Price inr={site.priceFloor} usd={site.priceFloorUsd} />.
+          </p>
+        </div>
+      </section>
+
+      {/* ---------- the services, stacked in colour (on the light band) ---------- */}
+      <section className="ink band">
+        <article className="lead-card" style={{ background: colors[0] }} data-reveal>
+          <div className="lead-copy">
+            <span className="lead-n">1</span>
+            <h3 className="lead-t">{lead.name}</h3>
+            <p>{lead.short}</p>
+            <p>{lead.headline}</p>
+            <ButtonLink href={`/services/${lead.slug}`} variant="outline">
+              Learn more
             </ButtonLink>
           </div>
+          <div className="lead-img">
+            <Image src={projects[5].images.cover.src} alt={projects[5].images.cover.alt} width={1200} height={750} sizes="(max-width: 768px) 92vw, 40vw" />
+          </div>
+        </article>
+        <ServiceStack items={rest} />
+      </section>
+
+      {/* ---------- fair questions, honest answers ---------- */}
+      <section className="qa" data-reveal>
+        <h2 className="qa-h">Fair questions, honest answers</h2>
+        <QuoteCarousel items={homeFaq} />
+      </section>
+
+      {/* ---------- the names, drifting past ---------- */}
+      <section className="names" data-reveal>
+        <p className="annotation names-h">Projects delivered for</p>
+        <div className="names-track" aria-hidden>
+          {[0, 1].map((k) => (
+            <span key={k} className="names-set">
+              {projects.map((p) => (
+                <span key={p.slug}>{p.name}</span>
+              ))}
+            </span>
+          ))}
         </div>
       </section>
 
-      {/* ---------------- questions ---------------- */}
-      <section className="border-t border-line">
-        <div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[minmax(280px,1fr)_minmax(0,2fr)]">
-          <div data-reveal>
-            <Eyebrow>Fair questions</Eyebrow>
-            <h2 className="mt-5 text-[clamp(2rem,4.6vw,4rem)] leading-[1]">
-              What people <span className="text-gradient">ask first.</span>
-            </h2>
-          </div>
-          <div data-reveal>
-            <Faq items={homeFaq} />
-          </div>
+      {/* ---------- what you can expect ---------- */}
+      <section className="expect">
+        <h2 className="expect-h" data-reveal>
+          What You Can
+          <br />
+          <em>Expect</em>
+          <br />
+          From Me
+        </h2>
+        <div className="expect-row" tabIndex={0} role="region" aria-label="What you can expect" data-reveal>
+          {expect.map((e, i) => (
+            <article key={e.t} className="expect-card">
+              <Image src={projects[i + 1].images.cover.src} alt="" width={800} height={500} sizes="(max-width: 768px) 78vw, 26vw" />
+              <p className="expect-t">{e.t}</p>
+              <p className="expect-s">{e.s}</p>
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* ---------------- the brief ---------------- */}
-      <section id="brief" className="ink">
-        <div className="mx-auto grid max-w-[1440px] gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[minmax(280px,1fr)_minmax(0,1.3fr)]">
-          <div data-reveal>
-            <Eyebrow>Start here</Eyebrow>
-            <h2 className="mt-5 text-[clamp(2rem,4.6vw,4rem)] leading-[1]">
-              Tell me what <span className="text-gradient">you’re building.</span>
+      {/* ---------- the person, and the call ---------- */}
+      <section className="who" data-reveal>
+        <div className="who-card">
+          <div className="who-photo">
+            <Image src="/founder.jpg" alt={`${site.founder}, founder of ${site.name}`} width={800} height={800} sizes="(max-width: 768px) 70vw, 300px" />
+            <h3>{site.founder}</h3>
+            <p>Founder of {site.name} · Full-stack engineer</p>
+          </div>
+          <div className="who-copy">
+            <h2>
+              Your Website Might Look Fine.
+              <br />
+              <em>But Is It Working?</em>
             </h2>
-            <p className="mt-6 max-w-md text-pretty leading-relaxed text-muted sm:text-lg">
-              You’ll hear back within one business day, from the engineer who would build it.
+            <p>Learn where your website is losing speed, search visibility or enquiries, and what should happen next.</p>
+            <p className="who-book">
+              Book a <em>Free Discovery Call</em> with {first}
             </p>
-            <div className="mt-8 flex flex-wrap gap-6">
-              <ArrowLink href={site.whatsapp} external>
-                Or message me on WhatsApp
-              </ArrowLink>
-            </div>
-          </div>
-          <div data-reveal>
-            <LeadForm source="home" />
+            <ButtonLink href="/contact" variant="outline">
+              Contact me now
+            </ButtonLink>
           </div>
         </div>
       </section>

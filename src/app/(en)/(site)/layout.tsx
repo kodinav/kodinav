@@ -1,13 +1,14 @@
+import { Aurora } from "@/components/Aurora";
 import { BackToTop } from "@/components/BackToTop";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { RevealObserver } from "@/components/RevealObserver";
 import { SmoothScroll } from "@/components/SmoothScroll";
-import { StickyCta } from "@/components/StickyCta";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
+      <Aurora />
       <SmoothScroll />
       <RevealObserver />
       <a
@@ -17,11 +18,10 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         Skip to content
       </a>
       <Navbar />
-      <main id="main-content" className="flex-1">
+      <main id="main-content" className="relative z-10 flex-1">
         {children}
       </main>
       <Footer />
-      <StickyCta />
       <BackToTop />
     </>
   );
