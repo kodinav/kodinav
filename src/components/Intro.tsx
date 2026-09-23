@@ -79,7 +79,20 @@ export function Intro() {
         ctx.fill();
       }
       ctx.globalCompositeOperation = "source-over";
-      if (t < 2.7) raf = requestAnimationFrame(draw);
+      // the letter itself resolves out of the cloud
+      const kk = Math.min(1, Math.max(0, (t - 1.9) / 0.6));
+      if (kk > 0) {
+        const g = ctx.createLinearGradient(w * 0.3, h * 0.2, w * 0.7, h * 0.8);
+        ["#ff3fb0", "#8a3fe0", "#3b7bff", "#2fd1c0", "#ffd23c", "#ff7a2f"].forEach((col, i, arr) => g.addColorStop(i / (arr.length - 1), col));
+        ctx.globalAlpha = kk;
+        ctx.font = o.font;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = g;
+        ctx.fillText("K", w / 2, h / 2 + size * 0.04);
+        ctx.globalAlpha = 1;
+      }
+      if (t < 3.0) raf = requestAnimationFrame(draw);
       else {
         setFade(true);
         try {

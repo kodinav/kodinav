@@ -2266,3 +2266,115 @@ html.is-light .band ~ * {
     translate: -140px 0;
   }
 }
+
+/* ---------- the ribbon, the hover chips, the vertical quote column ---------- */
+.aurora-band {
+  display: none;
+}
+.ribbon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(14px) saturate(1.25);
+  opacity: 0.95;
+  translate: calc(var(--mx) * 2%) calc(var(--my) * 1.5%);
+  transition: translate 1.2s var(--ease);
+}
+.aurora-ring i {
+  opacity: 0.28;
+}
+.aurora-veil {
+  background: rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+@media (width < 768px) {
+  .ribbon {
+    filter: blur(10px) saturate(1.25);
+  }
+}
+.work-card {
+  position: relative;
+}
+.work-chip {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 14px;
+  border-radius: 14px;
+  background: rgba(8, 8, 8, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.45s var(--ease);
+}
+.work-card:hover .work-chip,
+.work-card:focus-visible .work-chip {
+  opacity: 1;
+  transform: none;
+}
+.work-chip .work-name {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+.work-chip .work-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@media (hover: none) {
+  .work-chip {
+    opacity: 1;
+    transform: none;
+  }
+}
+.quotes-badge:nth-child(2) {
+  width: 108px;
+  height: 108px;
+  font-size: 1.9rem;
+}
+.quotes-nav button {
+  width: 40px;
+  height: 40px;
+}
+
+/* ---------- pass three, measured side by side ---------- */
+.hero-feat {
+  position: absolute;
+}
+.dock-pill {
+  min-width: 620px;
+  justify-content: space-between;
+  padding: 4px 8px;
+}
+.ribbon {
+  opacity: 0.85;
+  filter: blur(18px) saturate(1.25);
+}
+.aurora-veil {
+  background: rgba(0, 0, 0, 0.4);
+}
+.disc-h em {
+  font-style: italic;
+}
+@media (width < 768px) {
+  .ribbon {
+    filter: blur(12px) saturate(1.25);
+  }
+}
+.ribbon {
+  opacity: 0.78;
+  filter: blur(22px) saturate(1.2);
+}
+@media (width < 768px) {
+  .ribbon {
+    filter: blur(14px) saturate(1.2);
+  }
+}

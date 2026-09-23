@@ -62,13 +62,13 @@ export function QuoteCarousel({ items, badges = [] }: { items: { q: string; a: s
       </div>
       <div className="quotes-nav">
         <button type="button" onClick={() => go(-1)} aria-label="Previous question">
-          ←
+          ↑
         </button>
         <span className="annotation">
           {String(i + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
         </span>
         <button type="button" onClick={() => go(1)} aria-label="Next question">
-          →
+          ↓
         </button>
       </div>
     </div>

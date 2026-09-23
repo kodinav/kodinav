@@ -103,8 +103,10 @@ export default function Home() {
                   {row.map(({ p, tall, im }) => (
                     <Link key={p.slug} href={`/work/${p.slug}`} className={`work-card ${tall ? "is-tall" : "is-wide"}`} tabIndex={k ? -1 : 0}>
                       <Image src={im.src} alt={k ? "" : im.alt} width={tall ? 378 : 1200} height={tall ? 800 : 750} sizes={tall ? "(max-width: 768px) 44vw, 330px" : "(max-width: 768px) 78vw, 600px"} />
-                      <span className="work-name">{p.name}</span>
-                      <span className="work-tag">{p.industry.split(" · ")[0]}</span>
+                      <span className="work-chip">
+                        <span className="work-name">{p.name}</span>
+                        <span className="work-tag">{p.industry.split(" · ")[0]}</span>
+                      </span>
                     </Link>
                   ))}
                 </div>
@@ -190,7 +192,7 @@ export default function Home() {
       <div className="disc" data-reveal>
         <div>
           <h2 className="disc-h">
-            One Engineer.
+            <em>One Engineer.</em>
             <br />
             Every Discipline.
           </h2>
