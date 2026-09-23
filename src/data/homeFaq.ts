@@ -8,7 +8,7 @@ export const homeFaq = [
   },
   {
     q: "How much does a project cost?",
-    a: `Projects start from ${site.priceFloor} (about ${site.priceFloorUsd}) and scale with scope. After a short discovery call you receive a fixed, itemised quote naming every screen and workflow. Nothing vague, nothing added mid-project.`,
+    a: `Indian clients start from ${site.priceFloor}; international clients from ${site.priceFloorUsd} (about HK$16,000 in Hong Kong or NT$62,000 in Taiwan). Projects scale with scope, and after a short discovery call you receive a fixed, itemised quote naming every screen and workflow. Nothing vague, nothing added mid-project.`,
   },
   {
     q: "How long does it take?",
