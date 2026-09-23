@@ -1,5 +1,4 @@
 import { Aurora } from "@/components/Aurora";
-import { BackToTop } from "@/components/BackToTop";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { Polish } from "@/components/Polish";
@@ -26,7 +25,6 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         {children}
       </main>
       <Footer />
-      <BackToTop />
     </>
   );
 }

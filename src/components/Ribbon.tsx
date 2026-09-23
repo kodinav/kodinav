@@ -18,9 +18,12 @@ export function Ribbon({ className = "" }: { className?: string }) {
     if (!c || !ctx) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let w = 0, h = 0, raf = 0, on = true;
+    const small = window.innerWidth < 768;
+    const res = small ? 0.35 : 0.5;
+    let frame = 0;
     const size = () => {
-      w = Math.max(2, Math.round(c.clientWidth * 0.5));
-      h = Math.max(2, Math.round(c.clientHeight * 0.5));
+      w = Math.max(2, Math.round(c.clientWidth * res));
+      h = Math.max(2, Math.round(c.clientHeight * res));
       c.width = w;
       c.height = h;
     };
@@ -71,7 +74,7 @@ export function Ribbon({ className = "" }: { className?: string }) {
       }
     };
     const loop = (t: number) => {
-      if (on) draw(t);
+      if (on && (!small || frame++ % 2 === 0)) draw(t);
       raf = requestAnimationFrame(loop);
     };
     size();

@@ -51,7 +51,7 @@ export function Intro() {
     const step = Math.max(3, Math.round(4 * dpr));
     const targets: [number, number][] = [];
     for (let y = 0; y < h; y += step) for (let x = 0; x < w; x += step) if (img[(y * w + x) * 4 + 3] > 128) targets.push([x, y]);
-    const N = Math.min(1500, targets.length);
+    const N = Math.min(window.innerWidth < 768 ? 700 : 1500, targets.length);
     const pick = targets.sort(() => Math.random() - 0.5).slice(0, N);
     const R = Math.max(w, h) * 0.7;
     const P = pick.map(([tx, ty]) => {
@@ -98,11 +98,10 @@ export function Intro() {
         try {
           sessionStorage.setItem("kd-intro", "1");
         } catch {}
-        window.setTimeout(() => {
-          document.documentElement.classList.remove("intro-on");
-          window.dispatchEvent(new Event("kd:intro-done"));
-          setOn(false);
-        }, 700);
+        // the hero's own choreography starts as the field begins to lift
+        document.documentElement.classList.remove("intro-on");
+        window.dispatchEvent(new Event("kd:intro-done"));
+        window.setTimeout(() => setOn(false), 750);
       }
     };
     raf = requestAnimationFrame(draw);

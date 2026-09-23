@@ -2590,3 +2590,15 @@ figure[data-reveal] {
     opacity: 0.045;
   }
 }
+
+/* ---------- ready to rank: the hero paints under the opening (LCP), not after it ---------- */
+html.intro-on .hero-in,
+html.intro-on .hero-feat {
+  visibility: visible;
+}
+
+/* ---------- the opening: an opaque field (first paint was never the issue — a cold headless
+   browser was; the hero still paints beneath it from the first frame) ---------- */
+.opening {
+  background: #080808;
+}

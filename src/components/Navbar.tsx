@@ -28,6 +28,10 @@ const more = [
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
   { label: "Website audit", href: "/free-website-audit" },
+  { label: "Hong Kong", href: "/web-development-hong-kong" },
+  { label: "Taiwan", href: "/web-development-taiwan" },
+  { label: "香港（繁中）", href: "/zh-hk" },
+  { label: "台灣（繁中）", href: "/zh-tw" },
 ];
 
 export function Navbar() {

@@ -1,4 +1,7 @@
 import { RootDocument } from "@/components/RootDocument";
+import { Aurora } from "@/components/Aurora";
+import { Polish } from "@/components/Polish";
+import { RevealObserver } from "@/components/RevealObserver";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { WhatsAppFab } from "@/components/WhatsAppFab";
 import { ZhFooter } from "@/components/zh/ZhFooter";
@@ -18,7 +21,12 @@ export default function ZhTWRootLayout({ children }: { children: React.ReactNode
   const t = zhChrome["zh-TW"];
   return (
     <RootDocument lang="zh-TW">
+      <Aurora />
       <SmoothScroll />
+      <RevealObserver />
+      <Polish />
+      <div className="grain" aria-hidden />
+      <i className="readline" aria-hidden />
       <a
         href="#main-content"
         className="sr-only z-100 focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:border focus:border-accent focus:bg-background focus:px-4 focus:py-2 focus:text-sm"
